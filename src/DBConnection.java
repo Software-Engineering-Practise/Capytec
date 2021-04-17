@@ -27,9 +27,7 @@ public class DBConnection {
 		}
 		catch (SQLException e) {
 			System.out.println("Failed to connect to " + filename);
-			System.out.println("###########RETURNED MESSAGE###########");
 			System.out.println(e.getMessage());
-			System.out.println("################GABAGOO###############");
 			return false;
 		}
 		return true;
@@ -46,9 +44,7 @@ public class DBConnection {
 		}
 		catch(SQLException e) {
 			System.out.println("Failed to execute: " + sql);
-			System.out.println("###########RETURNED MESSAGE###########");
 			System.out.println(e.getMessage());
-			System.out.println("################GABAGOO###############");
 			return false;
 		}
 		return true;
@@ -66,9 +62,7 @@ public class DBConnection {
 		}
 		catch (SQLException e) {
 			System.out.println("Failed to execute: " + sql);
-			System.out.println("###########RETURNED MESSAGE###########");
 			System.out.println(e.getMessage());
-			System.out.println("################GABAGOO###############");
 			return null;
 		}
 		return result;
