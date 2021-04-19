@@ -12,10 +12,13 @@ import javax.swing.JTable;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 import javax.swing.JMenuItem;
+import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
 import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import java.awt.Font;
@@ -25,6 +28,7 @@ public class CapytecGui extends JFrame {
 	private JPanel contentPane;
 	private JTable tableUserManagement;
 	private JTable tableTaskManagement;
+	CapyTecDB dbClass = new CapyTecDB();
 
 	/**
 	 * Launch the application.
@@ -64,6 +68,11 @@ public class CapytecGui extends JFrame {
 		panelUserManagement.add(panelTaskBottomButtons, BorderLayout.SOUTH);
 		
 		JButton btnAddUser = new JButton("Add User");
+		btnAddUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+
+			}
+		});
 		panelTaskBottomButtons.add(btnAddUser);
 		
 		JButton btnEditUser = new JButton("Edit User");
@@ -83,16 +92,34 @@ public class CapytecGui extends JFrame {
 		panelUserManagement.add(scrollPaneUserManagement, BorderLayout.CENTER);
 		
 		tableUserManagement = new JTable();
+		
+		System.out.println(dbClass.getAllCaretakers().get(1).getFullName());
 		tableUserManagement.setModel(new DefaultTableModel(
 			new Object[][] {
+				{},
 			},
 			new String[] {
 				"User", "Position", "Talents"
 			}
 		));
+		
+		DefaultTableModel tableModel = (DefaultTableModel)tableUserManagement.getModel();
+		
+		for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
+			tableModel.addRow(new Object[] {dbClass.getAllCaretakers().get(i).getFullName(),dbClass.getAllCaretakers().get(i).getJobTitle(),"Talent"});
+		}
+		for(int i=0; i<dbClass.getAllManagers().size(); i++) {
+			tableModel.addRow(new Object[] {dbClass.getAllManagers().get(i).getFullName(),dbClass.getAllManagers().get(i).getJobTitle(),"Talent"});
+		}
+		
 		tableUserManagement.getColumnModel().getColumn(0).setPreferredWidth(351);
 		tableUserManagement.getColumnModel().getColumn(1).setPreferredWidth(197);
 		scrollPaneUserManagement.setViewportView(tableUserManagement);
+		
+		
+		
+		
+		
 		
 		JPanel panelTaskManagement = new JPanel();
 		tabbedPane.addTab("Task Management", null, panelTaskManagement, null);
