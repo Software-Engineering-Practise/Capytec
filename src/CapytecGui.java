@@ -70,7 +70,8 @@ public class CapytecGui extends JFrame {
 		JButton btnAddUser = new JButton("Add User");
 		btnAddUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				GuiInsertUser frameInsertUser = new GuiInsertUser();
+				frameInsertUser.setVisible(true);
 			}
 		});
 		panelTaskBottomButtons.add(btnAddUser);
