@@ -1,4 +1,4 @@
-import java.util.Date;
+import java.util.ArrayList;
 
 public abstract class Task {
 	
@@ -7,30 +7,29 @@ public abstract class Task {
 	private String desc;
 	private int priority;
 	
-	private Date dateCreated;
-	private Date dateDue;
-	private Date dateCompleted;
-	private Date dateUpdated;
+	private String dateCreated;
+	private String dateDue;
+	private String dateCompleted;
+	private String dateUpdated;
+	
+	private int daysUntilRepeat;
 	
 	private String author;
 	private String completionist;
 	private String signee;
 	private String peerChecker;
 	
-	private boolean needsChecking;//THIS ROW DOES NOT EXIST IN DB!!!
 	private boolean needsSigning;
 	private boolean needsPeerChecking;
 	
-	private User signedBy;
-	private User setBy;
-	
+	private ArrayList<String> recSkills = new ArrayList<String>();
+	private ArrayList<Integer> teamMembers = new ArrayList<Integer>(); 
 	
 	public Task() {
 		
 		setTitle("TITLE NOT SET!");
 		setDesc("DESCRIPTION NOT SET!");
 		
-		setNeedsChecking(false);
 		setNeedsSigning(false);
 		setNeedsPeerChecking(false);
 		
@@ -76,46 +75,56 @@ public abstract class Task {
 	}
 
 
-	public Date getDateCreated() {
+	public String getDateCreated() {
 		return dateCreated;
 	}
 
 
-	public void setDateCreated(Date dateCreated) {
+	public void setDateCreated(String dateCreated) {
 		this.dateCreated = dateCreated;
 	}
 
 
-	public Date getDateDue() {
+	public String getDateDue() {
 		return dateDue;
 	}
 
 
-	public void setDateDue(Date dateDue) {
+	public void setDateDue(String dateDue) {
 		this.dateDue = dateDue;
 	}
 
 
-	public Date getDateCompleted() {
+	public String getDateCompleted() {
 		return dateCompleted;
 	}
 
 
-	public void setDateCompleted(Date dateCompleted) {
+	public void setDateCompleted(String dateCompleted) {
 		this.dateCompleted = dateCompleted;
 	}
 
 
-	public Date getDateUpdated() {
+	public String getDateUpdated() {
 		return dateUpdated;
 	}
 
 
-	public void setDateUpdated(Date dateUpdated) {
+	public void setDateUpdated(String dateUpdated) {
 		this.dateUpdated = dateUpdated;
 	}
 	
 	
+	public int getDaysUntilRepeat() {
+		return daysUntilRepeat;
+	}
+
+
+	public void setDaysUntilRepeat(int daysUntilRepeat) {
+		this.daysUntilRepeat = daysUntilRepeat;
+	}
+
+
 	public String getAuthor() {
 		return author;
 	}
@@ -156,53 +165,37 @@ public abstract class Task {
 	}
 
 
-	public boolean isNeedsChecking() {
-		return needsChecking;
-	}
-
-
-	public void setNeedsChecking(boolean needsChecking) {
-		this.needsChecking = needsChecking;
-	}
-
-
 	public boolean isNeedsSigning() {
 		return needsSigning;
 	}
-
 
 	public void setNeedsSigning(boolean needsSigning) {
 		this.needsSigning = needsSigning;
 	}
 
-
 	public boolean isNeedsPeerChecking() {
 		return needsPeerChecking;
 	}
-
 
 	public void setNeedsPeerChecking(boolean needsPeerChecking) {
 		this.needsPeerChecking = needsPeerChecking;
 	}
 
+	public ArrayList<String> getRecSkills() {
+		return recSkills;
+	}
 
-	public User getSignedBy() {
-		return signedBy;
+	public void setRecSkills(ArrayList<String> recSkills) {
+		this.recSkills = recSkills;
+	}
+
+	public ArrayList<Integer> getTeamMembers() {
+		return teamMembers;
 	}
 
 
-	public void setSignedBy(User signedBy) {
-		this.signedBy = signedBy;
-	}
-
-
-	public User getSetBy() {
-		return setBy;
-	}
-
-
-	public void setSetBy(User setBy) {
-		this.setBy = setBy;
+	public void setTeamMembers(ArrayList<Integer> teamMembers) {
+		this.teamMembers = teamMembers;
 	}
 
 }
