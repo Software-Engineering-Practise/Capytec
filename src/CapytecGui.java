@@ -1,27 +1,18 @@
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JMenuBar;
-import javax.swing.JMenu;
-import javax.swing.JLabel;
-import javax.swing.JScrollPane;
-import javax.swing.JTable;
-import javax.swing.table.DefaultTableModel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.awt.event.ActionEvent;
-import javax.swing.JMenuItem;
-import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
-import javax.swing.JTextField;
-import javax.swing.table.DefaultTableModel;
-import java.awt.FlowLayout;
-import javax.swing.BoxLayout;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTabbedPane;
+import javax.swing.JTable;
+import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 public class CapytecGui extends JFrame {
 
@@ -70,7 +61,8 @@ public class CapytecGui extends JFrame {
 		JButton btnAddUser = new JButton("Add User");
 		btnAddUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-
+				GuiInsertUser frameInsertUser = new GuiInsertUser();
+				frameInsertUser.setVisible(true);
 			}
 		});
 		panelTaskBottomButtons.add(btnAddUser);
@@ -99,17 +91,17 @@ public class CapytecGui extends JFrame {
 				{},
 			},
 			new String[] {
-				"User", "Position", "Talents"
+				"User", "Position", "Skills"
 			}
 		));
 		
-		DefaultTableModel tableModel = (DefaultTableModel)tableUserManagement.getModel();
+		DefaultTableModel tableModelUserManagement = (DefaultTableModel)tableUserManagement.getModel();
 		
 		for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
-			tableModel.addRow(new Object[] {dbClass.getAllCaretakers().get(i).getFullName(),dbClass.getAllCaretakers().get(i).getJobTitle(),"Talent"});
+			tableModelUserManagement.addRow(new Object[] {dbClass.getAllCaretakers().get(i).getFullName(),dbClass.getAllCaretakers().get(i).getJobTitle(),"Skill"});
 		}
 		for(int i=0; i<dbClass.getAllManagers().size(); i++) {
-			tableModel.addRow(new Object[] {dbClass.getAllManagers().get(i).getFullName(),dbClass.getAllManagers().get(i).getJobTitle(),"Talent"});
+			tableModelUserManagement.addRow(new Object[] {dbClass.getAllManagers().get(i).getFullName(),dbClass.getAllManagers().get(i).getJobTitle(),"Skill"});
 		}
 		
 		tableUserManagement.getColumnModel().getColumn(0).setPreferredWidth(351);
@@ -152,15 +144,26 @@ public class CapytecGui extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Task No.", "Task", "Assigned Member", "Type", "Duration", "Importance", "Frequency"
+				"Task No.", "Task", "Assigned Member", "Description", "Type", "Start Date", "Due Date", "Completion Date", "Completionist", "Importance", "Frequency"
 			}
 		));
 		tableTaskManagement.getColumnModel().getColumn(1).setPreferredWidth(270);
 		tableTaskManagement.getColumnModel().getColumn(2).setPreferredWidth(173);
-		tableTaskManagement.getColumnModel().getColumn(3).setPreferredWidth(124);
-		tableTaskManagement.getColumnModel().getColumn(4).setPreferredWidth(120);
-		tableTaskManagement.getColumnModel().getColumn(5).setPreferredWidth(118);
-		tableTaskManagement.getColumnModel().getColumn(6).setPreferredWidth(117);
+		tableTaskManagement.getColumnModel().getColumn(3).setPreferredWidth(342);
+		tableTaskManagement.getColumnModel().getColumn(4).setPreferredWidth(124);
+		tableTaskManagement.getColumnModel().getColumn(5).setPreferredWidth(132);
+		tableTaskManagement.getColumnModel().getColumn(6).setPreferredWidth(120);
+		tableTaskManagement.getColumnModel().getColumn(7).setPreferredWidth(143);
+		tableTaskManagement.getColumnModel().getColumn(8).setPreferredWidth(130);
+		tableTaskManagement.getColumnModel().getColumn(9).setPreferredWidth(118);
+		tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(117);
+		
+		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
+		
+		for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
+			CaretakerTask currentItem = dbClass.GetAllTasks().get(i); 
+			tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"Repeat/Oneoff"});
+		}
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
 	}
 
