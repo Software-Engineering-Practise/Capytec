@@ -1,9 +1,9 @@
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 //import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class CapyTecDB{
 	

@@ -1,24 +1,23 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
-
-import javax.swing.JFrame;
-import javax.swing.JPanel;
-import javax.swing.border.EmptyBorder;
-import javax.swing.JTextField;
-import javax.swing.JLabel;
-import javax.swing.JButton;
-import java.awt.event.ActionListener;
-import java.awt.event.ActionEvent;
 import java.awt.Font;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+
+import javax.swing.JButton;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.border.EmptyBorder;
+import javax.swing.JComboBox;
+import javax.swing.DefaultComboBoxModel;
 
 public class GuiInsertUser extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
-	private JTextField textField_2;
-	private JTextField textField_3;
-
+	private JTextField textFieldFirstName;
+	private JTextField textFieldSurname;
+	CapyTecDB dbClass = new CapyTecDB();
 	/**
 	 * Launch the application.
 	 */
@@ -46,25 +45,15 @@ public class GuiInsertUser extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		textField = new JTextField();
-		textField.setBounds(191, 70, 96, 20);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		textFieldFirstName = new JTextField();
+		textFieldFirstName.setBounds(191, 70, 96, 20);
+		contentPane.add(textFieldFirstName);
+		textFieldFirstName.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setColumns(10);
-		textField_1.setBounds(191, 101, 96, 20);
-		contentPane.add(textField_1);
-		
-		textField_2 = new JTextField();
-		textField_2.setColumns(10);
-		textField_2.setBounds(191, 132, 96, 20);
-		contentPane.add(textField_2);
-		
-		textField_3 = new JTextField();
-		textField_3.setColumns(10);
-		textField_3.setBounds(191, 163, 96, 20);
-		contentPane.add(textField_3);
+		textFieldSurname = new JTextField();
+		textFieldSurname.setColumns(10);
+		textFieldSurname.setBounds(191, 101, 96, 20);
+		contentPane.add(textFieldSurname);
 		
 		JLabel lblNewLabel = new JLabel("First Name:");
 		lblNewLabel.setBounds(90, 70, 76, 14);
@@ -74,25 +63,44 @@ public class GuiInsertUser extends JFrame {
 		lblSurname.setBounds(90, 101, 76, 14);
 		contentPane.add(lblSurname);
 		
-		JLabel lblNewLabel_1_1 = new JLabel("Position:");
-		lblNewLabel_1_1.setBounds(90, 132, 76, 14);
-		contentPane.add(lblNewLabel_1_1);
+		JLabel lblPosition = new JLabel("Position:");
+		lblPosition.setBounds(90, 132, 76, 14);
+		contentPane.add(lblPosition);
 		
-		JLabel lblNewLabel_1_1_1 = new JLabel("Talents:");
-		lblNewLabel_1_1_1.setBounds(90, 163, 76, 14);
-		contentPane.add(lblNewLabel_1_1_1);
+		JLabel lblInsertUser = new JLabel("Insert User");
+		lblInsertUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		lblInsertUser.setBounds(87, 20, 202, 34);
+		contentPane.add(lblInsertUser);
 		
-		JButton btnNewButton = new JButton("Insert User");
-		btnNewButton.addActionListener(new ActionListener() {
+		JComboBox comboBoxPosition = new JComboBox();
+		comboBoxPosition.setModel(new DefaultComboBoxModel(new String[] {"Caretaker", "Manager"}));
+		comboBoxPosition.setBounds(191, 131, 96, 22);
+		contentPane.add(comboBoxPosition);
+		
+		JButton btnInsertUser = new JButton("Insert User");
+		btnInsertUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				String firstName = textFieldFirstName.getText();
+				String surname = textFieldSurname.getText();
+				String position = comboBoxPosition.getSelectedItem().toString();
+//				String talentOne = comboBoxTalentsOne.getSelectedItem().toString();
+//				String talentTwo = comboBoxTalentsTwo.getSelectedItem().toString();
+				if(firstName.isBlank() || surname.isBlank()) {
+					System.out.println("Name cannot be empty");
+				} else {
+					System.out.println(firstName + " " + surname);
+					if(position.equals("Caretaker")) {
+						System.out.println("Is caretaker");
+						
+					} else {
+						System.out.println("Is manager");
+					}
+				}
+				
 			}
 		});
-		btnNewButton.setBounds(304, 211, 118, 36);
-		contentPane.add(btnNewButton);
-		
-		JLabel lblNewLabel_1 = new JLabel("Insert User");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		lblNewLabel_1.setBounds(87, 20, 202, 34);
-		contentPane.add(lblNewLabel_1);
+		btnInsertUser.setBounds(304, 211, 118, 36);
+		contentPane.add(btnInsertUser);
+
 	}
 }
