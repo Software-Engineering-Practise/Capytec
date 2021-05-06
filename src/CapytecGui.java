@@ -29,6 +29,7 @@ public class CapytecGui extends JFrame {
 	private JTable tableUserManagement;
 	private JTable tableTaskManagement;
 	CapyTecDB dbClass = new CapyTecDB();
+	private JTable tableTaskLogging;
 
 	/**
 	 * Launch the application.
@@ -162,6 +163,34 @@ public class CapytecGui extends JFrame {
 		tableTaskManagement.getColumnModel().getColumn(5).setPreferredWidth(118);
 		tableTaskManagement.getColumnModel().getColumn(6).setPreferredWidth(117);
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
+		
+		JPanel panelTaskLogging = new JPanel();
+		tabbedPane.addTab("Task Logging", null, panelTaskLogging, null);
+		panelTaskLogging.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panelLoggingTitle = new JPanel();
+		panelTaskLogging.add(panelLoggingTitle, BorderLayout.NORTH);
+		
+		JLabel lblTaskLogging = new JLabel("Task Logging");
+		panelLoggingTitle.add(lblTaskLogging);
+		
+		JPanel panelTaskLoggingButtons = new JPanel();
+		panelTaskLogging.add(panelTaskLoggingButtons, BorderLayout.SOUTH);
+		
+		JScrollPane scrollPaneTaskLogging = new JScrollPane();
+		panelTaskLogging.add(scrollPaneTaskLogging, BorderLayout.CENTER);
+		
+		tableTaskLogging = new JTable();
+		tableTaskLogging.setModel(new DefaultTableModel(
+			new Object[][] {
+			},
+			new String[] {
+				"User", "Task", "Task Set", "Repeated Task?", "Completed Date"
+			}
+		));
+		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
+		
+		
 	}
 
 }
