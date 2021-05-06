@@ -1,3 +1,4 @@
+
 public abstract class User{
 	
 	private int id;
@@ -6,12 +7,12 @@ public abstract class User{
 	private String lastName;
 	private String jobTitle;
 	
-	
 	public User() {
 		
 		setUserName("USERNAME NOT SET!");
 		setFirstName("FIRSTNAME NOT SET!");
 		setLastName("LASTNAME NOT SET!");
+		
 		
 	}
 	
@@ -48,7 +49,6 @@ public abstract class User{
 		this.lastName = lastName;
 	}
 	
-	//Other Methods
 	public String getFullName() {
 		return getFirstName() + " " + getLastName();	
 	}
