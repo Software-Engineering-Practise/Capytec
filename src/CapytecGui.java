@@ -161,10 +161,11 @@ public class CapytecGui extends JFrame {
 		
 		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
 		
-		for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
+		for(int i=0; i<dbClass.GetAllTasks().size(); i++) {
 			CaretakerTask currentItem = dbClass.GetAllTasks().get(i); 
 			tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"Repeat/Oneoff"});
 		}
+
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
 		
 		JPanel panelTaskLogging = new JPanel();

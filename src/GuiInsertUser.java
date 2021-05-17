@@ -83,15 +83,16 @@ public class GuiInsertUser extends JFrame {
 				String firstName = textFieldFirstName.getText();
 				String surname = textFieldSurname.getText();
 				String position = comboBoxPosition.getSelectedItem().toString();
-//				String talentOne = comboBoxTalentsOne.getSelectedItem().toString();
-//				String talentTwo = comboBoxTalentsTwo.getSelectedItem().toString();
 				if(firstName.isBlank() || surname.isBlank()) {
 					System.out.println("Name cannot be empty");
 				} else {
 					System.out.println(firstName + " " + surname);
 					if(position.equals("Caretaker")) {
 						System.out.println("Is caretaker");
-						
+						Caretaker newCaretaker = new Caretaker();
+						newCaretaker.setFirstName(firstName);
+						newCaretaker.setLastName(surname);
+						dbClass.addCaretaker(newCaretaker);
 					} else {
 						System.out.println("Is manager");
 					}

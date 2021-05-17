@@ -160,7 +160,7 @@ public class CapyTecDB{
 		String fname = caretaker.getFirstName();
 		String lname = caretaker.getLastName();
 		
-		String sql = new String("INSERT INTO user (first_name, last_name, job_type) VALUES ("+fname+", "+lname+", 3);");
+		String sql = new String("INSERT INTO user (first_name, last_name, job_type) VALUES ('"+fname+"', '"+lname+"', 3);");
 		
 		boolean success = database.RunSQL(sql);
 		
