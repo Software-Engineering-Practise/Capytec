@@ -72,6 +72,12 @@ public class CapytecGui extends JFrame {
 		panelTaskBottomButtons.add(btnEditUser);
 		
 		JButton btnRemoveUser = new JButton("Remove User");
+		btnRemoveUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GuiDeleteUser frameDeleteUser = new GuiDeleteUser();
+				frameDeleteUser.setVisible(true);
+			}
+		});
 		panelTaskBottomButtons.add(btnRemoveUser);
 		
 		JPanel panelUserTitle = new JPanel();
@@ -89,28 +95,28 @@ public class CapytecGui extends JFrame {
 		System.out.println(dbClass.getAllCaretakers().get(1).getFullName());
 		tableUserManagement.setModel(new DefaultTableModel(
 			new Object[][] {
-				{},
+				{null, null, null, null},
 			},
 			new String[] {
-				"User", "Position", "Skills"
+				"ID", "User", "Position", "Skills"
 			}
 		));
+		tableUserManagement.getColumnModel().getColumn(0).setPreferredWidth(121);
+		tableUserManagement.getColumnModel().getColumn(1).setPreferredWidth(351);
+		tableUserManagement.getColumnModel().getColumn(2).setPreferredWidth(197);
+		tableUserManagement.getColumnModel().getColumn(3).setPreferredWidth(226);
 		
 		DefaultTableModel tableModelUserManagement = (DefaultTableModel)tableUserManagement.getModel();
 		
 		for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
-			tableModelUserManagement.addRow(new Object[] {dbClass.getAllCaretakers().get(i).getFullName(),dbClass.getAllCaretakers().get(i).getJobTitle(),"Skill"});
+			Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
+			tableModelUserManagement.addRow(new Object[] {currentCaretaker.getID(),currentCaretaker.getFullName(),currentCaretaker.getJobTitle(),"Skill"});
 		}
 		for(int i=0; i<dbClass.getAllManagers().size(); i++) {
-			tableModelUserManagement.addRow(new Object[] {dbClass.getAllManagers().get(i).getFullName(),dbClass.getAllManagers().get(i).getJobTitle(),"Skill"});
+			Manager currentManager = dbClass.getAllManagers().get(i);
+			tableModelUserManagement.addRow(new Object[] {currentManager.getID(),currentManager.getFullName(),currentManager.getJobTitle(),"Skill"});
 		}
-		
-		tableUserManagement.getColumnModel().getColumn(0).setPreferredWidth(351);
-		tableUserManagement.getColumnModel().getColumn(1).setPreferredWidth(197);
 		scrollPaneUserManagement.setViewportView(tableUserManagement);
-		
-		
-		
 		
 		
 		
