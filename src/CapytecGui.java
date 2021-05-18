@@ -68,8 +68,14 @@ public class CapytecGui extends JFrame {
 		});
 		panelTaskBottomButtons.add(btnAddUser);
 		
-		JButton btnEditUser = new JButton("Edit User");
-		panelTaskBottomButtons.add(btnEditUser);
+		JButton btnUpdateUser = new JButton("Update User");
+		btnUpdateUser.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GuiUpdateUser frameUpdateUser = new GuiUpdateUser();
+				frameUpdateUser.setVisible(true);
+			}
+		});
+		panelTaskBottomButtons.add(btnUpdateUser);
 		
 		JButton btnRemoveUser = new JButton("Remove User");
 		btnRemoveUser.addActionListener(new ActionListener() {

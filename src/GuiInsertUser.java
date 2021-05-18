@@ -55,9 +55,9 @@ public class GuiInsertUser extends JFrame {
 		textFieldSurname.setBounds(191, 101, 96, 20);
 		contentPane.add(textFieldSurname);
 		
-		JLabel lblNewLabel = new JLabel("First Name:");
-		lblNewLabel.setBounds(90, 70, 76, 14);
-		contentPane.add(lblNewLabel);
+		JLabel lblFirstName = new JLabel("First Name:");
+		lblFirstName.setBounds(90, 70, 76, 14);
+		contentPane.add(lblFirstName);
 		
 		JLabel lblSurname = new JLabel("Surname:");
 		lblSurname.setBounds(90, 101, 76, 14);

@@ -82,7 +82,6 @@ public class GuiDeleteUser extends JFrame {
 				}
 				if(!isFound) {
 					System.out.println("ID Invalid");
-					
 				}		
 			}
 		});
