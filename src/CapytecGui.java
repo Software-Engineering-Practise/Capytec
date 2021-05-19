@@ -202,7 +202,7 @@ public class CapytecGui extends JFrame {
 			String daysRepeat;
 			if (repeat == 0)
 			{
-				isRepeated = "No";
+				isRepeated = "Doesn't repeat";
 				daysRepeat = "N/A";
 			}
 			else
