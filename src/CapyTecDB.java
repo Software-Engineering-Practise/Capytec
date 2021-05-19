@@ -154,6 +154,29 @@ public class CapyTecDB{
 		return tasks;
 	}
 	
+	public ArrayList<String> getAllSkills() {
+		
+		ArrayList<String> skills = new ArrayList<String>();
+		
+		try {
+			
+			String sql = "SELECT skill_name FROM skill;";
+			
+			ResultSet skillResultSet = database.RunSQLQuery(sql);
+			
+			while(skillResultSet.next()) {
+				
+				skills.add(skillResultSet.getString(1));
+				
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return skills;
+	}
+	
 	//INSERT FUNCTIONS
 	public void addCaretaker(Caretaker caretaker) {
 		
@@ -169,74 +192,6 @@ public class CapyTecDB{
 		}
 		
 	}
-	//UPDATE FUNCTIONS
-	/*public void updateCaretaker(Caretaker caretaker) {
-		
-		String getCurrentSQL = "SELECT first_name, last_name, job_title, skills FROM user JOIN job ON user.job_type = job.job_id WHERE user_id = "+caretaker.getID()+";";
-		String updateSQL = "UPDATE user SET ";
-		
-		boolean needsUpdate = false;
-		
-		ResultSet currentCaretaker = database.RunSQLQuery(getCurrentSQL);
-		
-		
-		try {
-			if(!(currentCaretaker.getString(1).equals(caretaker.getFirstName()))) {
-				
-				needsUpdate = true;
-				
-				updateSQL = updateSQL + "first_name = '"+ caretaker.getFirstName() + "'";
-				
-			} else if (!(currentCaretaker.getString(2).equals(caretaker.getLastName()))) {
-				
-				if(needsUpdate) updateSQL = updateSQL + ", ";
-				needsUpdate = true;
-				
-				updateSQL = updateSQL + "last_name = '" + caretaker.getLastName() +"'";
-				
-			} else if (!(currentCaretaker.getString(3).equals(caretaker.getJobTitle()))) {
-				
-				if(needsUpdate) updateSQL = updateSQL + ", ";
-				needsUpdate = true;
-				
-				updateSQL = updateSQL + "job_title ";
-				
-				String getJobs = "SELECT * FROM job;";
-				ResultSet jobs = database.RunSQLQuery(getJobs);
-				
-				while(jobs.next()) {
-					if(currentCaretaker.getString(3) == jobs.getString(2)) updateSQL = updateSQL + "job_type = " + jobs.getInt(1);
-				}
-				
-			} else if(caretaker.getSkills() != null) { 
-				if (!(currentCaretaker.getString(4).equals(caretaker.getSkills()))) {
-				
-					if(needsUpdate) updateSQL = updateSQL + ", ";
-					needsUpdate = true;
-					
-					updateSQL = updateSQL + "skills = '"+ caretaker.getSkills() +"'";
-					
-				}
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
-		
-		if(needsUpdate) {
-			updateSQL = updateSQL + " WHERE user_id = "+ caretaker.getID() +";";
-			boolean success = database.RunSQL(updateSQL);
-			if(!success) {
-				System.out.println("Failed to run query: "+updateSQL);
-			}
-		}
-		
-	}
-	
-	public void UpdateCaretakerTask(CaretakerTask task) {
-		
-		String getCurrentSQL = "SELECT ";
-		
-	}*/
 	
 	//DELETE FUNCTIONS
 	public void DeleteUser(String userFName, String userLName) {
