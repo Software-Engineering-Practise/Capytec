@@ -188,10 +188,36 @@ public class CapytecGui extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"User", "Task", "Task Set", "Repeated Task?", "Completed Date"
+				"User", "Task ID", "Task",  "Task Set", "Repeated Task?", "Repeat Period", "Completed Date"
 			}
 		));
+		
+		DefaultTableModel tableModelTaskLogging = (DefaultTableModel)tableTaskLogging.getModel();
+		
+		for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++)
+		{
+			CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+			int repeat = currentItem.getDaysUntilRepeat();
+			String isRepeated;
+			String daysRepeat;
+			if (repeat == 0)
+			{
+				isRepeated = "No";
+				daysRepeat = "N/A";
+			}
+			else
+			{
+				isRepeated = "Yes";
+				daysRepeat = "" + repeat;
+			}
+			if (currentItem.getDateCompleted() == null || isRepeated == "Yes")
+				tableModelTaskLogging.addRow(new Object[] {currentItem.getID(), currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted()});
+		}
+		
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
+		
+		JPanel panelReporting = new JPanel();
+		tabbedPane.addTab("Reporting", null, panelReporting, null);
 		
 		
 	}
