@@ -17,6 +17,7 @@ import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import java.awt.Color;
 
 public class GuiInsertTask extends JFrame {
 
@@ -141,6 +142,13 @@ public class GuiInsertTask extends JFrame {
 		comboBoxImportance.setBounds(191, 299, 40, 22);
 		contentPane.add(comboBoxImportance);
 		
+		JLabel lblErrorMessage = new JLabel("Error Message");
+		lblErrorMessage.setForeground(Color.RED);
+		lblErrorMessage.setBounds(90, 332, 180, 31);
+		contentPane.add(lblErrorMessage);
+		lblErrorMessage.setVisible(false);
+		
+		
 		JButton btnInsertTask = new JButton("Insert Task");
 		btnInsertTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {				
@@ -148,35 +156,44 @@ public class GuiInsertTask extends JFrame {
 				String description = textFieldDescription.getText();
 				String taskType = comboBoxTaskType.getSelectedItem().toString();
 				boolean insertTaskError = false;
-				if(taskName.isBlank()) {
-					System.out.println("Task name cannot be empty");
-					insertTaskError = true;
-				}
-				if(description.isBlank()) {
-					System.out.println("Description cannot be empty");
-					insertTaskError = true;
-				}
-				if(taskType.isEmpty()) {
-					System.out.println("Task type cannot be empty");
+				
+				
+				if(datePickerDue.getJFormattedTextField().getText().equals("")) {
+					//System.out.println("Due date cannot be empty");
+					lblErrorMessage.setText("Due date cannot be empty");
 					insertTaskError = true;
 				}
 				if(datePickerStart.getJFormattedTextField().getText().equals("")) {
-					System.out.println("Start date cannot be empty");
+					//System.out.println("Start date cannot be empty");
+					lblErrorMessage.setText("Start date cannot be empty");
 					insertTaskError = true;
 				}
-				if(datePickerDue.getJFormattedTextField().getText().equals("")) {
-					System.out.println("Due date cannot be empty");
+				if(taskType.isEmpty()) {
+					//System.out.println("Task type cannot be empty");
+					lblErrorMessage.setText("Task type cannot be empty");
+					insertTaskError = true;
+				}
+				if(description.isBlank()) {
+					//System.out.println("Description cannot be empty");
+					lblErrorMessage.setText("Description cannot be empty");
+					insertTaskError = true;
+				}
+				if(taskName.isBlank()) {
+					//System.out.println("Task name cannot be empty");
+					lblErrorMessage.setText("Task name cannot be empty");
 					insertTaskError = true;
 				}
 				if(insertTaskError == false) {
+					lblErrorMessage.setVisible(false);
 					System.out.println("Insert");
+				} else {
+					lblErrorMessage.setVisible(true);
 				}
-				
-				
 			}
 		});
 		btnInsertTask.setBounds(306, 338, 118, 36);
 		contentPane.add(btnInsertTask);
+		
 
 	}
 }
