@@ -134,6 +134,12 @@ public class CapytecGui extends JFrame {
 		panelTaskManagement.add(panelUserBottomButtons, BorderLayout.SOUTH);
 		
 		JButton btnAddTask = new JButton("Add Task");
+		btnAddTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GuiInsertTask frameInsertTask = new GuiInsertTask();
+				frameInsertTask.setVisible(true);
+			}
+		});
 		panelUserBottomButtons.add(btnAddTask);
 		
 		JButton btnAssignTask = new JButton("Assign Task");
@@ -157,27 +163,63 @@ public class CapytecGui extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Task No.", "Task", "Assigned Member", "Description", "Type", "Start Date", "Due Date", "Completion Date", "Completionist", "Importance", "Frequency"
+				"Task No.", "Task", "Assigned Member", "Description", "Type", "Start Date", "Due Date", "Completion Date", "Completionist", "Importance", "Days Until Repeat"
 			}
 		));
 		tableTaskManagement.getColumnModel().getColumn(1).setPreferredWidth(270);
 		tableTaskManagement.getColumnModel().getColumn(2).setPreferredWidth(173);
 		tableTaskManagement.getColumnModel().getColumn(3).setPreferredWidth(342);
-		tableTaskManagement.getColumnModel().getColumn(4).setPreferredWidth(124);
-		tableTaskManagement.getColumnModel().getColumn(5).setPreferredWidth(132);
-		tableTaskManagement.getColumnModel().getColumn(6).setPreferredWidth(120);
-		tableTaskManagement.getColumnModel().getColumn(7).setPreferredWidth(143);
-		tableTaskManagement.getColumnModel().getColumn(8).setPreferredWidth(130);
-		tableTaskManagement.getColumnModel().getColumn(9).setPreferredWidth(118);
-		tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(117);
+		tableTaskManagement.getColumnModel().getColumn(4).setPreferredWidth(129);
+		tableTaskManagement.getColumnModel().getColumn(5).setPreferredWidth(162);
+		tableTaskManagement.getColumnModel().getColumn(6).setPreferredWidth(162);
+		tableTaskManagement.getColumnModel().getColumn(7).setPreferredWidth(175);
+		tableTaskManagement.getColumnModel().getColumn(8).setPreferredWidth(192);
+		tableTaskManagement.getColumnModel().getColumn(9).setPreferredWidth(98);
+		tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(131);
 		
 		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
 		
 		for(int i=0; i<dbClass.GetAllTasks().size(); i++) {
-			CaretakerTask currentItem = dbClass.GetAllTasks().get(i); 
-			tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"Repeat/Oneoff"});
+			CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+			int repeat = currentItem.getDaysUntilRepeat();
+			String isRepeated;
+			String daysUntilRepeat;
+			if(repeat == 0) {
+				isRepeated = "One-off";
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
+			} else {
+				isRepeated = "Repeats";
+				daysUntilRepeat = "" + repeat;
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
+			}
+			
+			
 		}
 
+		//for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++)
+		//{
+		//	CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+		//	int repeat = currentItem.getDaysUntilRepeat();
+		//	String isRepeated;
+		//	String daysRepeat;
+		//	if (repeat == 0)
+		//	{
+		//		isRepeated = "Doesn't repeat";
+		//		daysRepeat = "N/A";
+		//	}
+		//	else
+		//	{
+		//		isRepeated = "Yes";
+		//		daysRepeat = "" + repeat;
+		//	}
+		//	if (currentItem.getDateCompleted() == null || isRepeated == "Yes")
+		//		tableModelTaskLogging.addRow(new Object[] {currentItem.getID(), currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted()});
+		//}
+		
+		
+		
+		
+		
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
 		
 		JPanel panelTaskLogging = new JPanel();

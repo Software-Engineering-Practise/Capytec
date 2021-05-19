@@ -44,7 +44,7 @@ public class GuiInsertTask extends JFrame {
 	 * Create the frame.
 	 */
 	public GuiInsertTask() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 424);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -83,33 +83,7 @@ public class GuiInsertTask extends JFrame {
 		comboBoxTaskType.setBounds(191, 151, 96, 22);
 		contentPane.add(comboBoxTaskType);
 		
-		JButton btnInsertTask = new JButton("Insert Task");
-		btnInsertTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {				
-				String taskName = textFieldTaskName.getText();
-				String description = textFieldDescription.getText();
-				String taskType = comboBoxTaskType.getSelectedItem().toString();
-				boolean insertTaskError = false;
-				if(taskName.isBlank()) {
-					System.out.println("Task name cannot be empty");
-					insertTaskError = true;
-				}
-				if(description.isBlank()) {
-					System.out.println("Description cannot be empty");
-					insertTaskError = true;
-				}
-				if(taskType.isEmpty()) {
-					System.out.println("Task type cannot be empty");
-					insertTaskError = true;
-				}
-				if(insertTaskError == false) {
-					System.out.println("Insert");
-				}
-				
-			}
-		});
-		btnInsertTask.setBounds(306, 338, 118, 36);
-		contentPane.add(btnInsertTask);
+		
 		
 		JLabel lblFrequency = new JLabel("Frequency:");
 		lblFrequency.setBounds(90, 193, 76, 14);
@@ -155,8 +129,54 @@ public class GuiInsertTask extends JFrame {
 		contentPane.add(datePickerDue);
 		
 		JLabel lblDueDate = new JLabel("Due Date:");
-		lblDueDate.setBounds(90, 270, 76, 14);
+		lblDueDate.setBounds(90, 263, 76, 14);
 		contentPane.add(lblDueDate);
+		
+		JLabel lblImportance = new JLabel("Importance:");
+		lblImportance.setBounds(90, 303, 76, 14);
+		contentPane.add(lblImportance);
+		
+		JComboBox comboBoxImportance = new JComboBox();
+		comboBoxImportance.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
+		comboBoxImportance.setBounds(191, 299, 40, 22);
+		contentPane.add(comboBoxImportance);
+		
+		JButton btnInsertTask = new JButton("Insert Task");
+		btnInsertTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {				
+				String taskName = textFieldTaskName.getText();
+				String description = textFieldDescription.getText();
+				String taskType = comboBoxTaskType.getSelectedItem().toString();
+				boolean insertTaskError = false;
+				if(taskName.isBlank()) {
+					System.out.println("Task name cannot be empty");
+					insertTaskError = true;
+				}
+				if(description.isBlank()) {
+					System.out.println("Description cannot be empty");
+					insertTaskError = true;
+				}
+				if(taskType.isEmpty()) {
+					System.out.println("Task type cannot be empty");
+					insertTaskError = true;
+				}
+				if(datePickerStart.getJFormattedTextField().getText().equals("")) {
+					System.out.println("Start date cannot be empty");
+					insertTaskError = true;
+				}
+				if(datePickerDue.getJFormattedTextField().getText().equals("")) {
+					System.out.println("Due date cannot be empty");
+					insertTaskError = true;
+				}
+				if(insertTaskError == false) {
+					System.out.println("Insert");
+				}
+				
+				
+			}
+		});
+		btnInsertTask.setBounds(306, 338, 118, 36);
+		contentPane.add(btnInsertTask);
 
 	}
 }
