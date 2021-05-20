@@ -321,15 +321,33 @@ public class CapyTecDB{
 		}
 	}
 	
-	//DELETE FUNCTIONS
-	public void DeleteUser(String userFName, String userLName) {
+	public void addCaretakerTask(CaretakerTask caretakerTask) {
 		
-		String sqlString = new String("DELETE FROM user WHERE first_name = "+userFName+" AND last_name = "+userLName+";");
+		
+		
+	}
+	
+	//DELETE FUNCTIONS
+	public void DeleteUser(int userID) {
+		
+		String sqlString = new String("DELETE FROM user WHERE user_id = "+userID+";");
 		
 		boolean success = database.RunSQL(sqlString);
 		
 		if(!success) {
 			System.out.println("Failed to run query: "+sqlString);
 		}
+	}
+	
+	public void DeleteCaretakerTask(int taskID) {
+		
+		String sqlString = new String("DELETE FROM task WHERE task_id = "+taskID+";");
+		
+		boolean success = database.RunSQL(sqlString);
+		
+		if(!success) {
+			System.out.println("Failed to run query: "+sqlString);
+		}
+		
 	}
 }
