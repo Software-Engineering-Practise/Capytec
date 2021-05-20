@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDate;
 import java.util.Properties;
 
 import javax.swing.JButton;
@@ -96,6 +97,7 @@ public class GuiInsertTask extends JFrame {
 		contentPane.add(comboBoxFrequency);
 		
 		UtilDateModel modelStartDate = new UtilDateModel();
+		
 		Properties pStart = new Properties();
 		pStart.put("text.today", "Today");
 		pStart.put("text.month", "Month");
@@ -107,6 +109,7 @@ public class GuiInsertTask extends JFrame {
 	    		System.out.println("Start Date: " + datePickerStart.getJFormattedTextField().getText());
 	    	}
 	    });
+	    
 	    datePickerStart.setBounds(191, 230, 125, 20);
 		contentPane.add(datePickerStart);
 		
