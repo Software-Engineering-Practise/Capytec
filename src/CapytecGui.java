@@ -86,6 +86,9 @@ public class CapytecGui extends JFrame {
 		});
 		panelTaskBottomButtons.add(btnRemoveUser);
 		
+		JButton btnGetBriefing = new JButton("Daily Briefing");
+		panelTaskBottomButtons.add(btnGetBriefing);
+		
 		JPanel panelUserTitle = new JPanel();
 		panelUserManagement.add(panelUserTitle, BorderLayout.NORTH);
 		
@@ -146,6 +149,12 @@ public class CapytecGui extends JFrame {
 		panelUserBottomButtons.add(btnAssignTask);
 		
 		JButton btnRemoveTask = new JButton("Remove Task");
+		btnRemoveTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GuiDeleteTask frameDeleteTask = new GuiDeleteTask();
+				frameDeleteTask.setVisible(true);
+			}
+		});
 		panelUserBottomButtons.add(btnRemoveTask);
 		
 		JPanel panelTaskTitle = new JPanel();
@@ -184,41 +193,20 @@ public class CapytecGui extends JFrame {
 			int repeat = currentItem.getDaysUntilRepeat();
 			String isRepeated;
 			String daysUntilRepeat;
+			String skillsList = " ";
+			for(int x=0; x<currentItem.getRecSkills().size(); x++) {
+				skillsList += currentItem.getRecSkills().get(x) + " ";
+			}
 			if(repeat == 0) {
 				isRepeated = "One-off";
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
 			} else {
 				isRepeated = "Repeats";
 				daysUntilRepeat = "" + repeat;
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
+				
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
 			}
-			
-			
-		}
-
-		//for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++)
-		//{
-		//	CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
-		//	int repeat = currentItem.getDaysUntilRepeat();
-		//	String isRepeated;
-		//	String daysRepeat;
-		//	if (repeat == 0)
-		//	{
-		//		isRepeated = "Doesn't repeat";
-		//		daysRepeat = "N/A";
-		//	}
-		//	else
-		//	{
-		//		isRepeated = "Yes";
-		//		daysRepeat = "" + repeat;
-		//	}
-		//	if (currentItem.getDateCompleted() == null || isRepeated == "Yes")
-		//		tableModelTaskLogging.addRow(new Object[] {currentItem.getID(), currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted()});
-		//}
-		
-		
-		
-		
+		}		
 		
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
 		
