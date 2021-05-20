@@ -86,6 +86,9 @@ public class CapytecGui extends JFrame {
 		});
 		panelTaskBottomButtons.add(btnRemoveUser);
 		
+		JButton btnGetBriefing = new JButton("Daily Briefing");
+		panelTaskBottomButtons.add(btnGetBriefing);
+		
 		JPanel panelUserTitle = new JPanel();
 		panelUserManagement.add(panelUserTitle, BorderLayout.NORTH);
 		
