@@ -74,7 +74,7 @@ public class GuiSignTask extends JFrame {
 		JButton btnSignTask = new JButton("Set Task as Signed");
 		btnSignTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button pressed. No functionality yet.");
+				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ". No functionality yet.");
 			}
 		});
 		btnSignTask.setEnabled(false);

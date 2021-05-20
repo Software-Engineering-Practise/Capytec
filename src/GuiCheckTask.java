@@ -75,7 +75,7 @@ public class GuiCheckTask extends JFrame {
 		JButton btnCheckTask = new JButton("Set Task as Checked");
 		btnCheckTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button pressed. No functionality yet.");
+				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ". No functionality yet.");
 			}
 		});
 		btnCheckTask.setEnabled(false);
