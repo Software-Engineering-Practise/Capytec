@@ -190,16 +190,19 @@ public class CapytecGui extends JFrame {
 			int repeat = currentItem.getDaysUntilRepeat();
 			String isRepeated;
 			String daysUntilRepeat;
+			String skillsList = " ";
+			for(int x=0; x<currentItem.getRecSkills().size(); x++) {
+				skillsList += currentItem.getRecSkills().get(x) + " ";
+			}
 			if(repeat == 0) {
 				isRepeated = "One-off";
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
 			} else {
 				isRepeated = "Repeats";
 				daysUntilRepeat = "" + repeat;
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),"Type",currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
+				
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
 			}
-			
-			
 		}		
 		
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
