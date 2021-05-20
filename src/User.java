@@ -13,7 +13,6 @@ public abstract class User{
 		setFirstName("FIRSTNAME NOT SET!");
 		setLastName("LASTNAME NOT SET!");
 		
-		
 	}
 	
 	//ENCAPSULATION METHODS

@@ -19,6 +19,11 @@ public abstract class Task {
 	private String signee;
 	private String peerChecker;
 	
+	private int authorID;
+	private int completionistID;
+	private int signeeID;
+	private int peerCheckerID;
+	
 	private boolean needsSigning;
 	private boolean needsPeerChecking;
 	
@@ -162,6 +167,46 @@ public abstract class Task {
 
 	public void setPeerChecker(String peerChecker) {
 		this.peerChecker = peerChecker;
+	}
+
+
+	public int getAuthorID() {
+		return authorID;
+	}
+
+
+	public void setAuthorID(int authorID) {
+		this.authorID = authorID;
+	}
+
+
+	public int getCompletionistID() {
+		return completionistID;
+	}
+
+
+	public void setCompletionistID(int completionistID) {
+		this.completionistID = completionistID;
+	}
+
+
+	public int getSigneeID() {
+		return signeeID;
+	}
+
+
+	public void setSigneeID(int signeeID) {
+		this.signeeID = signeeID;
+	}
+
+
+	public int getPeerCheckerID() {
+		return peerCheckerID;
+	}
+
+
+	public void setPeerCheckerID(int peerCheckerID) {
+		this.peerCheckerID = peerCheckerID;
 	}
 
 
