@@ -188,8 +188,8 @@ public class CapytecGui extends JFrame {
 		
 		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
 		
-		for(int i=0; i<dbClass.GetAllTasks().size(); i++) {
-			CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+		for(int i=0; i<dbClass.getAllTasks().size(); i++) {
+			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
 			int repeat = currentItem.getDaysUntilRepeat();
 			String isRepeated;
 			String daysUntilRepeat;
@@ -270,9 +270,9 @@ public class CapytecGui extends JFrame {
 		
 		DefaultTableModel tableModelTaskLogging = (DefaultTableModel)tableTaskLogging.getModel();
 		
-		for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++)
+		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 		{
-			CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
 			
 			
 			int repeat = currentItem.getDaysUntilRepeat();

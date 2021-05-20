@@ -72,9 +72,9 @@ public class GuiDeleteTask extends JFrame {
 				String inputID = textFieldID.getText();
 				boolean isFound = false;
 				
-				for(int i=0; i<dbClass.GetAllTasks().size(); i++) {
+				for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 					//Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
-					Task currentTask = dbClass.GetAllTasks().get(i);
+					Task currentTask = dbClass.getAllTasks().get(i);
 					String retrievedID = Integer.toString(currentTask.getID());
 					if(inputID.equals(retrievedID)) {
 						System.out.println("ID found for task: " + currentTask.getTitle());

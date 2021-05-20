@@ -62,8 +62,8 @@ public class GuiCheckTask extends JFrame {
 		
 		dropdownTaskID.setModel(new DefaultComboBoxModel());
 		dropdownTaskID.addItem("Select a Task ID");
-		for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++) {
-			CaretakerTask currentTask = dbClass.GetAllTasks().get(i);
+		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
+			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			if (currentTask.isNeedsPeerChecking() && !currentTask.getTeamMembers().contains(userLoggedIn))
 			{
 				dropdownTaskID.addItem(currentTask.getID());
