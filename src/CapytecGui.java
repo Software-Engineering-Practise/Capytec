@@ -3,6 +3,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -13,6 +14,7 @@ import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.SwingConstants;
 
 public class CapytecGui extends JFrame {
 
@@ -188,8 +190,8 @@ public class CapytecGui extends JFrame {
 		
 		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
 		
-		for(int i=0; i<dbClass.GetAllTasks().size(); i++) {
-			CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+		for(int i=0; i<dbClass.getAllTasks().size(); i++) {
+			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
 			int repeat = currentItem.getDaysUntilRepeat();
 			String isRepeated;
 			String daysUntilRepeat;
@@ -218,6 +220,7 @@ public class CapytecGui extends JFrame {
 		panelTaskLogging.add(panelLoggingTitle, BorderLayout.NORTH);
 		
 		JLabel lblTaskLogging = new JLabel("Task Logging");
+		lblTaskLogging.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelLoggingTitle.add(lblTaskLogging);
 		
 		JPanel panelTaskLoggingButtons = new JPanel();
@@ -264,15 +267,15 @@ public class CapytecGui extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Assigned Caretaker(s)", "Task ID", "Task", "Task Set", "Repeated Task?", "Repeat Period", "Completed Date", "Extra Requirements", "Checked By", "Signed By"
+				"Assigned Caretaker(s)", "Task ID", "Task", "Task Set", "Repeated Task?", "Repeat Period", "Completed Date", "Extra Requirements", "Checked By", "Signed By", "Priority"
 			}
 		));
 		
 		DefaultTableModel tableModelTaskLogging = (DefaultTableModel)tableTaskLogging.getModel();
 		
-		for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++)
+		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 		{
-			CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
 			
 			
 			int repeat = currentItem.getDaysUntilRepeat();
@@ -315,13 +318,44 @@ public class CapytecGui extends JFrame {
 				signedBy = "N/A";
 				checkedBy = "N/A"; }
 			if (currentItem.getDateCompleted() == null || isRepeated == "Yes")
-				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy});
+				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
 		}
 		
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
 		
 		JPanel panelReporting = new JPanel();
 		tabbedPane.addTab("Reporting", null, panelReporting, null);
+		panelReporting.setLayout(new BorderLayout(0, 0));
+		
+		JPanel panelReportingTitle = new JPanel();
+		panelReporting.add(panelReportingTitle, BorderLayout.NORTH);
+		
+		JLabel lblReportingTitle = new JLabel("Reporting");
+		lblReportingTitle.setFont(new Font("Tahoma", Font.PLAIN, 20));
+		panelReportingTitle.add(lblReportingTitle);
+		
+		JPanel panelReportingButtons = new JPanel();
+		panelReporting.add(panelReportingButtons, BorderLayout.SOUTH);
+		
+		JButton btnCaretakerReports = new JButton("Caretaker Reports");
+		
+		panelReportingButtons.add(btnCaretakerReports);
+		
+		JButton btnReportButton2 = new JButton("Report Button 2");
+		panelReportingButtons.add(btnReportButton2);
+		
+		JLabel lblReportText = new JLabel("Text");
+		lblReportText.setVerticalAlignment(SwingConstants.TOP);
+		panelReporting.add(lblReportText, BorderLayout.CENTER);
+		
+		btnCaretakerReports.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for (int i = 0 ; i < dbClass.getAllCompletedTasks().size(); i++)
+				{
+					//CompletedTask currentCompletedTask = getAllCompletedTasks().get(i);
+				}
+			}
+		});
 		
 		
 	}

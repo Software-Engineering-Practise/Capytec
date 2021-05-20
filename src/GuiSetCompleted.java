@@ -60,8 +60,8 @@ public class GuiSetCompleted extends JFrame {
 		JComboBox dropdownTaskID = new JComboBox();
 		dropdownTaskID.setModel(new DefaultComboBoxModel());
 		dropdownTaskID.addItem("Select a Task ID");
-		for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++) {
-			CaretakerTask currentTask = dbClass.GetAllTasks().get(i);
+		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
+			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			if (currentTask.getTeamMembers().contains(userLoggedIn) && (currentTask.getDaysUntilRepeat() != 0 || currentTask.getDateCompleted() == null))
 			{
 				dropdownTaskID.addItem(currentTask.getID());
@@ -70,45 +70,50 @@ public class GuiSetCompleted extends JFrame {
 		dropdownTaskID.setBounds(208, 60, 138, 22);
 		contentPane.add(dropdownTaskID);
 		
-		JButton btnCompleteTask = new JButton("Set Task as Completed");
+		JButton btnCompleteTask = new JButton("Select a Task");
 		btnCompleteTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ". No functionality yet.");
 			}
 		});
-		btnCompleteTask.setEnabled(true);
+		btnCompleteTask.setEnabled(false);
 		btnCompleteTask.setBounds(96, 170, 250, 42);
 		contentPane.add(btnCompleteTask);
 		
+		
 		dropdownTaskID.addActionListener(new ActionListener() {
-            public void actionPerformed(ActionEvent e) {
-                boolean readyToComplete = true;
-
-                
-                CaretakerTask currentTask = dbClass.GetAllTasks().get((int) dropdownTaskID.getSelectedItem()-1);
-                if (currentTask.isNeedsSigning() && currentTask.getSignee() == null)
-                    readyToComplete = false;
-                else if (currentTask.isNeedsPeerChecking() && currentTask.getPeerChecker() == null)
-                    readyToComplete = false;
-                
-
-                if (dropdownTaskID.getSelectedIndex() == 0)
-                {
-                    setEnabled(false);
-                    btnCompleteTask.setText("Set Task as Completed");
-                }
-                else if (!readyToComplete)
-                {
-                    btnCompleteTask.setEnabled(false);
-                    btnCompleteTask.setText("This task requires signing or checking");
-                }
-                else
-                {
-                    btnCompleteTask.setEnabled(true);
-                    btnCompleteTask.setText("Set Task as Completed");
-                }
-            }
-        });
+			public void actionPerformed(ActionEvent e) {
+				if (dropdownTaskID.getSelectedIndex() != 0)
+				{
+					CaretakerTask currentTask = dbClass.getAllTasks().get((int)dropdownTaskID.getSelectedItem()-1);
+					if (currentTask.isNeedsPeerChecking() && currentTask.getPeerChecker() == null)
+					{
+						btnCompleteTask.setEnabled(false);
+						btnCompleteTask.setText("This task has not been checked");
+					}
+					else if (currentTask.isNeedsSigning() && currentTask.getSignee() == null)
+					{
+						btnCompleteTask.setEnabled(false);
+						btnCompleteTask.setText("This task has not been signed off");
+					}
+					else if (currentTask.getTeamMembers().contains(userLoggedIn))
+					{
+						btnCompleteTask.setEnabled(true);
+						btnCompleteTask.setText("Set Task " + currentTask.getID() + " as Complete");
+					}
+					else
+					{
+						btnCompleteTask.setEnabled(false);
+						btnCompleteTask.setText("This is not your task.");
+					}
+				}
+				else
+				{
+					btnCompleteTask.setEnabled(false);
+					btnCompleteTask.setText("Please Select a Task");
+				}
+			}
+		});
 		
 		
 		
