@@ -9,7 +9,8 @@ public class TestingDBMethods {
 		//test1();
 		//test2();
 		//test3();
-		test4();
+		//test4();
+		test5();
 	}
 	
 	public static void test1() {
@@ -111,9 +112,47 @@ public class TestingDBMethods {
 		
 		CapyTecDB DBTest = new CapyTecDB();
 		
+		ArrayList<CompletedTask> allTasks = DBTest.getAllCompletedTasks();
+		
+		
+		for(int i = 0; i < allTasks.size() ; i++) {
+			
+			System.out.println("");
+			System.out.println("##############Record ID: " + allTasks.get(i).getId());
+			System.out.println("Task ID: " + allTasks.get(i).getTaskID());
+			System.out.println("User ID: " + allTasks.get(i).getUserID());
+			System.out.println("Date Completed: " + allTasks.get(i).getDateCompleted());
+			
+		}
+		
+	}
+	
+	public static void test5() {
+		
+		System.out.println("");
+		System.out.println("######################TEST 5######################");
+		System.out.println("INSERTING NEW TASK!!!");
+		
+		CaretakerTask testTask = new CaretakerTask();
+		
+		testTask.setTitle("Test Insert Title");
+		testTask.setDesc("Test Insert Desc");
+		testTask.setDateCreated("2021-3-13 12:00:00");
+		testTask.setDateDue("2420-2-11 9:00:00");
+		testTask.setAuthorID(1);
+		testTask.setPriority(2);
+		
+		CapyTecDB DBTest = new CapyTecDB();
+		
+		DBTest.addCaretakerTask(testTask);
+		
 		ArrayList<CaretakerTask> allTasks = new ArrayList<CaretakerTask>();
 		
-		allTasks = DBTest.getAllCompletedTasks();
+		allTasks = DBTest.getAllTasks();
+		
+		System.out.println("Got Tasks!");
+		
+		int id = 0;
 		
 		for(int i = 0; i < allTasks.size() ; i++) {
 			
@@ -143,9 +182,15 @@ public class TestingDBMethods {
 				System.out.println("Member ID: " + allTasks.get(i).getTeamMembers().get(j));
 			}
 			
+			if(allTasks.get(i).getDateCreated().equals(allTasks.get(i).getDateCreated())) {
+				System.out.println("GOT ID FOR DELETE!");
+				id = allTasks.get(i).getID();
+			}
 		}
 		
+		
+		DBTest.DeleteCaretakerTask(id);
+		
 	}
-	
 	
 }

@@ -92,7 +92,7 @@ public class CapyTecDB{
 		
 		try {
 		
-			String sqlString = new String("SELECT task_id, task_title, task_desc, need_signing, need_peer_check, date_created, date_due, date_updated, date_completed, priority, days_till_repeat, "
+			String sqlString = new String("SELECT task_id, task_title, task_desc, need_signing, need_peer_check, date_created, date_due, date_updated, date_completed, priority, days_till_repeat, created_by, completed_by, signed_by, peer_checked_by, "
 					+ "a.first_name || ' ' || a.last_name AS CreatorName, "
 					+ "b.first_name || ' ' || b.last_name AS CompletionistName, "
 					+ "c.first_name || ' ' || c.last_name AS SignedBy, "
@@ -103,16 +103,21 @@ public class CapyTecDB{
 			
 			
 			while(taskResultSet.next()){
+				
 				CaretakerTask newTask = new CaretakerTask();
 				newTask.setID(taskResultSet.getInt(1));
 				newTask.setTitle(taskResultSet.getString(2));
 				newTask.setDesc(taskResultSet.getString(3));
 				newTask.setPriority(taskResultSet.getInt(10));
 				newTask.setDaysUntilRepeat(taskResultSet.getInt(11));
-				newTask.setAuthor(taskResultSet.getString(12));
-				newTask.setCompletionist(taskResultSet.getString(13));
-				newTask.setSignee(taskResultSet.getString(14));
-				newTask.setPeerChecker(taskResultSet.getString(15));
+				newTask.setAuthorID(taskResultSet.getInt(12));
+				newTask.setCompletionistID(taskResultSet.getInt(13));
+				newTask.setSigneeID(taskResultSet.getInt(14));
+				newTask.setPeerCheckerID(taskResultSet.getInt(15));
+				newTask.setAuthor(taskResultSet.getString(16));
+				newTask.setCompletionist(taskResultSet.getString(17));
+				newTask.setSignee(taskResultSet.getString(18));
+				newTask.setPeerChecker(taskResultSet.getString(19));
 				
 				//Get database integer flag and set to java boolean in Task
 				if (taskResultSet.getInt(4) == 1) newTask.setNeedsSigning(true);
@@ -181,9 +186,9 @@ public class CapyTecDB{
 		return skills;
 	}
 	
-	public ArrayList<CaretakerTask> getAllCompletedTasks() {
+	public ArrayList<CompletedTask> getAllCompletedTasks() {
 		
-		ArrayList<CaretakerTask> compTasks = new ArrayList<CaretakerTask>();
+		ArrayList<CompletedTask> compTasks = new ArrayList<CompletedTask>();
 		
 		try {
 			String sql = "SELECT compTask_id, task, user, date FROM completed_task;";
@@ -191,78 +196,15 @@ public class CapyTecDB{
 			ResultSet completedTasksResultSet = database.RunSQLQuery(sql);
 			
 			while(completedTasksResultSet.next()) {
-				boolean go = true;
+					
+				CompletedTask newCompTask = new CompletedTask();
 				
-				for(int i = 0 ; i < compTasks.size() ; i++) {
-					if(compTasks.get(i).getID() == completedTasksResultSet.getInt(2)) go = false;
-				}
+				newCompTask.setId(completedTasksResultSet.getInt(1));
+				newCompTask.setTaskID(completedTasksResultSet.getInt(2));
+				newCompTask.setUserID(completedTasksResultSet.getInt(3));
+				newCompTask.setDateCompleted(completedTasksResultSet.getString(4));
+				compTasks.add(newCompTask);
 				
-				if(go) {
-					
-					sql = "SELECT task_id, task_title, task_desc, need_signing, need_peer_check, date_created, date_due, date_updated, date_completed, priority, days_till_repeat, "
-							+ "a.first_name || ' ' || a.last_name AS CreatorName, "
-							+ "b.first_name || ' ' || b.last_name AS CompletionistName, "
-							+ "c.first_name || ' ' || c.last_name AS SignedBy, "
-							+ "d.first_name || ' ' || d.last_name AS PeerChecker "
-							+ "FROM task AS t LEFT JOIN user AS a ON t.created_by = a.user_id  LEFT JOIN user AS b ON t.completed_by = b.user_id LEFT JOIN user AS c ON t.signed_by = c.user_id LEFT JOIN user AS d ON t.peer_checked_by = d.user_id "
-							+ "WHERE task_id = "+completedTasksResultSet.getInt(2)+";";
-					
-					ResultSet currentTaskResultSet = database.RunSQLQuery(sql);
-									
-					
-					CaretakerTask newTask = new CaretakerTask();
-					newTask.setID(currentTaskResultSet.getInt(1));
-					newTask.setTitle(currentTaskResultSet.getString(2));
-					newTask.setDesc(currentTaskResultSet.getString(3));
-					newTask.setPriority(currentTaskResultSet.getInt(10));
-					newTask.setDaysUntilRepeat(currentTaskResultSet.getInt(11));
-					newTask.setAuthor(currentTaskResultSet.getString(12));
-					newTask.setCompletionist(currentTaskResultSet.getString(13));
-					newTask.setSignee(currentTaskResultSet.getString(14));
-					newTask.setPeerChecker(currentTaskResultSet.getString(15));
-					
-					if (currentTaskResultSet.getInt(4) == 1) newTask.setNeedsSigning(true);
-					if (currentTaskResultSet.getInt(5) == 1) newTask.setNeedsPeerChecking(true);
-					
-					newTask.setDateCreated(currentTaskResultSet.getString(6));
-					newTask.setDateDue(currentTaskResultSet.getString(7));
-					newTask.setDateUpdated(currentTaskResultSet.getString(8));
-					
-					compTasks.add(newTask);
-					
-					for(int i = 0 ; i < compTasks.size() ; i++) {
-						if(compTasks.get(i).getID() == completedTasksResultSet.getInt(2)) {
-							compTasks.get(i).setDateCompleted(completedTasksResultSet.getString(4));
-						}
-					}
-					
-					
-				}
-				
-				sql = "SELECT task_id, skill_name " + 
-						"FROM skill JOIN task_skill ON skill.skill_id = task_skill.skill " + 
-						"JOIN task ON task_skill.task = task.task_id WHERE task_id = "+completedTasksResultSet.getInt(2)+";";
-				
-				ResultSet completedTaskSkillResultSet = database.RunSQLQuery(sql);
-				
-				while(completedTaskSkillResultSet.next()) {
-					for(int i = 0 ; i < compTasks.size() ; i++) {
-						if(compTasks.get(i).getID() == completedTaskSkillResultSet.getInt(1)) {
-							compTasks.get(i).getRecSkills().add(completedTaskSkillResultSet.getString(2));
-						}
-					}
-				}
-				
-				sql = "SELECT * FROM team;";
-				ResultSet completedTaskTeamResultSet = database.RunSQLQuery(sql);
-				
-				while(completedTaskTeamResultSet.next()) {
-					for(int i = 0 ; i < compTasks.size() ; i++ ) {
-						if(compTasks.get(i).getID() == completedTaskTeamResultSet.getInt(1)) {
-							compTasks.get(i).getTeamMembers().add(completedTaskTeamResultSet.getInt(2));
-						}
-					}
-				}
 			}
 			
 		} catch (SQLException e) {
@@ -284,7 +226,7 @@ public class CapyTecDB{
 			System.out.println("Failed to run query: "+sql);
 		}
 		
-		sql = "SELECT * FROM skill;";
+		sql = "SELECT skill_id, skill_name FROM skill;";
 		
 		if(caretaker.getSkills().size() != 0) {
 			try {
@@ -323,30 +265,100 @@ public class CapyTecDB{
 	
 	public void addCaretakerTask(CaretakerTask caretakerTask) {
 		
+		String title = caretakerTask.getTitle();
+		String desc = caretakerTask.getDesc();
+		String dateCreated = caretakerTask.getDateCreated();
+		String dateDue = caretakerTask.getDateDue();
+		int priority = caretakerTask.getPriority();
+		int daysUntilRepeat = caretakerTask.getDaysUntilRepeat();
+		int authorID = caretakerTask.getAuthorID();
+		int needsSigning = caretakerTask.isNeedsSigning() ? 1 : 0;
+		int needsPeerChecking = caretakerTask.isNeedsPeerChecking() ? 1 : 0;
 		
+		
+		String sql = "INSERT INTO task (task_title, task_desc, need_signing, need_peer_check, date_created, date_due, priority, created_by, days_till_repeat) "
+				+ "VALUES ('"+title+"', '"+desc+"', "+needsSigning+", "+needsPeerChecking+", '"+dateCreated+"', '"+dateDue+"', "+priority+", "+authorID+", "+daysUntilRepeat+");";
+		
+		boolean success = database.RunSQL(sql);
+		
+		if(!success) {
+			System.out.println("Failed to run query: "+sql);
+		}
+		
+		sql = "SELECT skill_id, skill_name FROM skill;";
+		
+		if(caretakerTask.getRecSkills().size() != 0) {
+			try {
+				ResultSet sqlResult = database.RunSQLQuery(sql);
+				
+				ArrayList<Integer> skills = new ArrayList<Integer>();
+				
+				while(sqlResult.next()) {
+					int id = 1;
+					for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
+						if(caretakerTask.getRecSkills().get(i) == sqlResult.getString(2)) {
+							skills.add(id);
+						}
+					}
+					id++;
+				}
+				
+				sql = "INSERT INTO user_skill (user, skill) VALUES";
+				
+				for(int i = 0 ; i < skills.size() ; i++) {
+					sql = sql + " (" + caretakerTask.getID() + ", " + skills.get(i) + ")";
+					if(i < skills.size()) sql = sql + ",";
+				}
+				
+				success = database.RunSQL(sql);
+				
+				if(!success) {
+					System.out.println("Failed to run query: "+sql);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+			
+	}
+	
+	public void addCompletedTask(CompletedTask completedTask) {
+		
+		int taskID = completedTask.getTaskID();
+		int userID = completedTask.getUserID();
+		String dateCompleted = completedTask.getDateCompleted();
+		
+		String sql = "INSERT INTO completed_task (task, user, date) VALUES ("+taskID+", "+userID+", '"+dateCompleted+"');";
+		
+		boolean success = database.RunSQL(sql);
+		
+		if(!success) {
+			System.out.println("Failed to run query: "+sql);
+		}
 		
 	}
 	
 	//DELETE FUNCTIONS
 	public void DeleteUser(int userID) {
 		
-		String sqlString = new String("DELETE FROM user WHERE user_id = "+userID+";");
+		String sql = new String("DELETE FROM user WHERE user_id = "+userID+";");
 		
-		boolean success = database.RunSQL(sqlString);
+		boolean success = database.RunSQL(sql);
 		
 		if(!success) {
-			System.out.println("Failed to run query: "+sqlString);
+			System.out.println("Failed to run query: "+sql);
 		}
 	}
 	
 	public void DeleteCaretakerTask(int taskID) {
 		
-		String sqlString = new String("DELETE FROM task WHERE task_id = "+taskID+";");
+		String sql = new String("DELETE FROM task WHERE task_id = "+taskID+";");
 		
-		boolean success = database.RunSQL(sqlString);
+		boolean success = database.RunSQL(sql);
 		
 		if(!success) {
-			System.out.println("Failed to run query: "+sqlString);
+			System.out.println("Failed to run query: "+sql);
 		}
 		
 	}
