@@ -7,8 +7,12 @@ public class CapyTecDB{
 	private DBConnection database;
 	
 	public CapyTecDB() {
+		connect();
+	}
+	
+	private void connect() {
 		database = new DBConnection();
-		database.Connect("CapyTec.db"); // This is bad. Put in new function
+		database.Connect("CapyTec.db"); 
 	}
 	
 	//SELECT FUNCTIONS
@@ -82,7 +86,7 @@ public class CapyTecDB{
 		return managers;
 	}
 	
-	public ArrayList<CaretakerTask> GetAllTasks(){
+	public ArrayList<CaretakerTask> getAllTasks(){
 		
 		ArrayList<CaretakerTask> tasks = new ArrayList<CaretakerTask>();
 		
@@ -177,13 +181,102 @@ public class CapyTecDB{
 		return skills;
 	}
 	
+	public ArrayList<CaretakerTask> getAllCompletedTasks() {
+		
+		ArrayList<CaretakerTask> compTasks = new ArrayList<CaretakerTask>();
+		
+		try {
+			String sql = "SELECT compTask_id, task, user, date FROM completed_task;";
+			
+			ResultSet completedTasksResultSet = database.RunSQLQuery(sql);
+			
+			while(completedTasksResultSet.next()) {
+				boolean go = true;
+				
+				for(int i = 0 ; i < compTasks.size() ; i++) {
+					if(compTasks.get(i).getID() == completedTasksResultSet.getInt(2)) go = false;
+				}
+				
+				if(go) {
+					
+					sql = "SELECT task_id, task_title, task_desc, need_signing, need_peer_check, date_created, date_due, date_updated, date_completed, priority, days_till_repeat, "
+							+ "a.first_name || ' ' || a.last_name AS CreatorName, "
+							+ "b.first_name || ' ' || b.last_name AS CompletionistName, "
+							+ "c.first_name || ' ' || c.last_name AS SignedBy, "
+							+ "d.first_name || ' ' || d.last_name AS PeerChecker "
+							+ "FROM task AS t LEFT JOIN user AS a ON t.created_by = a.user_id  LEFT JOIN user AS b ON t.completed_by = b.user_id LEFT JOIN user AS c ON t.signed_by = c.user_id LEFT JOIN user AS d ON t.peer_checked_by = d.user_id "
+							+ "WHERE task_id = "+completedTasksResultSet.getInt(2)+";";
+					
+					ResultSet currentTaskResultSet = database.RunSQLQuery(sql);
+									
+					
+					CaretakerTask newTask = new CaretakerTask();
+					newTask.setID(currentTaskResultSet.getInt(1));
+					newTask.setTitle(currentTaskResultSet.getString(2));
+					newTask.setDesc(currentTaskResultSet.getString(3));
+					newTask.setPriority(currentTaskResultSet.getInt(10));
+					newTask.setDaysUntilRepeat(currentTaskResultSet.getInt(11));
+					newTask.setAuthor(currentTaskResultSet.getString(12));
+					newTask.setCompletionist(currentTaskResultSet.getString(13));
+					newTask.setSignee(currentTaskResultSet.getString(14));
+					newTask.setPeerChecker(currentTaskResultSet.getString(15));
+					
+					if (currentTaskResultSet.getInt(4) == 1) newTask.setNeedsSigning(true);
+					if (currentTaskResultSet.getInt(5) == 1) newTask.setNeedsPeerChecking(true);
+					
+					newTask.setDateCreated(currentTaskResultSet.getString(6));
+					newTask.setDateDue(currentTaskResultSet.getString(7));
+					newTask.setDateUpdated(currentTaskResultSet.getString(8));
+					
+					compTasks.add(newTask);
+					
+					for(int i = 0 ; i < compTasks.size() ; i++) {
+						if(compTasks.get(i).getID() == completedTasksResultSet.getInt(2)) {
+							compTasks.get(i).setDateCompleted(completedTasksResultSet.getString(4));
+						}
+					}
+					
+					
+				}
+				
+				sql = "SELECT task_id, skill_name " + 
+						"FROM skill JOIN task_skill ON skill.skill_id = task_skill.skill " + 
+						"JOIN task ON task_skill.task = task.task_id WHERE task_id = "+completedTasksResultSet.getInt(2)+";";
+				
+				ResultSet completedTaskSkillResultSet = database.RunSQLQuery(sql);
+				
+				while(completedTaskSkillResultSet.next()) {
+					for(int i = 0 ; i < compTasks.size() ; i++) {
+						if(compTasks.get(i).getID() == completedTaskSkillResultSet.getInt(1)) {
+							compTasks.get(i).getRecSkills().add(completedTaskSkillResultSet.getString(2));
+						}
+					}
+				}
+				
+				sql = "SELECT * FROM team;";
+				ResultSet completedTaskTeamResultSet = database.RunSQLQuery(sql);
+				
+				while(completedTaskTeamResultSet.next()) {
+					for(int i = 0 ; i < compTasks.size() ; i++ ) {
+						if(compTasks.get(i).getID() == completedTaskTeamResultSet.getInt(1)) {
+							compTasks.get(i).getTeamMembers().add(completedTaskTeamResultSet.getInt(2));
+						}
+					}
+				}
+			}
+			
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return compTasks;
+	}
 	//INSERT FUNCTIONS
 	public void addCaretaker(Caretaker caretaker) {
-		
+			
 		String fname = caretaker.getFirstName();
 		String lname = caretaker.getLastName();
 		
-		String sql = new String("INSERT INTO user (first_name, last_name, job_type) VALUES ('"+fname+"', '"+lname+"', 3);");
+		String sql = new String("INSERT INTO user (first_name, last_name, job_type) VALUES ("+fname+", "+lname+", 3);");
 		
 		boolean success = database.RunSQL(sql);
 		
@@ -191,6 +284,41 @@ public class CapyTecDB{
 			System.out.println("Failed to run query: "+sql);
 		}
 		
+		sql = "SELECT * FROM skill;";
+		
+		if(caretaker.getSkills().size() != 0) {
+			try {
+				ResultSet sqlResult = database.RunSQLQuery(sql);
+				
+				ArrayList<Integer> skills = new ArrayList<Integer>();
+				
+				while(sqlResult.next()) {
+					int id = 1;
+					for(int i = 0 ; i < caretaker.getSkills().size() ; i++) {
+						if(caretaker.getSkills().get(i) == sqlResult.getString(2)) {
+							skills.add(id);
+						}
+					}
+					id++;
+				}
+				
+				sql = "INSERT INTO user_skill (user, skill) VALUES";
+				
+				for(int i = 0 ; i < skills.size() ; i++) {
+					sql = sql + " (" + caretaker.getID() + ", " + skills.get(i) + ")";
+					if(i < skills.size()) sql = sql + ",";
+				}
+				
+				success = database.RunSQL(sql);
+				
+				if(!success) {
+					System.out.println("Failed to run query: "+sql);
+				}
+				
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	//DELETE FUNCTIONS
