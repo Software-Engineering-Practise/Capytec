@@ -146,6 +146,12 @@ public class CapytecGui extends JFrame {
 		panelUserBottomButtons.add(btnAssignTask);
 		
 		JButton btnRemoveTask = new JButton("Remove Task");
+		btnRemoveTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GuiDeleteTask frameDeleteTask = new GuiDeleteTask();
+				frameDeleteTask.setVisible(true);
+			}
+		});
 		panelUserBottomButtons.add(btnRemoveTask);
 		
 		JPanel panelTaskTitle = new JPanel();
@@ -194,31 +200,7 @@ public class CapytecGui extends JFrame {
 			}
 			
 			
-		}
-
-		//for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++)
-		//{
-		//	CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
-		//	int repeat = currentItem.getDaysUntilRepeat();
-		//	String isRepeated;
-		//	String daysRepeat;
-		//	if (repeat == 0)
-		//	{
-		//		isRepeated = "Doesn't repeat";
-		//		daysRepeat = "N/A";
-		//	}
-		//	else
-		//	{
-		//		isRepeated = "Yes";
-		//		daysRepeat = "" + repeat;
-		//	}
-		//	if (currentItem.getDateCompleted() == null || isRepeated == "Yes")
-		//		tableModelTaskLogging.addRow(new Object[] {currentItem.getID(), currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted()});
-		//}
-		
-		
-		
-		
+		}		
 		
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
 		
