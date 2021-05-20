@@ -223,15 +223,48 @@ public class CapytecGui extends JFrame {
 		JPanel panelTaskLoggingButtons = new JPanel();
 		panelTaskLogging.add(panelTaskLoggingButtons, BorderLayout.SOUTH);
 		
+		JButton btnSignTask = new JButton("Sign Task");
+		btnSignTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GuiSignTask frameSignTask = new GuiSignTask();
+				frameSignTask.setVisible(true);
+			}
+		});
+		panelTaskLoggingButtons.add(btnSignTask);
+		
+		JButton btnSetCompleted = new JButton("Set Completed");
+		btnSetCompleted.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GuiSetCompleted frameSetCompleted = new GuiSetCompleted();
+				frameSetCompleted.setVisible(true);
+			}
+		});
+		panelTaskLoggingButtons.add(btnSetCompleted);
+		
+		JButton btnCheckTask = new JButton("Check Task");
+		btnCheckTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				GuiCheckTask frameCheckTask = new GuiCheckTask();
+				frameCheckTask.setVisible(true);
+			}
+		});
+		panelTaskLoggingButtons.add(btnCheckTask);
+		
+		
+		
 		JScrollPane scrollPaneTaskLogging = new JScrollPane();
 		panelTaskLogging.add(scrollPaneTaskLogging, BorderLayout.CENTER);
 		
-		tableTaskLogging = new JTable();
+		JTable tableTaskLogging = new JTable() {
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
 		tableTaskLogging.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"User", "Task ID", "Task",  "Task Set", "Repeated Task?", "Repeat Period", "Completed Date"
+				"Assigned Caretaker(s)", "Task ID", "Task", "Task Set", "Repeated Task?", "Repeat Period", "Completed Date", "Extra Requirements", "Checked By", "Signed By"
 			}
 		));
 		
@@ -240,7 +273,16 @@ public class CapytecGui extends JFrame {
 		for (int i = 0 ; i < dbClass.GetAllTasks().size() ; i++)
 		{
 			CaretakerTask currentItem = dbClass.GetAllTasks().get(i);
+			
+			
 			int repeat = currentItem.getDaysUntilRepeat();
+			String members;
+			if (currentItem.getTeamMembers().isEmpty()) {
+				members = "No Assigned Caretakers";
+			}
+			else {
+				members = "" + currentItem.getTeamMembers();
+			}
 			String isRepeated;
 			String daysRepeat;
 			if (repeat == 0)
@@ -253,8 +295,27 @@ public class CapytecGui extends JFrame {
 				isRepeated = "Yes";
 				daysRepeat = "" + repeat;
 			}
+			String extraReqs;
+			String signedBy;
+			String checkedBy;
+			if (currentItem.isNeedsSigning() && currentItem.isNeedsPeerChecking()) {
+				extraReqs = "Needs Peer Checking and Signing";
+				signedBy = currentItem.getSignee();
+				checkedBy = currentItem.getPeerChecker(); }
+			else if (currentItem.isNeedsPeerChecking()) {
+				extraReqs = "Needs Peer Checking";
+				signedBy = "N/A";
+				checkedBy = currentItem.getPeerChecker(); }
+			else if (currentItem.isNeedsSigning()) {
+				extraReqs = "Needs Signing";
+				signedBy = currentItem.getSignee();
+				checkedBy = "N/A"; }
+			else {
+				extraReqs = "No Extra Requirements"; 
+				signedBy = "N/A";
+				checkedBy = "N/A"; }
 			if (currentItem.getDateCompleted() == null || isRepeated == "Yes")
-				tableModelTaskLogging.addRow(new Object[] {currentItem.getID(), currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted()});
+				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy});
 		}
 		
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
