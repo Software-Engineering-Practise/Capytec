@@ -469,35 +469,93 @@ public class CapytecGui extends JFrame {
 				if (lblCaretakerDropdown.isVisible())
 					mode = 0;
 				else if (lblTaskDropdown.isVisible())
-					mode = 1;
-				else
 					mode = 2;
+				else
+					mode = 1;
 				
 				switch (mode)
 				{
 				case 0:
-					//
 					System.out.println("Caretaker Report");
+					//Currently assigned tasks
+					reportText += "Selected caretaker: " + comboBoxSelectedCaretaker.getSelectedItem() + "\n";
+					reportText += "Currently assigned tasks: " + "\n";
+					String currentTaskEntry = "";
+					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+					{
+						currentTaskEntry = "";
+						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+						if (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDateCompleted() == null || currentTask.getDaysUntilRepeat() != 0))
+						{
+							currentTaskEntry = "Task: " + currentTask.getID() + "\n";
+						}
+						reportText += currentTaskEntry;
+					}
+					
+					//Task completion log
+					reportText += "Previously completed tasks: " + "\n";
+					for (int i = 0 ; i < dbClass.getAllCompletedTasks().size() ; i++)
+					{
+						currentTaskEntry ="";
+						CompletedTask currentTask = dbClass.getAllCompletedTasks().get(i);
+						if (currentTask.getUserID() == (int) comboBoxSelectedCaretaker.getSelectedItem())
+						{
+							currentTaskEntry = "Task " + currentTask.getTaskID() + ", Completed on: " + currentTask.getDateCompleted() + "\n";
+						}
+						reportText += currentTaskEntry;
+					}
 					break;
 				case 1:
-					//
-					System.out.println("Historic Task Report");
+					System.out.println("Current Tasks");
+					String currentReportEntry = "";
+					reportText += "Current Tasks: \n";
+					reportText += "One off tasks: "  + "\n";
+					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+					{
+						currentReportEntry = "";
+						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+						if (currentTask.getDateCompleted() == null && currentTask.getDaysUntilRepeat() == 0)
+						{
+							currentReportEntry = "Task: " + currentTask.getID() + ", This task is due: " + currentTask.getDateDue();
+							if (false) // Date comparison
+								currentReportEntry += ". This task is overdue. ";
+							currentReportEntry += "\n";
+						}
+						reportText += currentReportEntry;
+					}
+					reportText += currentReportEntry = "Repeated tasks: " + "\n";
+					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+					{
+						currentReportEntry = "";
+						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+						if (currentTask.getDaysUntilRepeat() != 0)
+						{
+							currentReportEntry = "Task: " + currentTask.getID() + "\n";
+						}
+						reportText += currentReportEntry;
+					}
 					break;
 				case 2:
-					//
-					System.out.println("Current Tasks");
+					System.out.println("Historic Task Report");
+					for (int i = 0 ; i < dbClass.getAllCompletedTasks().size() ; i++)
+					{
+						currentReportEntry = "";
+						CompletedTask currentRepeatedTask = dbClass.getAllCompletedTasks().get(i);
+						if (currentRepeatedTask.getTaskID() == (int) comboBoxSelectedTask.getSelectedItem())
+						{
+							currentReportEntry = "Task: " + currentRepeatedTask.getTaskID() + " was completed on: " + currentRepeatedTask.getDateCompleted() + "\n";
+						}
+						
+						reportText += currentReportEntry;
+					}
 					break;
 				default:
-					//
+					System.out.println("Something went wrong, please try again.");
+					reportText = "Something went wrong, please try again.";
 					break;
 				}
-				for (int i = 0 ; i < dbClass.getAllCompletedTasks().size(); i++)
-				{
-					CompletedTask currentCompletedTask = dbClass.getAllCompletedTasks().get(i);
-					reportText += ("Entry: " + currentCompletedTask.getId() + ". On Task ID: " + currentCompletedTask.getTaskID() + ", from User: " + currentCompletedTask.getUserID() + ". Completed on: " + currentCompletedTask.getDateCompleted() + System.lineSeparator());
-				}
 				
-				
+				System.out.println(reportText);
 				//Report text is presented to the user
 				textPaneReport.setText(reportText);
 			}
