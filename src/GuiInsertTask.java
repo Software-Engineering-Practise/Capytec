@@ -21,6 +21,7 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import java.awt.Color;
 import javax.swing.JCheckBox;
+import javax.swing.JTextArea;
 
 public class GuiInsertTask extends JFrame {
 
@@ -56,13 +57,13 @@ public class GuiInsertTask extends JFrame {
 		contentPane.setLayout(null);
 		
 		textFieldTaskName = new JTextField();
-		textFieldTaskName.setBounds(191, 70, 172, 20);
+		textFieldTaskName.setBounds(191, 70, 221, 20);
 		contentPane.add(textFieldTaskName);
 		textFieldTaskName.setColumns(10);
 		
 		textFieldDescription = new JTextField();
 		textFieldDescription.setColumns(10);
-		textFieldDescription.setBounds(191, 101, 172, 39);
+		textFieldDescription.setBounds(191, 101, 221, 39);
 		contentPane.add(textFieldDescription);
 		
 		JLabel lblTaskName = new JLabel("Task Name:");
@@ -179,6 +180,14 @@ public class GuiInsertTask extends JFrame {
 		chckbxNeedsPeerChecking.setBounds(233, 500, 97, 23);
 		contentPane.add(chckbxNeedsPeerChecking);
 		
+		JLabel lblExtraConsiderations = new JLabel("Extra Considerations:");
+		lblExtraConsiderations.setBounds(86, 536, 139, 14);
+		contentPane.add(lblExtraConsiderations);
+		
+		JTextArea textAreaExtraConsiderations = new JTextArea();
+		textAreaExtraConsiderations.setBounds(226, 525, 198, 78);
+		contentPane.add(textAreaExtraConsiderations);
+		
 		JLabel lblErrorMessage = new JLabel("Error Message");
 		lblErrorMessage.setForeground(Color.RED);
 		lblErrorMessage.setBounds(22, 626, 180, 31);
@@ -201,6 +210,7 @@ public class GuiInsertTask extends JFrame {
 				int importanceNumeric = 0;
 				boolean needsSigning = chckbxNeedsSigning.isSelected();
 				boolean needsPeerChecking = chckbxNeedsPeerChecking.isSelected();
+				String extraConsiderations = textAreaExtraConsiderations.getText();
 				
 				switch(comboBoxFrequency.getSelectedItem().toString()){
 				case "1":
@@ -228,10 +238,13 @@ public class GuiInsertTask extends JFrame {
 				switch(importance) {
 				case "1":
 					importanceNumeric = 1;
+					break;
 				case "2":
 					importanceNumeric = 2;
+					break;
 				case "3":
 					importanceNumeric = 3;
+					break;
 				}
 				boolean insertTaskError = false;
 				
@@ -294,11 +307,14 @@ public class GuiInsertTask extends JFrame {
 					newTask.setDaysUntilRepeat(frequency);
 					newTask.setDateCreated(startDate);
 					newTask.setDateDue(dueDate);
+					System.out.println(importanceNumeric);
+					System.out.println(importance);
 					newTask.setPriority(importanceNumeric);
 					newTask.setNeedsSigning(needsSigning);
 					newTask.setNeedsPeerChecking(needsPeerChecking);
+					newTask.setExtraConsiderations(extraConsiderations);
 					
-					//dbClass.addCaretakerTask(newTask);
+					dbClass.addCaretakerTask(newTask);
 					//System.out.println("Insert");
 				} else {
 					lblErrorMessage.setVisible(true);
@@ -307,6 +323,8 @@ public class GuiInsertTask extends JFrame {
 		});
 		btnInsertTask.setBounds(294, 623, 118, 36);
 		contentPane.add(btnInsertTask);
+		
+		
 		
 		
 		
