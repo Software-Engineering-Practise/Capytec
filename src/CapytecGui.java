@@ -178,7 +178,12 @@ public class CapytecGui extends JFrame {
 		JScrollPane scrollPaneTaskManagement = new JScrollPane();
 		panelTaskManagement.add(scrollPaneTaskManagement, BorderLayout.CENTER);
 		
-		tableTaskManagement = new JTable();
+		tableTaskManagement = new JTable() {
+			//Make it so user cannot edit the table at runtime
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
 		tableTaskManagement.setModel(new DefaultTableModel(
 			new Object[][] {
 			},

@@ -122,6 +122,8 @@ public class GuiAllocateTask extends JFrame {
 		//Add line wrapping after words in text field.
 		textAreaDescription.setLineWrap(true);
 		textAreaDescription.setWrapStyleWord(true);
+		//Made it so user cannot edit box
+		textAreaDescription.setEditable(false);	
 		contentPane.add(textAreaDescription);
 		
 		JLabel lblTaskTypeOne = new JLabel("Placeholder");
@@ -164,9 +166,14 @@ public class GuiAllocateTask extends JFrame {
 		lblExtraConsiderations.setBounds(22, 531, 150, 14);
 		contentPane.add(lblExtraConsiderations);
 		
-		JTextPane textPaneExtraConsiderations = new JTextPane();
-		textPaneExtraConsiderations.setBounds(191, 525, 172, 50);
-		contentPane.add(textPaneExtraConsiderations);
+		JTextArea textAreaExtraConsiderations = new JTextArea();
+		textAreaExtraConsiderations.setBounds(191, 525, 172, 50);
+		//Add line wrapping after words in text field.
+		textAreaExtraConsiderations.setLineWrap(true);
+		textAreaExtraConsiderations.setWrapStyleWord(true);
+		//Make is so user cannot edit box
+		textAreaExtraConsiderations.setEditable(false);	
+		contentPane.add(textAreaExtraConsiderations);
 		
 		JLabel lblUserSkills = new JLabel("Your Skills:");
 		lblUserSkills.setBounds(157, 160, 83, 14);
@@ -211,7 +218,7 @@ public class GuiAllocateTask extends JFrame {
 			Integer importance = currentTask.getPriority();
 			Boolean needsSigning = currentTask.isNeedsSigning();
 			Boolean needsPeerChecking = currentTask.isNeedsPeerChecking();
-			
+			String extraConsiderations = currentTask.getExtraConsiderations();
 			
 			if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
 				ArrayList<String> recSkills = currentTask.getRecSkills();
@@ -267,7 +274,7 @@ public class GuiAllocateTask extends JFrame {
 				lblImportanceValue.setText(importance.toString());
 				lblNeedsSigningValue.setText(needsSigning.toString());
 				lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
-				
+				textAreaExtraConsiderations.setText(extraConsiderations);
 			}	
 		}
 		
@@ -287,6 +294,7 @@ public class GuiAllocateTask extends JFrame {
 					Integer importance = currentTask.getPriority();
 					Boolean needsSigning = currentTask.isNeedsSigning();
 					Boolean needsPeerChecking = currentTask.isNeedsPeerChecking();
+					String extraConsiderations = currentTask.getExtraConsiderations();
 					
 					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
 						ArrayList<String> recSkills = currentTask.getRecSkills();
@@ -342,6 +350,7 @@ public class GuiAllocateTask extends JFrame {
 						lblImportanceValue.setText(importance.toString());
 						lblNeedsSigningValue.setText(needsSigning.toString());
 						lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
+						textAreaExtraConsiderations.setText(extraConsiderations);
 						
 					}	
 				}
