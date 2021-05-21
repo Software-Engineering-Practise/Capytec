@@ -88,9 +88,6 @@ public class CapytecGui extends JFrame {
 		});
 		panelTaskBottomButtons.add(btnRemoveUser);
 		
-		JButton btnGetBriefing = new JButton("Daily Briefing");
-		panelTaskBottomButtons.add(btnGetBriefing);
-		
 		JPanel panelUserTitle = new JPanel();
 		panelUserManagement.add(panelUserTitle, BorderLayout.NORTH);
 		
@@ -158,6 +155,15 @@ public class CapytecGui extends JFrame {
 			}
 		});
 		panelUserBottomButtons.add(btnRemoveTask);
+		
+		JButton btnGetBriefing = new JButton("Daily Briefing");
+		btnGetBriefing.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GuiDailyBriefing frameDailyBriefing = new GuiDailyBriefing();
+				frameDailyBriefing.setVisible(true);
+			}
+		});
+		panelUserBottomButtons.add(btnGetBriefing);
 		
 		JPanel panelTaskTitle = new JPanel();
 		panelTaskManagement.add(panelTaskTitle, BorderLayout.NORTH);
