@@ -5,6 +5,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -15,6 +16,8 @@ import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
+import javax.swing.JTextPane;
+import javax.swing.JComboBox;
 
 public class CapytecGui extends JFrame {
 
@@ -212,6 +215,8 @@ public class CapytecGui extends JFrame {
 		
 		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
 		
+		//Task Logging - Mission 9
+		
 		JPanel panelTaskLogging = new JPanel();
 		tabbedPane.addTab("Task Logging", null, panelTaskLogging, null);
 		panelTaskLogging.setLayout(new BorderLayout(0, 0));
@@ -323,6 +328,8 @@ public class CapytecGui extends JFrame {
 		
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
 		
+		//Reporting - Mission 10
+		
 		JPanel panelReporting = new JPanel();
 		tabbedPane.addTab("Reporting", null, panelReporting, null);
 		panelReporting.setLayout(new BorderLayout(0, 0));
@@ -337,26 +344,184 @@ public class CapytecGui extends JFrame {
 		JPanel panelReportingButtons = new JPanel();
 		panelReporting.add(panelReportingButtons, BorderLayout.SOUTH);
 		
-		JButton btnCaretakerReports = new JButton("Caretaker Reports");
+		JPanel panelReportPresentation = new JPanel();
+		panelReporting.add(panelReportPresentation, BorderLayout.CENTER);
+		panelReportPresentation.setLayout(new BorderLayout(0, 0));
 		
+		JPanel panelReportSettings = new JPanel();
+		panelReportPresentation.add(panelReportSettings, BorderLayout.NORTH);
+		
+		JLabel lblTaskDropdown = new JLabel("Selected Task:");
+		lblTaskDropdown.setVisible(false);
+		panelReportSettings.add(lblTaskDropdown);
+		
+		JLabel lblCaretakerDropdown = new JLabel("Selected Caretaker:");
+		lblCaretakerDropdown.setVisible(false);
+		panelReportSettings.add(lblCaretakerDropdown);
+		
+		JComboBox comboBoxSelectedCaretaker = new JComboBox();
+		panelReportSettings.add(comboBoxSelectedCaretaker);
+		comboBoxSelectedCaretaker.setVisible(false);
+		
+		comboBoxSelectedCaretaker.setModel(new DefaultComboBoxModel());
+		comboBoxSelectedCaretaker.addItem("Select a Caretaker");
+		
+		ArrayList<Caretaker> allCaretakers = dbClass.getAllCaretakers();
+		
+		for (int i = 0 ; i < allCaretakers.size(); i++)
+		{
+			Caretaker currentCaretaker = allCaretakers.get(i);
+			comboBoxSelectedCaretaker.addItem(currentCaretaker.getID());
+		}
+		
+		
+		JComboBox comboBoxSelectedTask = new JComboBox();
+		panelReportSettings.add(comboBoxSelectedTask);
+		comboBoxSelectedTask.setVisible(false);
+		
+		comboBoxSelectedTask.setModel(new DefaultComboBoxModel());
+		comboBoxSelectedTask.addItem("Select a Task");;
+		
+		ArrayList<CaretakerTask> allTasks = dbClass.getAllTasks();
+		
+		for (int i = 0 ; i < allTasks.size(); i++)
+		{
+			CaretakerTask currentTask = allTasks.get(i);
+			comboBoxSelectedTask.addItem(currentTask.getID());
+		}
+		
+		//Define each report-type button.
+		JButton btnCaretakerReports = new JButton("Caretaker Reports");
 		panelReportingButtons.add(btnCaretakerReports);
 		
-		JButton btnReportButton2 = new JButton("Report Button 2");
-		panelReportingButtons.add(btnReportButton2);
+		JButton btnCurrentTasksReports = new JButton("Current Tasks");
+		panelReportingButtons.add(btnCurrentTasksReports);
 		
-		JLabel lblReportText = new JLabel("Text");
-		lblReportText.setVerticalAlignment(SwingConstants.TOP);
-		panelReporting.add(lblReportText, BorderLayout.CENTER);
+		JButton btnHistoricTasks = new JButton("Historic Tasks");
+		panelReportingButtons.add(btnHistoricTasks);
 		
-		btnCaretakerReports.addActionListener(new ActionListener() {
+		//Define the text pane.
+		JTextPane textPaneReport = new JTextPane();
+		textPaneReport.setEditable(false);
+		panelReportPresentation.add(textPaneReport, BorderLayout.CENTER);
+		
+		//Report generation button and panel.
+		JPanel panelGenerateButton = new JPanel();
+		panelReportPresentation.add(panelGenerateButton, BorderLayout.SOUTH);
+		
+		JButton btnGenerateReport = new JButton("Generate Report");
+		btnGenerateReport.setVisible(false);
+		panelGenerateButton.add(btnGenerateReport);
+	
+		
+		//Report type buttons
+		btnHistoricTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				for (int i = 0 ; i < dbClass.getAllCompletedTasks().size(); i++)
-				{
-					//CompletedTask currentCompletedTask = getAllCompletedTasks().get(i);
-				}
+				System.out.println("Historic tasks report button");
+				int mode = 2;
+				System.out.println("Mode: " + mode);
+				comboBoxSelectedCaretaker.setVisible(false);
+				comboBoxSelectedTask.setVisible(true);
+				btnGenerateReport.setVisible(false);
+				lblCaretakerDropdown.setVisible(false);
+				lblTaskDropdown.setVisible(true);
+				comboBoxSelectedTask.setSelectedIndex(0);
+				lblReportingTitle.setText("Reporting - Task History");
+			}
+		});
+
+		btnCurrentTasksReports.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Current tasks report button");
+				int mode = 1;
+				System.out.println("Mode: " + mode);
+				comboBoxSelectedCaretaker.setVisible(false);
+				comboBoxSelectedTask.setVisible(false);
+				btnGenerateReport.setVisible(true);
+				lblCaretakerDropdown.setVisible(false);
+				lblTaskDropdown.setVisible(false);
+				lblReportingTitle.setText("Reporting - Current Tasks");
 			}
 		});
 		
+		btnCaretakerReports.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				System.out.println("Caretaker report button");
+				int mode = 0;
+				System.out.println("Mode: " + mode);
+				comboBoxSelectedCaretaker.setVisible(true);
+				comboBoxSelectedTask.setVisible(false);
+				btnGenerateReport.setVisible(false);
+				lblCaretakerDropdown.setVisible(true);
+				lblTaskDropdown.setVisible(false);
+				comboBoxSelectedCaretaker.setSelectedIndex(0);
+				lblReportingTitle.setText("Reporting - Caretaker History");
+			}
+		});
+		
+		
+		//Generate Report button
+		btnGenerateReport.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Report text is reset.
+				String reportText = "";
+				int mode = 0;
+				if (lblCaretakerDropdown.isVisible())
+					mode = 0;
+				else if (lblTaskDropdown.isVisible())
+					mode = 1;
+				else
+					mode = 2;
+				
+				switch (mode)
+				{
+				case 0:
+					//
+					System.out.println("Caretaker Report");
+					break;
+				case 1:
+					//
+					System.out.println("Historic Task Report");
+					break;
+				case 2:
+					//
+					System.out.println("Current Tasks");
+					break;
+				default:
+					//
+					break;
+				}
+				for (int i = 0 ; i < dbClass.getAllCompletedTasks().size(); i++)
+				{
+					CompletedTask currentCompletedTask = dbClass.getAllCompletedTasks().get(i);
+					reportText += ("Entry: " + currentCompletedTask.getId() + ". On Task ID: " + currentCompletedTask.getTaskID() + ", from User: " + currentCompletedTask.getUserID() + ". Completed on: " + currentCompletedTask.getDateCompleted() + System.lineSeparator());
+				}
+				
+				
+				//Report text is presented to the user
+				textPaneReport.setText(reportText);
+			}
+		});
+		
+		//Drop down boxes event listeners.
+		//Caretaker
+		comboBoxSelectedCaretaker.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Is it a valid one? Make button visible
+				System.out.println("Interacted with caretaker");
+				if (comboBoxSelectedCaretaker.getSelectedIndex() != 0)
+					btnGenerateReport.setVisible(true);
+			}
+		});
+		//Tasks
+		comboBoxSelectedTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				//Is it a valid one? Make button visible.
+				System.out.println("Interacted with task");
+				if (comboBoxSelectedTask.getSelectedIndex() != 0)
+					btnGenerateReport.setVisible(true);
+			}
+		});
 		
 	}
 
