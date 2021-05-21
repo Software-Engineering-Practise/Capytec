@@ -558,4 +558,25 @@ public class CapyTecDB{
 		}
 		
 	}
+	
+	//LOGIN TABLEMETHODS
+	
+	public String getHash(String username) {
+		
+		String pwdHash = null;
+		
+		String sql = "SELECT login_username, login_pass FROM login WHERE login_username = '"+username+"';";
+		
+		ResultSet hashResultSet = database.RunSQLQuery(sql);
+		
+		try {
+			if(hashResultSet.next()) {
+				pwdHash = hashResultSet.getString(2);
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return pwdHash;
+	}
 }
