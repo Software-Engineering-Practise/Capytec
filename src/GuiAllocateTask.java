@@ -209,7 +209,8 @@ public class GuiAllocateTask extends JFrame {
 			String startDate = currentTask.getDateCreated();
 			String dueDate = currentTask.getDateDue();
 			Integer importance = currentTask.getPriority();
-			
+			Boolean needsSigning = currentTask.isNeedsSigning();
+			Boolean needsPeerChecking = currentTask.isNeedsPeerChecking();
 			
 			
 			if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
@@ -264,6 +265,8 @@ public class GuiAllocateTask extends JFrame {
 				lblStartDateValue.setText(startDate);
 				lblDueDateValue.setText(dueDate);
 				lblImportanceValue.setText(importance.toString());
+				lblNeedsSigningValue.setText(needsSigning.toString());
+				lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
 				
 			}	
 		}
@@ -282,6 +285,8 @@ public class GuiAllocateTask extends JFrame {
 					String startDate = currentTask.getDateCreated();
 					String dueDate = currentTask.getDateDue();
 					Integer importance = currentTask.getPriority();
+					Boolean needsSigning = currentTask.isNeedsSigning();
+					Boolean needsPeerChecking = currentTask.isNeedsPeerChecking();
 					
 					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
 						ArrayList<String> recSkills = currentTask.getRecSkills();
@@ -335,7 +340,8 @@ public class GuiAllocateTask extends JFrame {
 						lblStartDateValue.setText(startDate);
 						lblDueDateValue.setText(dueDate);
 						lblImportanceValue.setText(importance.toString());
-						
+						lblNeedsSigningValue.setText(needsSigning.toString());
+						lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
 						
 					}	
 				}
