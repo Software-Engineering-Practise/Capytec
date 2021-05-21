@@ -11,6 +11,7 @@ public class TestingDBMethods {
 		//test3();
 		//test4();
 		test5();
+		//test6();
 	}
 	
 	public static void test1() {
@@ -190,6 +191,49 @@ public class TestingDBMethods {
 		
 		
 		DBTest.DeleteCaretakerTask(id);
+		
+	}
+	
+	public static void test6() {
+		
+		System.out.println("");
+		System.out.println("######################TEST 6######################");
+		System.out.println("UPDATING CARETAKER!!!");
+		
+		CapyTecDB DBTest = new CapyTecDB();
+		
+		Caretaker caretaker = DBTest.getAllCaretakers().get(0);
+		
+		System.out.println("Caretaker ID: " + caretaker.getID());
+		System.out.println("Full Name: " + caretaker.getFullName());
+		System.out.println("Job Title: " + caretaker.getJobTitle());
+		
+		for(int j = 0; j < caretaker.getSkills().size() ; j++) {
+			System.out.println("Skill: " + caretaker.getSkills().get(j));
+		}
+		
+		caretaker.setFirstName("Daniel");
+		String oldSkill = caretaker.getSkills().get(1);
+		String changeSkill = DBTest.getAllSkills().get(1);
+		caretaker.getSkills().set(1, changeSkill);
+		
+		DBTest.updateCaretaker(caretaker);
+		Caretaker updatedCaretaker = DBTest.getAllCaretakers().get(0);
+		
+		System.out.println("Caretaker ID: " + updatedCaretaker.getID());
+		System.out.println("Full Name: " + updatedCaretaker.getFullName());
+		System.out.println("Job Title: " + updatedCaretaker.getJobTitle());
+		
+		for(int j = 0; j < updatedCaretaker.getSkills().size() ; j++) {
+			System.out.println("Skill: " + updatedCaretaker.getSkills().get(j));
+		}
+		
+		caretaker.setFirstName("Dan");
+		caretaker.getSkills().set(1, oldSkill);
+		
+		DBTest.updateCaretaker(caretaker);
+		
+		
 		
 	}
 	
