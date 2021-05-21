@@ -27,7 +27,6 @@ public class GuiInsertTask extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldTaskName;
-	private JTextField textFieldDescription;
 	CapyTecDB dbClass = new CapyTecDB();
 	/**
 	 * Launch the application.
@@ -61,11 +60,6 @@ public class GuiInsertTask extends JFrame {
 		contentPane.add(textFieldTaskName);
 		textFieldTaskName.setColumns(10);
 		
-		textFieldDescription = new JTextField();
-		textFieldDescription.setColumns(10);
-		textFieldDescription.setBounds(191, 101, 221, 39);
-		contentPane.add(textFieldDescription);
-		
 		JLabel lblTaskName = new JLabel("Task Name:");
 		lblTaskName.setBounds(90, 70, 76, 14);
 		contentPane.add(lblTaskName);
@@ -73,6 +67,13 @@ public class GuiInsertTask extends JFrame {
 		JLabel lblDescription = new JLabel("Description:");
 		lblDescription.setBounds(90, 101, 76, 14);
 		contentPane.add(lblDescription);
+		
+		JTextArea textAreaDescription = new JTextArea();
+		textAreaDescription.setBounds(191, 96, 221, 51);
+		//Add line wrapping after words in text field.
+		textAreaDescription.setLineWrap(true);
+		textAreaDescription.setWrapStyleWord(true);
+		contentPane.add(textAreaDescription);
 		
 		JLabel lblTaskType = new JLabel("Type:");
 		lblTaskType.setBounds(90, 155, 76, 14);
@@ -186,6 +187,9 @@ public class GuiInsertTask extends JFrame {
 		
 		JTextArea textAreaExtraConsiderations = new JTextArea();
 		textAreaExtraConsiderations.setBounds(226, 525, 198, 78);
+		//Add line wrapping after words in text field.
+		textAreaExtraConsiderations.setLineWrap(true);
+		textAreaExtraConsiderations.setWrapStyleWord(true);
 		contentPane.add(textAreaExtraConsiderations);
 		
 		JLabel lblErrorMessage = new JLabel("Error Message");
@@ -199,7 +203,7 @@ public class GuiInsertTask extends JFrame {
 		btnInsertTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {				
 				String taskName = textFieldTaskName.getText();
-				String description = textFieldDescription.getText();
+				String description = textAreaDescription.getText();
 				int frequency;
 				String taskTypeOne = comboBoxTaskTypeOne.getSelectedItem().toString();
 				String taskTypeTwo = comboBoxTaskTypeTwo.getSelectedItem().toString();
@@ -307,8 +311,6 @@ public class GuiInsertTask extends JFrame {
 					newTask.setDaysUntilRepeat(frequency);
 					newTask.setDateCreated(startDate);
 					newTask.setDateDue(dueDate);
-					System.out.println(importanceNumeric);
-					System.out.println(importance);
 					newTask.setPriority(importanceNumeric);
 					newTask.setNeedsSigning(needsSigning);
 					newTask.setNeedsPeerChecking(needsPeerChecking);
@@ -323,6 +325,7 @@ public class GuiInsertTask extends JFrame {
 		});
 		btnInsertTask.setBounds(294, 623, 118, 36);
 		contentPane.add(btnInsertTask);
+		
 		
 		
 		
