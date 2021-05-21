@@ -92,7 +92,7 @@ public class CapyTecDB{
 		
 		try {
 		
-			String sqlString = new String("SELECT task_id, task_title, task_desc, need_signing, need_peer_check, date_created, date_due, date_updated, date_completed, priority, days_till_repeat, created_by, completed_by, signed_by, peer_checked_by, "
+			String sqlString = new String("SELECT task_id, task_title, task_desc, need_signing, need_peer_check, date_created, date_due, date_updated, date_completed, priority, days_till_repeat, created_by, completed_by, signed_by, peer_checked_by, extra_considerations, "
 					+ "a.first_name || ' ' || a.last_name AS CreatorName, "
 					+ "b.first_name || ' ' || b.last_name AS CompletionistName, "
 					+ "c.first_name || ' ' || c.last_name AS SignedBy, "
@@ -114,10 +114,11 @@ public class CapyTecDB{
 				newTask.setCompletionistID(taskResultSet.getInt(13));
 				newTask.setSigneeID(taskResultSet.getInt(14));
 				newTask.setPeerCheckerID(taskResultSet.getInt(15));
-				newTask.setAuthor(taskResultSet.getString(16));
-				newTask.setCompletionist(taskResultSet.getString(17));
-				newTask.setSignee(taskResultSet.getString(18));
-				newTask.setPeerChecker(taskResultSet.getString(19));
+				newTask.setExtraConsiderations(taskResultSet.getString(16));
+				newTask.setAuthor(taskResultSet.getString(17));
+				newTask.setCompletionist(taskResultSet.getString(18));
+				newTask.setSignee(taskResultSet.getString(19));
+				newTask.setPeerChecker(taskResultSet.getString(20));
 				
 				//Get database integer flag and set to java boolean in Task
 				if (taskResultSet.getInt(4) == 1) newTask.setNeedsSigning(true);
@@ -269,6 +270,7 @@ public class CapyTecDB{
 		
 		String title = caretakerTask.getTitle();
 		String desc = caretakerTask.getDesc();
+		String exConsider = caretakerTask.getExtraConsiderations();
 		String dateCreated = caretakerTask.getDateCreated();
 		String dateDue = caretakerTask.getDateDue();
 		int priority = caretakerTask.getPriority();
@@ -278,8 +280,8 @@ public class CapyTecDB{
 		int needsPeerChecking = caretakerTask.isNeedsPeerChecking() ? 1 : 0;
 		
 		
-		String sql = "INSERT INTO task (task_title, task_desc, need_signing, need_peer_check, date_created, date_due, priority, created_by, days_till_repeat) "
-				+ "VALUES ('"+title+"', '"+desc+"', "+needsSigning+", "+needsPeerChecking+", '"+dateCreated+"', '"+dateDue+"', "+priority+", "+authorID+", "+daysUntilRepeat+");";
+		String sql = "INSERT INTO task (task_title, task_desc, extra_considerations, need_signing, need_peer_check, date_created, date_due, priority, created_by, days_till_repeat) "
+				+ "VALUES ('"+title+"', '"+desc+"', '"+exConsider+"', "+needsSigning+", "+needsPeerChecking+", '"+dateCreated+"', '"+dateDue+"', "+priority+", "+authorID+", "+daysUntilRepeat+");";
 		
 		boolean success = database.RunSQL(sql);
 		
@@ -315,7 +317,6 @@ public class CapyTecDB{
 				}
 				
 				sql = "";
-				
 				
 				sql = "INSERT INTO task_skill (task, skill) VALUES";
 				
@@ -415,6 +416,7 @@ public class CapyTecDB{
 			
 			String title = caretakerTask.getTitle();
 			String desc = caretakerTask.getDesc();
+			String exConsider = caretakerTask.getExtraConsiderations();
 			String dateCreated = caretakerTask.getDateCreated();
 			String dateDue = caretakerTask.getDateDue();
 			int priority = caretakerTask.getPriority();
@@ -431,7 +433,7 @@ public class CapyTecDB{
 			
 			ResultSet sqlResult = database.RunSQLQuery(sql);
 			try {
-				sql = "UPDATE task SET task_title = '"+title+"', task_desc = '"+desc+"', need_signing = "+needsSigning+", need_peer_check = "+needsPeerChecking+", "  
+				sql = "UPDATE task SET task_title = '"+title+"', task_desc = '"+desc+"', extra_considerations = '"+exConsider+"', need_signing = "+needsSigning+", need_peer_check = "+needsPeerChecking+", "  
 						+" date_created = '"+dateCreated+"', date_due = '"+dateDue+"', priority = "+priority+", created_by = "+authorID+", days_till_repeat = "+daysUntilRepeat+", "
 						+" completed_by ="+completionistID+", signed_by ="+signeeID+", peer_checked_by = "+peerCheckerID
 						+" WHERE task_id = "+id+";";

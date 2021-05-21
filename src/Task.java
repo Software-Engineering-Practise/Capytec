@@ -5,6 +5,7 @@ public abstract class Task {
 	private int id;
 	private String title;
 	private String desc;
+	private String extraConsiderations;
 	private int priority;
 	
 	private String dateCreated;
@@ -70,6 +71,16 @@ public abstract class Task {
 	}
 	
 	
+	public String getExtraConsiderations() {
+		return extraConsiderations;
+	}
+
+
+	public void setExtraConsiderations(String extraConsiderations) {
+		this.extraConsiderations = extraConsiderations;
+	}
+
+
 	public int getPriority() {
 		return priority;
 	}
