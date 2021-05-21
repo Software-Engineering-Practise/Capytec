@@ -83,7 +83,7 @@ public class GuiDeleteTask extends JFrame {
 						int confirmationResult = JOptionPane.showConfirmDialog(contentPane, "Are you sure you would like to delete '" + currentTask.getTitle() + "'","Confirm Deletion",JOptionPane.YES_NO_OPTION);
 						if(JOptionPane.YES_OPTION == confirmationResult) {
 							//Delete Task
-							System.out.println("Delete");
+							dbClass.DeleteCaretakerTask(currentTask.getID());
 						} else {
 							System.out.println("Do not delete");
 						}				
