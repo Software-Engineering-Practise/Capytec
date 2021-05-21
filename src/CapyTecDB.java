@@ -303,7 +303,7 @@ public class CapyTecDB{
 					id++;
 				}
 				
-				sql = "INSERT INTO user_skill (user, skill) VALUES";
+				sql = "INSERT INTO task_skill (task, skill) VALUES";
 				
 				for(int i = 0 ; i < skills.size() ; i++) {
 					sql = sql + " (" + caretakerTask.getID() + ", " + skills.get(i) + ")";
@@ -337,6 +337,73 @@ public class CapyTecDB{
 			System.out.println("Failed to run query: "+sql);
 		}
 		
+	}
+	//UPDATE FUNCITONS
+	
+	public void updateCaretaker(Caretaker caretaker) {
+		
+		int id = caretaker.getID();
+		String fname = caretaker.getFirstName();
+		String lname = caretaker.getLastName();
+		
+		String sql = "UPDATE user SET first_name = '"+fname+"', last_name = '"+lname+"' WHERE user_id = "+id+";";
+		
+		boolean success = database.RunSQL(sql);
+		
+		if(!success) {
+			System.out.println("Failed to run query: "+sql);
+		}
+		
+		
+		if(caretaker.getSkills().size() != 0) {
+			try {
+				sql = "SELECT skill_id, skill_name FROM skill;";
+				
+				ResultSet sqlResult = database.RunSQLQuery(sql);
+				
+				ArrayList<Integer> skills = new ArrayList<Integer>();
+				
+				while(sqlResult.next()) {
+					int skillID = sqlResult.getInt(1);
+					for(int i = 0 ; i < caretaker.getSkills().size() ; i++) {
+						if(caretaker.getSkills().get(i) == sqlResult.getString(2)) {
+							skills.add(skillID);
+						}
+					}
+				}
+				
+				sql = "SELECT skill FROM user_skill WHERE user = "+id+";";
+				
+				ResultSet caretakerSkillsResultSet = database.RunSQLQuery(sql);
+				
+				while (caretakerSkillsResultSet.next()) {
+					while(sqlResult.next()) {
+						if(caretakerSkillsResultSet.getInt(1) != sqlResult.getInt(1)) {
+							sql = "DELETE from user_skill WHERE user = "+id+" AND skill = "+sqlResult.getInt(1)+";";
+							
+							success = database.RunSQL(sql);
+							
+							if(!success) {
+								System.out.println("Failed to run query: "+sql);
+							}
+						}
+					}
+					for(int i = 0 ; i < skills.size() ; i++) {
+						if(caretakerSkillsResultSet.getInt(1) != skills.get(i)) {
+							sql = "INSERT INTO user_skill (user, skill) VALUES ("+id+", "+skills.get(i)+");";
+						}
+						
+						success = database.RunSQL(sql);
+						
+						if(!success) {
+							System.out.println("Failed to run query: "+sql);
+						}
+					}
+				}		
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	//DELETE FUNCTIONS
