@@ -56,7 +56,7 @@ public class GuiCheckTask extends JFrame {
 		lblSelectedTask.setBounds(96, 64, 46, 14);
 		contentPane.add(lblSelectedTask);
 		
-		int userLoggedIn = 5;
+		int userLoggedIn = 7;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		
@@ -75,7 +75,36 @@ public class GuiCheckTask extends JFrame {
 		JButton btnCheckTask = new JButton("Set Task as Checked");
 		btnCheckTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ". No functionality yet.");
+				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ".");
+				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+				{
+					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					{
+						CaretakerTask taskToUpdate = currentTask;
+						taskToUpdate.setPeerCheckerID(userLoggedIn);
+						String checkerName = "";
+						for (int i2 = 0 ; i2 < dbClass.getAllCaretakers().size() ; i2++) {
+							Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i2);
+							if (currentCaretaker.getID() == userLoggedIn)
+								checkerName = currentCaretaker.getFullName();
+						}
+						for (int i2 = 0 ; i2 < dbClass.getAllManagers().size() ; i2++) {
+							Manager currentManager = dbClass.getAllManagers().get(i2);
+							if (currentManager.getID() == userLoggedIn)
+								checkerName = currentManager.getFullName();
+						}
+						taskToUpdate.setPeerChecker(checkerName);
+						if (checkerName.isEmpty())
+						{
+							System.out.println("Current user logged in is invalid.");
+						}
+						else
+						{
+							System.out.println("New checker is " + checkerName);
+						}
+					}
+				}
 			}
 		});
 		btnCheckTask.setEnabled(false);

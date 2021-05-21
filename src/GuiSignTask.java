@@ -55,7 +55,7 @@ public class GuiSignTask extends JFrame {
 		lblSelectedTaskLabel.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTaskLabel);
 		
-		int userLoggedIn = 5;
+		int userLoggedIn = 4;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		
@@ -74,7 +74,17 @@ public class GuiSignTask extends JFrame {
 		JButton btnSignTask = new JButton("Set Task as Signed");
 		btnSignTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ". No functionality yet.");
+				System.out.println("Sign button pressed. No funtionality yet.");
+				System.out.println("Task " + (dropdownTaskID.getSelectedItem()));
+				
+				String loggedIn = "";
+				for (int i = 0 ; i < dbClass.getAllManagers().size() ; i++)
+				{
+					Manager currentManager = dbClass.getAllManagers().get(i);
+					loggedIn = currentManager.getFullName();
+				}
+				
+				System.out.println("Signed by: " + loggedIn);
 			}
 		});
 		btnSignTask.setEnabled(false);
