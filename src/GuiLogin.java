@@ -9,12 +9,19 @@ import java.awt.Font;
 import javax.swing.SwingConstants;
 import javax.swing.JTextField;
 import javax.swing.JButton;
+import javax.swing.JPasswordField;
+import java.awt.event.ActionListener;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
+import java.util.concurrent.TimeUnit;
+import java.awt.event.ActionEvent;
 
 public class GuiLogin extends JFrame {
 
 	private JPanel contentPane;
-	private JTextField textField;
-	private JTextField textField_1;
+	private JTextField usernameField;
+	private JPasswordField passwordField;
 
 	/**
 	 * Launch the application.
@@ -36,57 +43,89 @@ public class GuiLogin extends JFrame {
 	 * Create the frame.
 	 */
 	public GuiLogin() {
-		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 466, 352);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
-		JLabel lblNewLabel = new JLabel("CAPYTEC");
-		lblNewLabel.setToolTipText("");
-		lblNewLabel.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		lblNewLabel.setBounds(165, 11, 239, 59);
-		contentPane.add(lblNewLabel);
+		JLabel lblLoginTitle = new JLabel("CAPYTEC LOGIN");
+		lblLoginTitle.setToolTipText("");
+		lblLoginTitle.setFont(new Font("Tahoma", Font.PLAIN, 28));
+		lblLoginTitle.setBounds(115, 0, 280, 59);
+		contentPane.add(lblLoginTitle);
 		
-		textField = new JTextField();
-		textField.setToolTipText("Please enter username here");
-		textField.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textField.setBounds(187, 107, 225, 37);
-		contentPane.add(textField);
-		textField.setColumns(10);
+		usernameField = new JTextField();
+		usernameField.setToolTipText("Please enter username here");
+		usernameField.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		usernameField.setBounds(170, 107, 225, 37);
+		contentPane.add(usernameField);
+		usernameField.setColumns(10);
 		
-		textField_1 = new JTextField();
-		textField_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		textField_1.setBounds(187, 182, 225, 37);
-		contentPane.add(textField_1);
-		textField_1.setColumns(10);
+		JLabel lblUsername = new JLabel("Username:");
+		lblUsername.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblUsername.setBounds(46, 107, 110, 37);
+		contentPane.add(lblUsername);
 		
-		JLabel lblNewLabel_1 = new JLabel("Username");
-		lblNewLabel_1.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblNewLabel_1.setBounds(26, 107, 110, 37);
-		contentPane.add(lblNewLabel_1);
+		JLabel lblPassword = new JLabel("Password:");
+		lblPassword.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		lblPassword.setBounds(46, 177, 102, 47);
+		contentPane.add(lblPassword);
 		
-		JLabel lblNewLabel_2 = new JLabel("Password");
-		lblNewLabel_2.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		lblNewLabel_2.setBounds(26, 177, 151, 47);
-		contentPane.add(lblNewLabel_2);
+		JButton btnLogin = new JButton("LOGIN");
 		
-		JButton btnNewButton = new JButton("LOGIN");
-		btnNewButton.setFont(new Font("Tahoma", Font.PLAIN, 18));
-		btnNewButton.setBounds(165, 256, 110, 37);
-		contentPane.add(btnNewButton);
+		btnLogin.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				String usernameIn = usernameField.getText();
+				char [] passwordIn = passwordField.getPassword();
+				
+				
+				
+				try {
+					MessageDigest digest = MessageDigest.getInstance("SHA-256");
+					
+					byte[] hash = digest.digest(new String(passwordIn).getBytes());
+					
+					//String s = Base64.getEncoder().encodeToString(hash);
+					
+					//System.out.println("Hash: "+ s);
+					
+				} catch (NoSuchAlgorithmException e1) {
+					e1.printStackTrace();
+				}
+				
+				if((!usernameIn.isEmpty()) && !(passwordIn.length == 0)) {
+					//System.out.println("Valid!");
+					
+					CapytecGui frameMain = new CapytecGui();
+					frameMain.setVisible(true);
+					
+					//System.exit(DISPOSE_ON_CLOSE);
+					
+				}else {
+					//System.out.println("Invalid!");
+				}
+			}
+
+			private String bytesToStringHex(byte[] hash) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+
+			private String byteToStringHex(byte[] hash) {
+				// TODO Auto-generated method stub
+				return null;
+			}
+		});
 		
-		JLabel lblLogin = new JLabel("LOGIN");
-		lblLogin.setToolTipText("");
-		lblLogin.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		lblLogin.setBounds(175, 46, 239, 59);
-		contentPane.add(lblLogin);
+		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 18));
+		btnLogin.setBounds(166, 251, 110, 37);
+		contentPane.add(btnLogin);
 		
-		JLabel lblLogin_1 = new JLabel("");
-		lblLogin_1.setToolTipText("");
-		lblLogin_1.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		lblLogin_1.setBounds(67, 40, 239, 59);
-		contentPane.add(lblLogin_1);
+		passwordField = new JPasswordField();
+		passwordField.setBounds(170, 185, 225, 37);
+		contentPane.add(passwordField);
 	}
 }
