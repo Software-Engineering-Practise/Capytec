@@ -141,11 +141,11 @@ public class GuiAllocateTask extends JFrame {
 		contentPane.add(lblFrequencyValue);
 		
 		JLabel lblStartDateValue = new JLabel("New label");
-		lblStartDateValue.setBounds(191, 340, 98, 14);
+		lblStartDateValue.setBounds(191, 340, 187, 14);
 		contentPane.add(lblStartDateValue);
 		
 		JLabel lblDueDateValue = new JLabel("New label");
-		lblDueDateValue.setBounds(191, 380, 98, 14);
+		lblDueDateValue.setBounds(191, 380, 187, 14);
 		contentPane.add(lblDueDateValue);
 		
 		JLabel lblImportanceValue = new JLabel("New label");
@@ -205,6 +205,13 @@ public class GuiAllocateTask extends JFrame {
 			String recSkillOne = "";
 			String recSkillTwo = "";
 			String recSkillThree = "";
+			Integer daysUntilRepeat = currentTask.getDaysUntilRepeat();
+			String startDate = currentTask.getDateCreated();
+			String dueDate = currentTask.getDateDue();
+			Integer importance = currentTask.getPriority();
+			
+			
+			
 			if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
 				ArrayList<String> recSkills = currentTask.getRecSkills();
 				int noOfRecSkills = recSkills.size();
@@ -223,10 +230,41 @@ public class GuiAllocateTask extends JFrame {
 					break;
 					
 				}
+				
+				/* Template code for when login system implemented
+				ArrayList<String> userSkills = loggedInUser.getSkills();
+				int noOfUserSkills = userSkills.size();
+				switch(noOfUserSkills) {
+				case 1:
+					userSkillOne = userSkills.get(0);
+					break;
+				case 2:
+					userSkillOne = userSkills.get(0);
+					userSkillTwo = userSkills.get(1);
+					break;
+				case 3:
+					userSkillOne = userSkills.get(0);
+					userSkillTwo = userSkills.get(1);
+					userSkillThree = userSkills.get(2);
+					break;
+				}
+				*/
+				
+				
+			
 				textAreaDescription.setText(currentTaskDesc);
 				lblTaskTypeOne.setText(recSkillOne);
 				lblTaskTypeTwo.setText(recSkillTwo);
 				lblTaskTypeThree.setText(recSkillThree);
+				// Template code for when login system implemented
+				//lblUserSkillOne.setText(userSkillOne);
+				//lblUserSkillTwo.setText(userSkillTwo);
+				//lblUserSkillThree.setText(userSkillThree);
+				lblFrequencyValue.setText(daysUntilRepeat.toString());
+				lblStartDateValue.setText(startDate);
+				lblDueDateValue.setText(dueDate);
+				lblImportanceValue.setText(importance.toString());
+				
 			}	
 		}
 		
@@ -240,6 +278,11 @@ public class GuiAllocateTask extends JFrame {
 					String recSkillOne = "";
 					String recSkillTwo = "";
 					String recSkillThree = "";
+					Integer daysUntilRepeat = currentTask.getDaysUntilRepeat();
+					String startDate = currentTask.getDateCreated();
+					String dueDate = currentTask.getDateDue();
+					Integer importance = currentTask.getPriority();
+					
 					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
 						ArrayList<String> recSkills = currentTask.getRecSkills();
 						int noOfRecSkills = recSkills.size();
@@ -284,9 +327,15 @@ public class GuiAllocateTask extends JFrame {
 						lblTaskTypeOne.setText(recSkillOne);
 						lblTaskTypeTwo.setText(recSkillTwo);
 						lblTaskTypeThree.setText(recSkillThree);
+						// Template code for when login system implemented
 						//lblUserSkillOne.setText(userSkillOne);
 						//lblUserSkillTwo.setText(userSkillTwo);
 						//lblUserSkillThree.setText(userSkillThree);
+						lblFrequencyValue.setText(daysUntilRepeat.toString());
+						lblStartDateValue.setText(startDate);
+						lblDueDateValue.setText(dueDate);
+						lblImportanceValue.setText(importance.toString());
+						
 						
 					}	
 				}
