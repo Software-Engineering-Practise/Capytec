@@ -265,6 +265,8 @@ public class CapyTecDB{
 	
 	public void addCaretakerTask(CaretakerTask caretakerTask) {
 		
+		int dbTaskID;
+		
 		String title = caretakerTask.getTitle();
 		String desc = caretakerTask.getDesc();
 		String dateCreated = caretakerTask.getDateCreated();
@@ -281,6 +283,7 @@ public class CapyTecDB{
 		
 		boolean success = database.RunSQL(sql);
 		
+		
 		if(!success) {
 			System.out.println("Failed to run query: "+sql);
 		}
@@ -291,25 +294,37 @@ public class CapyTecDB{
 			try {
 				ResultSet sqlResult = database.RunSQLQuery(sql);
 				
+				sql = "SELECT last_insert_rowid();";
+				
+				dbTaskID = database.RunSQLQuery(sql).getInt(1);
+				
 				ArrayList<Integer> skills = new ArrayList<Integer>();
 				
 				while(sqlResult.next()) {
 					int id = 1;
 					for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
-						if(caretakerTask.getRecSkills().get(i) == sqlResult.getString(2)) {
+						System.out.println("==========");
+						System.out.println(caretakerTask.getRecSkills().get(i));
+						System.out.println(sqlResult.getString(2));
+						if(caretakerTask.getRecSkills().get(i).contentEquals(sqlResult.getString(2))) {
+							System.out.println("got skill");
 							skills.add(id);
 						}
 					}
 					id++;
 				}
 				
+				sql = "";
+				
+				
 				sql = "INSERT INTO task_skill (task, skill) VALUES";
 				
-				for(int i = 0 ; i < skills.size() ; i++) {
-					sql = sql + " (" + caretakerTask.getID() + ", " + skills.get(i) + ")";
+				for(int i = 0 ; i < skills.size() ; ) {
+					sql = sql + " (" + dbTaskID + ", " + skills.get(i) + ")";
+					i++;
 					if(i < skills.size()) sql = sql + ",";
 				}
-				
+				sql = sql + ";";
 				success = database.RunSQL(sql);
 				
 				if(!success) {
@@ -336,7 +351,6 @@ public class CapyTecDB{
 		if(!success) {
 			System.out.println("Failed to run query: "+sql);
 		}
-		
 	}
 	//UPDATE FUNCITONS
 	
@@ -354,6 +368,13 @@ public class CapyTecDB{
 			System.out.println("Failed to run query: "+sql);
 		}
 		
+		//Delete older caretaker skills from db
+		sql = "DELETE FROM user_skill WHERE user = "+id+";";
+		
+		success = database.RunSQL(sql);
+		if(!success) {
+			System.out.println("Failed to run query: "+sql);
+		}
 		
 		if(caretaker.getSkills().size() != 0) {
 			try {
@@ -361,57 +382,161 @@ public class CapyTecDB{
 				
 				ResultSet sqlResult = database.RunSQLQuery(sql);
 				
-				ArrayList<Integer> skills = new ArrayList<Integer>();
+				ArrayList<Integer> newerSkills = new ArrayList<Integer>();
 				
 				while(sqlResult.next()) {
 					int skillID = sqlResult.getInt(1);
 					for(int i = 0 ; i < caretaker.getSkills().size() ; i++) {
-						if(caretaker.getSkills().get(i) == sqlResult.getString(2)) {
-							skills.add(skillID);
+						if(caretaker.getSkills().get(i).equals(sqlResult.getString(2))) {
+							System.out.println("got skill : " + skillID);
+							newerSkills.add(skillID);
 						}
 					}
 				}
-				
-				sql = "SELECT skill FROM user_skill WHERE user = "+id+";";
-				
-				ResultSet caretakerSkillsResultSet = database.RunSQLQuery(sql);
-				
-				while (caretakerSkillsResultSet.next()) {
-					while(sqlResult.next()) {
-						if(caretakerSkillsResultSet.getInt(1) != sqlResult.getInt(1)) {
-							sql = "DELETE from user_skill WHERE user = "+id+" AND skill = "+sqlResult.getInt(1)+";";
-							
-							success = database.RunSQL(sql);
-							
-							if(!success) {
-								System.out.println("Failed to run query: "+sql);
-							}
-						}
+				//loop though and add skills to caretaker
+				for (int i = 0 ; i < newerSkills.size(); i++) {
+					sql = "INSERT INTO user_skill (user, skill) VALUES ("+id+", "+newerSkills.get(i)+");";
+					success = database.RunSQL(sql);
+					if(!success) {
+						System.out.println("Failed to run query: "+sql);
 					}
-					for(int i = 0 ; i < skills.size() ; i++) {
-						if(caretakerSkillsResultSet.getInt(1) != skills.get(i)) {
-							sql = "INSERT INTO user_skill (user, skill) VALUES ("+id+", "+skills.get(i)+");";
-						}
-						
-						success = database.RunSQL(sql);
-						
-						if(!success) {
-							System.out.println("Failed to run query: "+sql);
-						}
-					}
-				}		
+				}
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
 		}
 	}
 	
+	public void updateCaretakerTask(CaretakerTask caretakerTask) {
+		
+		if(caretakerTask.getID() != 0) {
+			
+			int id = caretakerTask.getID();
+			
+			String title = caretakerTask.getTitle();
+			String desc = caretakerTask.getDesc();
+			String dateCreated = caretakerTask.getDateCreated();
+			String dateDue = caretakerTask.getDateDue();
+			int priority = caretakerTask.getPriority();
+			int daysUntilRepeat = caretakerTask.getDaysUntilRepeat();
+			int authorID = caretakerTask.getAuthorID();
+			int completionistID = caretakerTask.getCompletionistID();
+			int signeeID = caretakerTask.getSigneeID();
+			int peerCheckerID = caretakerTask.getPeerCheckerID();
+			//convert boolean to int 1 true/0 false
+			int needsSigning = caretakerTask.isNeedsSigning() ? 1 : 0;
+			int needsPeerChecking = caretakerTask.isNeedsPeerChecking() ? 1 : 0;
+			
+			String sql = "SELECT task_id FROM task WHERE task_id = "+id+";";
+			
+			ResultSet sqlResult = database.RunSQLQuery(sql);
+			try {
+				sql = "UPDATE task SET task_title = '"+title+"', task_desc = '"+desc+"', need_signing = "+needsSigning+", need_peer_check = "+needsPeerChecking+", "  
+						+" date_created = '"+dateCreated+"', date_due = '"+dateDue+"', priority = "+priority+", created_by = "+authorID+", days_till_repeat = "+daysUntilRepeat+", "
+						+" completed_by ="+completionistID+", signed_by ="+signeeID+", peer_checked_by = "+peerCheckerID
+						+" WHERE task_id = "+id+";";
+				
+				boolean success = database.RunSQL(sql);
+				if(!success) {
+					System.out.println("Failed to run query: "+sql);
+				}
+				
+				//Delete old version of skills
+				sql = "DELETE FROM task_skill WHERE task = "+id+";";
+				
+				success = database.RunSQL(sql);
+				if(!success) {
+					System.out.println("Failed to run query: "+sql);
+				}
+				
+				if(caretakerTask.getRecSkills().size() != 0) {
+					
+					sql = "SELECT skill_id, skill_name FROM skill;";
+					
+					sqlResult = database.RunSQLQuery(sql);
+					
+					ArrayList<Integer> newerSkills = new ArrayList<Integer>();
+					
+					while(sqlResult.next()) {
+						int skillID = sqlResult.getInt(1);
+						for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
+							if(caretakerTask.getRecSkills().get(i).equals(sqlResult.getString(2))) {
+								System.out.println("got skill : " + skillID);
+								newerSkills.add(skillID);
+								break;
+							}
+						}
+					}
+					
+					for (int i = 0 ; i < newerSkills.size(); i++) {
+						sql = "INSERT INTO task_skill (task, skill) VALUES ("+id+", "+newerSkills.get(i)+");";
+						success = database.RunSQL(sql);
+						if(!success) {
+							System.out.println("Failed to run query: "+sql);
+						}
+					}
+				}
+				
+				//remove old version of team members from db
+				sql = "DELETE FROM team WHERE task = "+id+";";
+				
+				success = database.RunSQL(sql);
+				
+				if(!success) {
+					System.out.println("Failed to run query: "+sql);
+				}
+				
+				if(caretakerTask.getTeamMembers().size() != 0) {
+					
+					sql = "SELECT user_id FROM user;";
+					
+					sqlResult = database.RunSQLQuery(sql);
+					
+					ArrayList<Integer> newerMembers= new ArrayList<Integer>();
+					
+					
+					while(sqlResult.next()) {
+						int memberID = sqlResult.getInt(1);
+						for(int i = 0 ; i < caretakerTask.getTeamMembers().size() ; i++) {
+							if(caretakerTask.getTeamMembers().get(i).equals(sqlResult.getInt(1))) {
+								System.out.println("got member : " + memberID);
+								newerMembers.add(memberID);
+								break;
+							}
+						}
+					}
+					//Add team members to db for task
+					for (int i = 0 ; i < newerMembers.size(); i++) {
+						sql = "INSERT INTO team (task, member) VALUES ("+id+", "+newerMembers.get(i)+");";
+						System.out.println("added team member!");
+						success = database.RunSQL(sql);
+						if(!success) {
+							System.out.println("Failed to run query: "+sql);
+						}
+					}
+				}
+			} catch(SQLException e) {
+				e.printStackTrace();
+			}
+		} else {
+			System.out.println("Not Valid Task ID");
+		}
+	}
+	
 	//DELETE FUNCTIONS
 	public void DeleteUser(int userID) {
 		
-		String sql = new String("DELETE FROM user WHERE user_id = "+userID+";");
+		String sql = "DELETE FROM user WHERE user_id = "+userID+";";
 		
 		boolean success = database.RunSQL(sql);
+		
+		if(!success) {
+			System.out.println("Failed to run query: "+sql);
+		}
+		
+		sql = "DELETE FROM user_skill WHERE user = "+userID+";";
+		
+		success = database.RunSQL(sql);
 		
 		if(!success) {
 			System.out.println("Failed to run query: "+sql);
@@ -423,6 +548,14 @@ public class CapyTecDB{
 		String sql = new String("DELETE FROM task WHERE task_id = "+taskID+";");
 		
 		boolean success = database.RunSQL(sql);
+		
+		if(!success) {
+			System.out.println("Failed to run query: "+sql);
+		}
+		
+		sql = "DELETE FROM task_skill WHERE task = "+taskID+";";
+		
+		success = database.RunSQL(sql);
 		
 		if(!success) {
 			System.out.println("Failed to run query: "+sql);
