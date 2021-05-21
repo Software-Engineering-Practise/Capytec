@@ -17,6 +17,11 @@ public class DateLabelFormatter extends AbstractFormatter {
     public String valueToString(Object value) throws ParseException {
         if (value != null) {
             Calendar cal = (Calendar) value;
+            Calendar today = Calendar.getInstance();
+            
+            //Return todays date if time before today is selected
+            if(cal.getTime().before(today.getTime())) return dateFormatter.format(today.getTime());                   
+                        
             return dateFormatter.format(cal.getTime());
         }
 
