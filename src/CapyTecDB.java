@@ -316,20 +316,14 @@ public class CapyTecDB{
 					id++;
 				}
 				
-				sql = "";
-				
-				sql = "INSERT INTO task_skill (task, skill) VALUES";
-				
-				for(int i = 0 ; i < skills.size() ; ) {
-					sql = sql + " (" + dbTaskID + ", " + skills.get(i) + ")";
-					i++;
-					if(i < skills.size()) sql = sql + ",";
-				}
-				sql = sql + ";";
-				success = database.RunSQL(sql);
-				
-				if(!success) {
-					System.out.println("Failed to run query: "+sql);
+				for(int i = 0 ; i < skills.size() ; i++) {
+					sql = "INSERT INTO task_skill (task, skill) VALUES ("+dbTaskID+", "+skills.get(i)+");";
+					
+					success = database.RunSQL(sql);
+					
+					if(!success) {
+						System.out.println("Failed to run query: "+sql);
+					}
 				}
 				
 			} catch (SQLException e) {
