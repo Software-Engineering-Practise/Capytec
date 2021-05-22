@@ -334,6 +334,7 @@ public class GuiInsertTask extends JFrame {
 					
 					//dbClass.addCaretakerTask(newTask);
 					//System.out.println("Insert");
+					CapytecGui.refreshTaskManagementGui();
 				} else {
 					lblErrorMessage.setVisible(true);
 				}

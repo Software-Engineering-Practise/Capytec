@@ -55,6 +55,9 @@ public class GuiAllocateTask extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		//Placeholder value until login system is implemented
+		int loggedInUser = 8;
+		
 		JLabel lblTaskName = new JLabel("Task Name:");
 		lblTaskName.setBounds(22, 70, 144, 14);
 		contentPane.add(lblTaskName);
@@ -191,10 +194,9 @@ public class GuiAllocateTask extends JFrame {
 		lblUserSkillThree.setBounds(157, 219, 76, 14);
 		contentPane.add(lblUserSkillThree);
 		
-		JButton btnAllocateTask = new JButton("Allocate Task");
 		
-		btnAllocateTask.setBounds(294, 623, 118, 36);
-		contentPane.add(btnAllocateTask);
+		
+		
 		
 		JComboBox<String> comboBoxTaskName = new JComboBox<String>();
 		
@@ -275,8 +277,13 @@ public class GuiAllocateTask extends JFrame {
 				lblNeedsSigningValue.setText(needsSigning.toString());
 				lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
 				textAreaExtraConsiderations.setText(extraConsiderations);
+				
+				
+				
+				
 			}	
 		}
+		
 		
 		//Update values on change of task name dropdown
 		comboBoxTaskName.addActionListener(new ActionListener() {
@@ -335,7 +342,7 @@ public class GuiAllocateTask extends JFrame {
 						*/
 						
 						
-						
+						//Update GUI with task details
 						textAreaDescription.setText(currentTaskDesc);
 						lblTaskTypeOne.setText(recSkillOne);
 						lblTaskTypeTwo.setText(recSkillTwo);
@@ -352,13 +359,42 @@ public class GuiAllocateTask extends JFrame {
 						lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
 						textAreaExtraConsiderations.setText(extraConsiderations);
 						
+						
+						
+						
+						
+						
 					}	
 				}
 			}
 		});
 		
 		
+		JButton btnAllocateTask = new JButton("Allocate Task");
+		btnAllocateTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for(int i=0; i<dbClass.getAllTasks().size(); i++) {
+					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+					//if(currentTask.getID() == 1);
+					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
+						CaretakerTask updatedTask = currentTask;
+						ArrayList<Integer> assignedCaretakers = new ArrayList<Integer>();
+						//Template code for when login system is implemented
+						assignedCaretakers.add(loggedInUser);
+						updatedTask.setTeamMembers(assignedCaretakers);
+						dbClass.updateCaretakerTask(updatedTask);
+						CapytecGui.refreshTaskManagementGui();
+					}
+				}
+
+				
+				
+				
+			}
+		});
 		
+		btnAllocateTask.setBounds(294, 623, 118, 36);
+		contentPane.add(btnAllocateTask);
 		
 		
 		/*
