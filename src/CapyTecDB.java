@@ -268,13 +268,56 @@ public class CapyTecDB{
 		
 		int dbTaskID;
 		
+		//String title = caretakerTask.getTitle();
+		//String desc = caretakerTask.getDesc();
+		//String exConsider = caretakerTask.getExtraConsiderations();
+		//String dateCreated = caretakerTask.getDateCreated();
+		//String dateDue = caretakerTask.getDateDue();
+		
 		String title = caretakerTask.getTitle();
+		if(title == null || title.length() > 50) {
+			title = title.substring(0, Math.min(title.length(), 50));
+		} else {
+			title = caretakerTask.getTitle();
+		}
+		
 		String desc = caretakerTask.getDesc();
+		if(desc == null || desc.length() > 250) {
+			desc = desc.substring(0, Math.min(desc.length(), 250));
+		} else {
+			desc = caretakerTask.getDesc();
+		}
+		
 		String exConsider = caretakerTask.getExtraConsiderations();
-		String dateCreated = caretakerTask.getDateCreated();
-		String dateDue = caretakerTask.getDateDue();
+		if(exConsider == null || exConsider.length() > 250) {
+			exConsider = exConsider.substring(0, Math.min(exConsider.length(), 250));
+		} else {
+			exConsider = caretakerTask.getExtraConsiderations();
+		}
+		
+		String dateCreated;
+		if(caretakerTask.getDateCreated() == null) {
+			dateCreated = "";
+		} else {
+			dateCreated = caretakerTask.getDateCreated();
+		}
+		
+		String dateDue;
+		if(caretakerTask.getDateDue() == null) {
+			dateDue = "";
+		} else {
+			dateDue = caretakerTask.getDateDue();
+		}
+		
 		int priority = caretakerTask.getPriority();
+		if (0 < priority || priority < 4) {
+			priority = 1;
+		}
+		
 		int daysUntilRepeat = caretakerTask.getDaysUntilRepeat();
+		if(daysUntilRepeat < 0) {
+			daysUntilRepeat = 0;
+		}
 		int authorID = caretakerTask.getAuthorID();
 		int needsSigning = caretakerTask.isNeedsSigning() ? 1 : 0;
 		int needsPeerChecking = caretakerTask.isNeedsPeerChecking() ? 1 : 0;
@@ -333,7 +376,13 @@ public class CapyTecDB{
 		
 		int taskID = completedTask.getTaskID();
 		int userID = completedTask.getUserID();
-		String dateCompleted = completedTask.getDateCompleted();
+		
+		String dateCompleted;
+		if(completedTask.getDateCompleted() == null) {
+			dateCompleted = "";
+		} else {
+			dateCompleted = completedTask.getDateCompleted();
+		}
 		
 		String sql = "INSERT INTO completed_task (task, user, date) VALUES ("+taskID+", "+userID+", '"+dateCompleted+"');";
 		
@@ -405,14 +454,64 @@ public class CapyTecDB{
 			int id = caretakerTask.getID();
 			
 			String title = caretakerTask.getTitle();
+			if(title == null || title.length() > 50) {
+				title = title.substring(0, Math.min(title.length(), 50));
+			} else {
+				title = caretakerTask.getTitle();
+			}
+			
 			String desc = caretakerTask.getDesc();
+			if(desc == null || desc.length() > 250) {
+				desc = desc.substring(0, Math.min(desc.length(), 250));
+			} else {
+				desc = caretakerTask.getDesc();
+			}
+			
 			String exConsider = caretakerTask.getExtraConsiderations();
-			String dateCreated = caretakerTask.getDateCreated();
-			String dateDue = caretakerTask.getDateDue();
-			String dateUpdated = caretakerTask.getDateUpdated();
-			String dateCompleted = caretakerTask.getDateCompleted();
+			if(exConsider == null || exConsider.length() > 250) {
+				exConsider = exConsider.substring(0, Math.min(exConsider.length(), 250));
+			} else {
+				exConsider = caretakerTask.getExtraConsiderations();
+			}
+			
+			String dateCreated;
+			if(caretakerTask.getDateCreated() == null) {
+				dateCreated = "";
+			} else {
+				dateCreated = caretakerTask.getDateCreated();
+			}
+			
+			String dateDue;
+			if(caretakerTask.getDateDue() == null) {
+				dateDue = "";
+			} else {
+				dateDue = caretakerTask.getDateDue();
+			}
+			
+			String dateUpdated;
+			if(caretakerTask.getDateUpdated() == null) {
+				dateUpdated = "";
+			} else {
+				dateUpdated = caretakerTask.getDateUpdated();
+			}
+			
+			String dateCompleted;
+			if(caretakerTask.getDateCompleted() == null) {
+				dateCompleted = "";
+			} else {
+				dateCompleted = caretakerTask.getDateCompleted();
+			}
+			
 			int priority = caretakerTask.getPriority();
+			if (0 < priority || priority < 4) {
+				priority = 1;
+			}
+			
 			int daysUntilRepeat = caretakerTask.getDaysUntilRepeat();
+			if(daysUntilRepeat < 0) {
+				daysUntilRepeat = 0;
+			}
+			
 			int authorID = caretakerTask.getAuthorID();
 			int completionistID = caretakerTask.getCompletionistID();
 			int signeeID = caretakerTask.getSigneeID();
@@ -590,5 +689,13 @@ public class CapyTecDB{
 			}
 		}
 		return id;
+	}
+	
+	//CLOSE connection Method
+	
+	public void closeConn() {
+		
+		database.CloseConn();
+		
 	}
 }
