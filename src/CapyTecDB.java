@@ -579,4 +579,22 @@ public class CapyTecDB{
 		
 		return pwdHash;
 	}
+	
+	public int getAccId(String username) {
+		
+		int id = 0;
+		if(username != null) {
+			
+			String sql = "SELECT login_user FROM login WHERE login_username = '"+username+"';";
+			
+			ResultSet userIdResult = database.RunSQLQuery(sql);
+			
+			try {
+				id = userIdResult.getInt(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return id;
+	}
 }
