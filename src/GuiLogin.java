@@ -16,6 +16,7 @@ import java.security.NoSuchAlgorithmException;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
+import java.awt.Color;
 
 public class GuiLogin extends JFrame {
 
@@ -51,9 +52,10 @@ public class GuiLogin extends JFrame {
 		contentPane.setLayout(null);
 		
 		JLabel lblLoginTitle = new JLabel("CAPYTEC LOGIN");
+		lblLoginTitle.setHorizontalAlignment(SwingConstants.CENTER);
 		lblLoginTitle.setToolTipText("");
 		lblLoginTitle.setFont(new Font("Tahoma", Font.PLAIN, 28));
-		lblLoginTitle.setBounds(115, 0, 280, 59);
+		lblLoginTitle.setBounds(0, 0, 450, 59);
 		contentPane.add(lblLoginTitle);
 		
 		usernameField = new JTextField();
@@ -73,6 +75,23 @@ public class GuiLogin extends JFrame {
 		lblPassword.setBounds(46, 177, 102, 47);
 		contentPane.add(lblPassword);
 		
+		JLabel lblUserBox = new JLabel("");
+		lblUserBox.setForeground(new Color(204, 51, 0));
+		lblUserBox.setBounds(170, 144, 225, 19);
+		contentPane.add(lblUserBox);
+		
+		JLabel lblPwdBox = new JLabel("");
+		lblPwdBox.setForeground(new Color(204, 51, 0));
+		lblPwdBox.setBounds(170, 221, 225, 19);
+		contentPane.add(lblPwdBox);
+		
+		JLabel lblNotify = new JLabel("");
+		lblNotify.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNotify.setFont(new Font("Tahoma", Font.PLAIN, 14));
+		lblNotify.setForeground(new Color(204, 51, 0));
+		lblNotify.setBounds(10, 70, 430, 14);
+		contentPane.add(lblNotify);
+		
 		JButton btnLogin = new JButton("LOGIN");
 		
 		btnLogin.addActionListener(new ActionListener() {
@@ -80,43 +99,67 @@ public class GuiLogin extends JFrame {
 				
 				String usernameIn = usernameField.getText();
 				char [] passwordIn = passwordField.getPassword();
+				int loggedInId;
 				
-				
-				
-				try {
-					MessageDigest digest = MessageDigest.getInstance("SHA-256");
-					
-					byte[] hash = digest.digest(new String(passwordIn).getBytes());
-					
-					//String s = Base64.getEncoder().encodeToString(hash);
-					
-					//System.out.println("Hash: "+ s);
-					
-				} catch (NoSuchAlgorithmException e1) {
-					e1.printStackTrace();
+				if(usernameIn.isEmpty()) {
+					lblUserBox.setText("Please enter a username!");
+				} else {
+					lblUserBox.setText("");
+				}
+				if(passwordIn.length == 0) {
+					lblPwdBox.setText("Please enter a password!");
+				} else {
+					lblPwdBox.setText("");
 				}
 				
 				if((!usernameIn.isEmpty()) && !(passwordIn.length == 0)) {
-					//System.out.println("Valid!");
+					System.out.println("Input not null!");
+					lblNotify.setText("");
+					try {
+						
+						CapyTecDB db = new CapyTecDB();
+						
+						String dbHash = new String(); 
+						
+						if(db.getHash(usernameIn) != null) {
+							System.out.println("hash retrieved!");
+							dbHash = db.getHash(usernameIn);
+						}
+						
+						//SHA-256 hashing is used.
+						MessageDigest digest = MessageDigest.getInstance("SHA-256");
+						
+						byte[] hash = digest.digest(new String(passwordIn).getBytes());
+						
+						
+						String hashIn = Base64.getEncoder().encodeToString(hash);
+						
+						
+						if(dbHash.equals(hashIn)){
+							
+							loggedInId = db.getAccId(usernameIn);
+							System.out.println("Welcome "+usernameIn+" UserID "+ loggedInId);
+							CapytecGui frameMain = new CapytecGui();
+							frameMain.setVisible(true);
+							
+						}
+						
+						
+					} catch (NoSuchAlgorithmException e1) {
+						e1.printStackTrace();
+					}
 					
-					CapytecGui frameMain = new CapytecGui();
-					frameMain.setVisible(true);
+					
+					//CapytecGui frameMain = new CapytecGui();
+					//frameMain.setVisible(true);
 					
 					//System.exit(DISPOSE_ON_CLOSE);
 					
 				}else {
-					//System.out.println("Invalid!");
+					lblNotify.setText("Invalid Username or Password!");
 				}
-			}
+				
 
-			private String bytesToStringHex(byte[] hash) {
-				// TODO Auto-generated method stub
-				return null;
-			}
-
-			private String byteToStringHex(byte[] hash) {
-				// TODO Auto-generated method stub
-				return null;
 			}
 		});
 		
@@ -127,5 +170,8 @@ public class GuiLogin extends JFrame {
 		passwordField = new JPasswordField();
 		passwordField.setBounds(170, 185, 225, 37);
 		contentPane.add(passwordField);
+		
+		
+		
 	}
 }
