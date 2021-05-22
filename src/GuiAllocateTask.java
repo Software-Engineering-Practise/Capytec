@@ -114,7 +114,13 @@ public class GuiAllocateTask extends JFrame {
 		lblNeedsPeerChecking.setBounds(22, 500, 162, 14);
 		contentPane.add(lblNeedsPeerChecking);
 		
-		JLabel lblErrorMessage = new JLabel("Error Message");
+		JLabel lblSuccessPrompt = new JLabel("Task Allocated. Restart GUI to view changes");
+		lblSuccessPrompt.setForeground(Color.RED);
+		lblSuccessPrompt.setBounds(22, 606, 267, 69);
+		contentPane.add(lblSuccessPrompt);
+		lblSuccessPrompt.setVisible(false);
+		
+		JLabel lblErrorMessage = new JLabel("Task already assigned");
 		lblErrorMessage.setForeground(Color.RED);
 		lblErrorMessage.setBounds(22, 626, 180, 31);
 		contentPane.add(lblErrorMessage);
@@ -205,6 +211,7 @@ public class GuiAllocateTask extends JFrame {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			String currentTaskName = currentTask.getTitle();	
 			comboBoxTaskName.addItem(currentTaskName);
+			
 		}
 		
 		//Populate initial values
@@ -373,20 +380,28 @@ public class GuiAllocateTask extends JFrame {
 		JButton btnAllocateTask = new JButton("Allocate Task");
 		btnAllocateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				lblSuccessPrompt.setVisible(false);
+				lblErrorMessage.setVisible(false);
 				for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 					//if(currentTask.getID() == 1);
-					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
+					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString()) && currentTask.getTeamMembers().isEmpty()) {
+						System.out.println("Team members is not empty and update string matches");
 						CaretakerTask updatedTask = currentTask;
 						ArrayList<Integer> assignedCaretakers = new ArrayList<Integer>();
 						//Template code for when login system is implemented
 						assignedCaretakers.add(loggedInUser);
 						updatedTask.setTeamMembers(assignedCaretakers);
 						dbClass.updateCaretakerTask(updatedTask);
-						CapytecGui.refreshTaskManagementGui();
-					}
-				}
+						lblErrorMessage.setVisible(false);
+						lblSuccessPrompt.setVisible(true);
+					} else if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString()) && !currentTask.getTeamMembers().isEmpty()){
+						System.out.println("Team members is empty");
+						lblSuccessPrompt.setVisible(false);
+						lblErrorMessage.setVisible(true);
 
+					}
+				} 
 				
 				
 				
@@ -453,6 +468,7 @@ public class GuiAllocateTask extends JFrame {
 		*/
 		comboBoxTaskName.setBounds(97, 68, 266, 22);
 		contentPane.add(comboBoxTaskName);
+		
 		
 		
 		
