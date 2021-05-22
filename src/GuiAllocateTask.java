@@ -2,7 +2,6 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -10,18 +9,13 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
-import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 
 import org.jdatepicker.impl.JDatePanelImpl;
-import org.jdatepicker.impl.JDatePickerImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.JComboBox;
-import javax.swing.DefaultComboBoxModel;
 import java.awt.Color;
-import javax.swing.JCheckBox;
-import javax.swing.JTextPane;
 import javax.swing.JTextArea;
 
 public class GuiAllocateTask extends JFrame {
@@ -35,6 +29,7 @@ public class GuiAllocateTask extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
+					//Create and make allocate task form frame visible
 					GuiAllocateTask frame = new GuiAllocateTask();
 					frame.setVisible(true);
 				} catch (Exception e) {
@@ -48,7 +43,9 @@ public class GuiAllocateTask extends JFrame {
 	 * Create the frame.
 	 */
 	public GuiAllocateTask() {
+		//Set frame to close independently on exit rather than close whole program
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+		//Set size of content pane
 		setBounds(100, 100, 450, 725);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
@@ -58,27 +55,33 @@ public class GuiAllocateTask extends JFrame {
 		//Placeholder value until login system is implemented
 		int loggedInUser = 8;
 		
+		//Label to tell user they are selecting between task names in the adjacent dropdown
 		JLabel lblTaskName = new JLabel("Task Name:");
 		lblTaskName.setBounds(22, 70, 144, 14);
 		contentPane.add(lblTaskName);
 		
+		//Label to tell user they are reading the task description in the adjacent textbox
 		JLabel lblDescription = new JLabel("Description:");
 		lblDescription.setBounds(22, 101, 144, 14);
 		contentPane.add(lblDescription);
 		
+		//Subheading to tell user they are reading recommended skills
 		JLabel lblTaskType = new JLabel("Recommended Skills:");
 		lblTaskType.setBounds(22, 160, 144, 14);
 		contentPane.add(lblTaskType);
 		
+		//Form title to tell user they are allocating a task
 		JLabel lblAllocateTask = new JLabel("Allocate Task");
 		lblAllocateTask.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblAllocateTask.setBounds(87, 20, 202, 34);
 		contentPane.add(lblAllocateTask);
 		
+		//Frame to tell user they are reading the frequency of the tasks repetition
 		JLabel lblFrequency = new JLabel("Days Until Repeat");
 		lblFrequency.setBounds(22, 283, 162, 14);
 		contentPane.add(lblFrequency);
 		
+		//Create models to store the format for the start and due dates to be displayed
 		UtilDateModel modelStartDate = new UtilDateModel();
 		
 		Properties pStart = new Properties();
@@ -98,34 +101,41 @@ public class GuiAllocateTask extends JFrame {
 		pDue.put("text.year", "Year");
 		JDatePanelImpl datePanelDue = new JDatePanelImpl(modelDueDate, pDue);
 		
+		//Label to tell user they are reading the selected tasks due date that is adjacent to the label
 		JLabel lblDueDate = new JLabel("Due Date:");
 		lblDueDate.setBounds(22, 380, 144, 14);
 		contentPane.add(lblDueDate);
 		
+		//Label to tell user they are reading the selected tasks importance level that is adjacent to the label
 		JLabel lblImportance = new JLabel("Importance:");
 		lblImportance.setBounds(22, 428, 144, 14);
 		contentPane.add(lblImportance);
 		
+		//Label to tell the user they are reading if the selected task needs signing off
 		JLabel lblNeedsSigning = new JLabel("Needs Signing:");
 		lblNeedsSigning.setBounds(22, 470, 162, 14);
 		contentPane.add(lblNeedsSigning);
 		
+		//Label to tell the user they are reading if the selected task needs peer checkings
 		JLabel lblNeedsPeerChecking = new JLabel("Needs Peer Checking:");
 		lblNeedsPeerChecking.setBounds(22, 500, 162, 14);
 		contentPane.add(lblNeedsPeerChecking);
 		
+		//Label to tell user allocation was a success. Only visible after successful allocation.
 		JLabel lblSuccessPrompt = new JLabel("Task Allocated. Restart GUI to view changes");
 		lblSuccessPrompt.setForeground(Color.RED);
 		lblSuccessPrompt.setBounds(22, 606, 267, 69);
 		contentPane.add(lblSuccessPrompt);
 		lblSuccessPrompt.setVisible(false);
 		
+		//Label to tell user allocation was a failure. Only visible after task allocation fails
 		JLabel lblErrorMessage = new JLabel("Task already assigned");
 		lblErrorMessage.setForeground(Color.RED);
 		lblErrorMessage.setBounds(22, 626, 180, 31);
 		contentPane.add(lblErrorMessage);
 		lblErrorMessage.setVisible(false);
 		
+		//Text box containing the description for the currently selected task
 		JTextArea textAreaDescription = new JTextArea();
 		textAreaDescription.setBounds(95, 96, 317, 53);
 		//Add line wrapping after words in text field.
@@ -135,6 +145,7 @@ public class GuiAllocateTask extends JFrame {
 		textAreaDescription.setEditable(false);	
 		contentPane.add(textAreaDescription);
 		
+		//Three labels containing the relevant task types for that particular tasks, presenting them to the user (Gardening, Plumbing etc)
 		JLabel lblTaskTypeOne = new JLabel("Placeholder");
 		lblTaskTypeOne.setBounds(22, 183, 96, 14);
 		contentPane.add(lblTaskTypeOne);
@@ -147,34 +158,42 @@ public class GuiAllocateTask extends JFrame {
 		lblTaskTypeThree.setBounds(22, 219, 125, 14);
 		contentPane.add(lblTaskTypeThree);
 		
-		JLabel lblFrequencyValue = new JLabel("New label");
+		//Label storing the frequency of the tasks repetition, or if it is a one-off task
+		JLabel lblFrequencyValue = new JLabel("Frequency");
 		lblFrequencyValue.setBounds(191, 283, 118, 14);
 		contentPane.add(lblFrequencyValue);
 		
-		JLabel lblStartDateValue = new JLabel("New label");
+		//Label storing the start value of the task
+		JLabel lblStartDateValue = new JLabel("Start");
 		lblStartDateValue.setBounds(191, 340, 187, 14);
 		contentPane.add(lblStartDateValue);
 		
-		JLabel lblDueDateValue = new JLabel("New label");
+		//Label storing the due date value of the task
+		JLabel lblDueDateValue = new JLabel("Due");
 		lblDueDateValue.setBounds(191, 380, 187, 14);
 		contentPane.add(lblDueDateValue);
 		
+		//Label storing the importance rating for the task
 		JLabel lblImportanceValue = new JLabel("New label");
 		lblImportanceValue.setBounds(191, 428, 98, 14);
 		contentPane.add(lblImportanceValue);
 		
+		//Label storing whether the task needs peer checking
 		JLabel lblNeedsPeerCheckingValue = new JLabel("New label");
 		lblNeedsPeerCheckingValue.setBounds(191, 500, 98, 14);
 		contentPane.add(lblNeedsPeerCheckingValue);
 		
+		//Label storing whether the task needs signing off
 		JLabel lblNeedsSigningValue = new JLabel("New label");
 		lblNeedsSigningValue.setBounds(191, 470, 98, 14);
 		contentPane.add(lblNeedsSigningValue);
 		
+		//Label telling user they are reading extra considerations for that particular task, holding any extra information surrounding that task
 		JLabel lblExtraConsiderations = new JLabel("Extra Considerations:");
 		lblExtraConsiderations.setBounds(22, 531, 150, 14);
 		contentPane.add(lblExtraConsiderations);
 		
+		//Uneditable textbox containing the extra considerations for the task
 		JTextArea textAreaExtraConsiderations = new JTextArea();
 		textAreaExtraConsiderations.setBounds(191, 525, 172, 50);
 		//Add line wrapping after words in text field.
@@ -184,6 +203,7 @@ public class GuiAllocateTask extends JFrame {
 		textAreaExtraConsiderations.setEditable(false);	
 		contentPane.add(textAreaExtraConsiderations);
 		
+		//Subheader and labels showing the skills of the currently logged in user
 		JLabel lblUserSkills = new JLabel("Your Skills:");
 		lblUserSkills.setBounds(157, 160, 83, 14);
 		contentPane.add(lblUserSkills);
@@ -203,7 +223,7 @@ public class GuiAllocateTask extends JFrame {
 		
 		
 		
-		
+		//Dropdown for task names
 		JComboBox<String> comboBoxTaskName = new JComboBox<String>();
 		
 		//Populate task name dropdown
@@ -294,8 +314,8 @@ public class GuiAllocateTask extends JFrame {
 		
 		//Update values on change of task name dropdown
 		comboBoxTaskName.addActionListener(new ActionListener() {
-			
 			public void actionPerformed(ActionEvent e) {
+				//Get details of each stored task
 				for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 					String currentTaskDesc = currentTask.getDesc();	
@@ -310,7 +330,9 @@ public class GuiAllocateTask extends JFrame {
 					Boolean needsPeerChecking = currentTask.isNeedsPeerChecking();
 					String extraConsiderations = currentTask.getExtraConsiderations();
 					
+					//If task is the same as currently selected task by user, update GUI elements with details
 					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
+						//Get same number of skills as stored in database. Prevents index out of bounds issues.
 						ArrayList<String> recSkills = currentTask.getRecSkills();
 						int noOfRecSkills = recSkills.size();
 						switch(noOfRecSkills) {
@@ -364,29 +386,23 @@ public class GuiAllocateTask extends JFrame {
 						lblImportanceValue.setText(importance.toString());
 						lblNeedsSigningValue.setText(needsSigning.toString());
 						lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
-						textAreaExtraConsiderations.setText(extraConsiderations);
-						
-						
-						
-						
-						
-						
+						textAreaExtraConsiderations.setText(extraConsiderations);	
 					}	
 				}
 			}
 		});
 		
-		
+		//Create allocate task button
 		JButton btnAllocateTask = new JButton("Allocate Task");
 		btnAllocateTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				lblSuccessPrompt.setVisible(false);
 				lblErrorMessage.setVisible(false);
+				//Loop through each stored task
 				for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-					//if(currentTask.getID() == 1);
+					//If task matches currently selected task by user set new team member and run database update method
 					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString()) && currentTask.getTeamMembers().isEmpty()) {
-						System.out.println("Team members is not empty and update string matches");
 						CaretakerTask updatedTask = currentTask;
 						ArrayList<Integer> assignedCaretakers = new ArrayList<Integer>();
 						//Template code for when login system is implemented
@@ -396,7 +412,7 @@ public class GuiAllocateTask extends JFrame {
 						lblErrorMessage.setVisible(false);
 						lblSuccessPrompt.setVisible(true);
 					} else if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString()) && !currentTask.getTeamMembers().isEmpty()){
-						System.out.println("Team members is empty");
+						//Output error information
 						lblSuccessPrompt.setVisible(false);
 						lblErrorMessage.setVisible(true);
 
@@ -408,64 +424,9 @@ public class GuiAllocateTask extends JFrame {
 			}
 		});
 		
+		//Set dimensions for allocate task button
 		btnAllocateTask.setBounds(294, 623, 118, 36);
 		contentPane.add(btnAllocateTask);
-		
-		
-		/*
-		comboBoxTaskName.addActionListener(new ActionListener() {
-			
-			public void actionPerformed(ActionEvent e) {
-				for(int i=0; i<dbClass.getAllTasks().size(); i++) {			
-					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
-						String recSkillOne = "Placeholder";
-						String recSkillTwo = ""; 
-						String recSkillThree = "";
-						ArrayList<String> recSkills = currentTask.getRecSkills();
-						int noOfRecSkills = recSkills.size();
-						switch(noOfRecSkills) {
-						case 1:
-							recSkillOne = recSkills.get(0);
-							break;
-						case 2:
-							recSkillOne = recSkills.get(0);
-							recSkillTwo = recSkills.get(1);
-							break;
-						case 3:
-							recSkillOne = recSkills.get(0);
-							recSkillTwo = recSkills.get(1);
-							recSkillThree = recSkills.get(2);
-							break;
-							
-					}
-						
-						
-						
-						
-						
-						
-						
-						
-						String currentTaskName = currentTask.getTitle();
-						String currentTaskDesc = currentTask.getDesc();
-						comboBoxTaskName.addItem(currentTaskName);
-						textAreaDescription.setText(currentTaskDesc);
-						lblTaskTypeOne.setText(recSkillOne);
-						lblTaskTypeTwo.setText(recSkillTwo);
-						lblTaskTypeThree.setText(recSkillThree);
-					}
-					
-					
-					
-					
-				}
-				
-				
-				//CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-			}
-		});
-		*/
 		comboBoxTaskName.setBounds(97, 68, 266, 22);
 		contentPane.add(comboBoxTaskName);
 		
