@@ -328,7 +328,7 @@ public class CapytecGui extends JFrame {
 		
 		DefaultTableModel tableModelTaskLogging = (DefaultTableModel)tableTaskLogging.getModel();
 		
-		//Load all current tasks
+		//Load all current tasks, one off tasks.
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 		{
 			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
@@ -373,9 +373,62 @@ public class CapytecGui extends JFrame {
 				extraReqs = "No Extra Requirements"; 
 				signedBy = "N/A";
 				checkedBy = "N/A"; }
-			if (currentItem.getDateCompleted() == null || isRepeated == "Yes")
+			if ((currentItem.getDateCompleted() == null || currentItem.getDateCompleted().equals("")) && isRepeated != "Yes")
+			{
+				//System.out.println("Current item " + currentItem.getID() + ". Completed date: " + currentItem.getDateCompleted());
 				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+			}
 		}
+		
+		//Load all current tasks, repeated tasks.
+				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+				{
+					CaretakerTask currentItem = dbClass.getAllTasks().get(i);
+					
+					
+					int repeat = currentItem.getDaysUntilRepeat();
+					String members;
+					if (currentItem.getTeamMembers().isEmpty()) {
+						members = "No Assigned Caretakers";
+					}
+					else {
+						members = "" + currentItem.getTeamMembers();
+					}
+					String isRepeated;
+					String daysRepeat;
+					if (repeat == 0)
+					{
+						isRepeated = "Doesn't repeat";
+						daysRepeat = "N/A";
+					}
+					else
+					{
+						isRepeated = "Yes";
+						daysRepeat = "" + repeat;
+					}
+					String extraReqs;
+					String signedBy;
+					String checkedBy;
+					if (currentItem.isNeedsSigning() && currentItem.isNeedsPeerChecking()) {
+						extraReqs = "Needs Both Peer Checking and Signing";
+						signedBy = currentItem.getSignee();
+						checkedBy = currentItem.getPeerChecker(); }
+					else if (currentItem.isNeedsPeerChecking()) {
+						extraReqs = "Needs Peer Checking";
+						signedBy = "N/A";
+						checkedBy = currentItem.getPeerChecker(); }
+					else if (currentItem.isNeedsSigning()) {
+						extraReqs = "Needs Signing";
+						signedBy = currentItem.getSignee();
+						checkedBy = "N/A"; }
+					else {
+						extraReqs = "No Extra Requirements"; 
+						signedBy = "N/A";
+						checkedBy = "N/A"; }
+					if (isRepeated == "Yes")
+						tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+				}
+		
 		//Load all completed tasks
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 		{
@@ -421,8 +474,12 @@ public class CapytecGui extends JFrame {
 				extraReqs = "No Extra Requirements"; 
 				signedBy = "N/A";
 				checkedBy = "N/A"; }
-			if (currentItem.getDateCompleted() != null)
+			if (currentItem.getDateCompleted() != null && !currentItem.getDateCompleted().equals("") && isRepeated != "Yes")
+			{
+				String currentDate = currentItem.getDateCompleted();
+				//System.out.println("Current item " + currentItem.getID() + ". Completed date: " + currentItem.getDateCompleted() + currentItem.getDateCompleted().compareTo(""));
 				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+			}
 		}
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
 		
