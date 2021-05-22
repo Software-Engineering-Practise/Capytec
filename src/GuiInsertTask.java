@@ -192,6 +192,13 @@ public class GuiInsertTask extends JFrame {
 		textAreaExtraConsiderations.setWrapStyleWord(true);
 		contentPane.add(textAreaExtraConsiderations);
 		
+		JLabel lblSuccessPrompt = new JLabel("Task created. Restart GUI to view changes");
+		lblSuccessPrompt.setForeground(Color.RED);
+		lblSuccessPrompt.setBounds(22, 621, 294, 41);
+		contentPane.add(lblSuccessPrompt);
+		lblSuccessPrompt.setVisible(false);
+		
+		
 		JLabel lblErrorMessage = new JLabel("Error Message");
 		lblErrorMessage.setForeground(Color.RED);
 		lblErrorMessage.setBounds(22, 626, 272, 31);
@@ -215,6 +222,10 @@ public class GuiInsertTask extends JFrame {
 				boolean needsSigning = chckbxNeedsSigning.isSelected();
 				boolean needsPeerChecking = chckbxNeedsPeerChecking.isSelected();
 				String extraConsiderations = textAreaExtraConsiderations.getText();
+				ArrayList<String> storedTasks = new ArrayList<String>();
+				for(int i=0; i<dbClass.getAllTasks().size(); i++) {
+					storedTasks.add(dbClass.getAllTasks().get(i).getTitle());
+				}
 				
 				switch(comboBoxFrequency.getSelectedItem().toString()){
 				case "1":
@@ -294,6 +305,9 @@ public class GuiInsertTask extends JFrame {
 					//System.out.println("Task name cannot be empty");
 					lblErrorMessage.setText("Task name cannot be empty");
 					insertTaskError = true;
+				} else if(storedTasks.contains(taskName)) {
+					lblErrorMessage.setText("Task already exists");
+					insertTaskError = true;	
 				} else if(taskName.length() > 30) {
 					lblErrorMessage.setText("Task name cannot be over 30 characters");
 					insertTaskError = true;	
@@ -332,9 +346,9 @@ public class GuiInsertTask extends JFrame {
 					newTask.setNeedsPeerChecking(needsPeerChecking);
 					newTask.setExtraConsiderations(extraConsiderations);
 					
-					//dbClass.addCaretakerTask(newTask);
+					dbClass.addCaretakerTask(newTask);
 					//System.out.println("Insert");
-					CapytecGui.refreshTaskManagementGui();
+					lblSuccessPrompt.setVisible(true);
 				} else {
 					lblErrorMessage.setVisible(true);
 				}
@@ -342,6 +356,8 @@ public class GuiInsertTask extends JFrame {
 		});
 		btnInsertTask.setBounds(294, 623, 118, 36);
 		contentPane.add(btnInsertTask);
+		
+		
 		
 		
 		

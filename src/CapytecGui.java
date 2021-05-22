@@ -15,6 +15,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.AbstractTableModel;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
@@ -22,6 +23,7 @@ import javax.swing.RowSorter;
 import javax.swing.SortOrder;
 import javax.swing.JComboBox;
 
+//Main GUI Class
 public class CapytecGui extends JFrame {
 
 	private JPanel contentPane;
@@ -50,13 +52,16 @@ public class CapytecGui extends JFrame {
 	 * Create the frame.
 	 */
 	public CapytecGui() {
+		//Exit application when JFrame is closed
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		//Set size of JFrame and other window settings. Display the frame.
 		setBounds(100, 100, 1127, 984);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
 		
+		//Create a multi-tab frame, with each tab to encompass a different feature within the application
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
@@ -64,6 +69,7 @@ public class CapytecGui extends JFrame {
 		tabbedPane.addTab("User Management", null, panelUserManagement, null);
 		panelUserManagement.setLayout(new BorderLayout(0, 0));
 		
+		//Add a JPanel which will store the buttons across the bottom of the application
 		JPanel panelTaskBottomButtons = new JPanel();
 		panelUserManagement.add(panelTaskBottomButtons, BorderLayout.SOUTH);
 		
@@ -97,15 +103,16 @@ public class CapytecGui extends JFrame {
 		JPanel panelUserTitle = new JPanel();
 		panelUserManagement.add(panelUserTitle, BorderLayout.NORTH);
 		
+		//User management tab title
 		JLabel lblUserManagement = new JLabel("User Management");
 		lblUserManagement.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelUserTitle.add(lblUserManagement);
 		
+		//Scroll pane along with table displaying users within the application and their details
 		JScrollPane scrollPaneUserManagement = new JScrollPane();
 		panelUserManagement.add(scrollPaneUserManagement, BorderLayout.CENTER);
-		
 		tableUserManagement = new JTable();
-		
+		//Create table layout
 		System.out.println(dbClass.getAllCaretakers().get(1).getFullName());
 		tableUserManagement.setModel(new DefaultTableModel(
 			new Object[][] {
@@ -115,6 +122,7 @@ public class CapytecGui extends JFrame {
 				"ID", "User", "Position", "Skills"
 			}
 		));
+		//Set dimensions of table columns
 		tableUserManagement.getColumnModel().getColumn(0).setPreferredWidth(121);
 		tableUserManagement.getColumnModel().getColumn(1).setPreferredWidth(351);
 		tableUserManagement.getColumnModel().getColumn(2).setPreferredWidth(197);
@@ -122,6 +130,7 @@ public class CapytecGui extends JFrame {
 		
 		DefaultTableModel tableModelUserManagement = (DefaultTableModel)tableUserManagement.getModel();
 		
+		//Add rows for all caretakers and managers
 		for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
 			Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
 			tableModelUserManagement.addRow(new Object[] {currentCaretaker.getID(),currentCaretaker.getFullName(),currentCaretaker.getJobTitle(),"Skill"});
@@ -133,7 +142,7 @@ public class CapytecGui extends JFrame {
 		scrollPaneUserManagement.setViewportView(tableUserManagement);
 		
 		
-		
+		//Add task management as a tab to the tabbedPane
 		JPanel panelTaskManagement = new JPanel();
 		tabbedPane.addTab("Task Management", null, panelTaskManagement, null);
 		panelTaskManagement.setLayout(new BorderLayout(0, 0));
@@ -141,6 +150,7 @@ public class CapytecGui extends JFrame {
 		JPanel panelUserBottomButtons = new JPanel();
 		panelTaskManagement.add(panelUserBottomButtons, BorderLayout.SOUTH);
 		
+		//Add task button which opens the insert task form on click
 		JButton btnAddTask = new JButton("Add Task");
 		btnAddTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -150,6 +160,7 @@ public class CapytecGui extends JFrame {
 		});
 		panelUserBottomButtons.add(btnAddTask);
 		
+		//Assign task button which opens the assign task form on click
 		JButton btnAssignTask = new JButton("Assign Task");
 		btnAssignTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -159,6 +170,7 @@ public class CapytecGui extends JFrame {
 		});
 		panelUserBottomButtons.add(btnAssignTask);
 		
+		//Remove task button which opens the remove task form on click
 		JButton btnRemoveTask = new JButton("Remove Task");
 		btnRemoveTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -168,6 +180,7 @@ public class CapytecGui extends JFrame {
 		});
 		panelUserBottomButtons.add(btnRemoveTask);
 		
+		//Daily briefing button which generates currently logged in user daily briefing on click
 		JButton btnGetBriefing = new JButton("Daily Briefing");
 		btnGetBriefing.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -180,13 +193,16 @@ public class CapytecGui extends JFrame {
 		JPanel panelTaskTitle = new JPanel();
 		panelTaskManagement.add(panelTaskTitle, BorderLayout.NORTH);
 		
+		//Add task management title
 		JLabel lblTaskManagement = new JLabel("Task Management");
 		lblTaskManagement.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		panelTaskTitle.add(lblTaskManagement);
 		
+		//Add task management to scroll pane
 		JScrollPane scrollPaneTaskManagement = new JScrollPane();
 		panelTaskManagement.add(scrollPaneTaskManagement, BorderLayout.CENTER);
 		
+		//Create table structure for task management
 		tableTaskManagement = new JTable() {
 			//Make it so user cannot edit the table at runtime
 			public boolean editCellAt(int row, int column, java.util.EventObject e) {
@@ -212,8 +228,10 @@ public class CapytecGui extends JFrame {
 		tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(131);
 		
 		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
+		AbstractTableModel aTableModelTaskManagement = (AbstractTableModel)tableTaskManagement.getModel();
+		//aTableModelTaskManagement.fireTableDataChanged
+		
 		tableTaskManagement.setAutoCreateRowSorter(true);
-		//tableTaskManagement.getRowSorter().toggleSortOrder(0);
 		
 		for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
@@ -621,6 +639,7 @@ public class CapytecGui extends JFrame {
 		//tableTaskManagement.validate();
 		//tableTaskManagement.getSelectionModel().clearSelection();
 		//tableTaskManagement.repaint();
+		
 	}
 	
 	
