@@ -11,6 +11,11 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.Console;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Calendar;
+import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class GuiCheckTask extends JFrame {
@@ -84,15 +89,22 @@ public class GuiCheckTask extends JFrame {
 						CaretakerTask taskToUpdate = currentTask;
 						taskToUpdate.setPeerCheckerID(userLoggedIn);
 						String checkerName = "";
+						int checkerID = 0;
 						for (int i2 = 0 ; i2 < dbClass.getAllCaretakers().size() ; i2++) {
 							Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i2);
 							if (currentCaretaker.getID() == userLoggedIn)
+							{
 								checkerName = currentCaretaker.getFullName();
+								checkerID = currentCaretaker.getID();
+							}
 						}
 						for (int i2 = 0 ; i2 < dbClass.getAllManagers().size() ; i2++) {
 							Manager currentManager = dbClass.getAllManagers().get(i2);
 							if (currentManager.getID() == userLoggedIn)
+							{
 								checkerName = currentManager.getFullName();
+								checkerID = currentManager.getID();
+							}
 						}
 						taskToUpdate.setPeerChecker(checkerName);
 						if (checkerName.isEmpty())
@@ -102,6 +114,9 @@ public class GuiCheckTask extends JFrame {
 						else
 						{
 							System.out.println("New checker is " + checkerName);
+							taskToUpdate.setPeerChecker(checkerName);
+							taskToUpdate.setPeerCheckerID(checkerID);
+							dbClass.updateCaretakerTask(taskToUpdate);
 						}
 					}
 				}

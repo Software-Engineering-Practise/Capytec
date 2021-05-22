@@ -433,6 +433,7 @@ public class CapytecGui extends JFrame {
 				lblTaskDropdown.setVisible(true);
 				comboBoxSelectedTask.setSelectedIndex(0);
 				lblReportingTitle.setText("Reporting - Task History");
+				textPaneReport.setText("");
 			}
 		});
 
@@ -447,6 +448,7 @@ public class CapytecGui extends JFrame {
 				lblCaretakerDropdown.setVisible(false);
 				lblTaskDropdown.setVisible(false);
 				lblReportingTitle.setText("Reporting - Current Tasks");
+				textPaneReport.setText("");
 			}
 		});
 		
@@ -462,6 +464,7 @@ public class CapytecGui extends JFrame {
 				lblTaskDropdown.setVisible(false);
 				comboBoxSelectedCaretaker.setSelectedIndex(0);
 				lblReportingTitle.setText("Reporting - Caretaker History");
+				textPaneReport.setText("");
 			}
 		});
 		
