@@ -57,7 +57,7 @@ public class GuiSetCompleted extends JFrame {
 		lblSelectedTask.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTask);
 		
-		int userLoggedIn = 5;
+		int userLoggedIn = 8;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		dropdownTaskID.setModel(new DefaultComboBoxModel());
@@ -75,7 +75,7 @@ public class GuiSetCompleted extends JFrame {
 		JButton btnCompleteTask = new JButton("Select a Task");
 		btnCompleteTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ". No functionality yet.");
+				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + " selected");
 				
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
@@ -108,6 +108,9 @@ public class GuiSetCompleted extends JFrame {
 						Caretaker currentUserC;
 						Manager currentUserM;
 						
+						//Checks to see who the currently logged in user is, in order to get their name.
+						//As user could be either a regular caretaker or a manager, it has to loop through both
+						//If it finds the correct ID, it then sets the completionist and completionist ID
 						completedTask.setDateCompleted(taskDate);
 						for (int j = 0 ; j < dbClass.getAllCaretakers().size() ; j++)
 						{
@@ -131,7 +134,9 @@ public class GuiSetCompleted extends JFrame {
 							}
 						}
 						
-						//If it's a task that repeats, the task must be set to be re-signed or re-checked, if it needs checking or sighning
+						//If it's a task that repeats, the task must be set to be re-signed or re-checked, if it needs checking or signing
+						//Checks to see if task repeates, then checks to see if it needs peer checking and signing
+						//If it needs either, the person who has checked or signed is reset
 						if (completedTask.getDaysUntilRepeat() != 0)
 						{
 							if (completedTask.isNeedsPeerChecking())
@@ -147,10 +152,11 @@ public class GuiSetCompleted extends JFrame {
 						}
 						
 						//Adds an entry to the completed task database
-						//Updates task with new details
 						dbClass.addCompletedTask(newCompletion);
+						//Updates task with new details
 						dbClass.updateCaretakerTask(completedTask);
 						
+						System.out.println("Task " + completedTask.getID() + ". Set as completed on date: " + completedTask.getDateCompleted());
 					}
 				}				
 			}

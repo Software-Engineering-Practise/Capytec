@@ -336,7 +336,7 @@ public class CapytecGui extends JFrame {
 			String signedBy;
 			String checkedBy;
 			if (currentItem.isNeedsSigning() && currentItem.isNeedsPeerChecking()) {
-				extraReqs = "Needs Peer Checking and Signing";
+				extraReqs = "Needs Both Peer Checking and Signing";
 				signedBy = currentItem.getSignee();
 				checkedBy = currentItem.getPeerChecker(); }
 			else if (currentItem.isNeedsPeerChecking()) {
