@@ -194,7 +194,7 @@ public class GuiInsertTask extends JFrame {
 		
 		JLabel lblErrorMessage = new JLabel("Error Message");
 		lblErrorMessage.setForeground(Color.RED);
-		lblErrorMessage.setBounds(22, 626, 180, 31);
+		lblErrorMessage.setBounds(22, 626, 272, 31);
 		contentPane.add(lblErrorMessage);
 		lblErrorMessage.setVisible(false);
 		
@@ -252,6 +252,10 @@ public class GuiInsertTask extends JFrame {
 				}
 				boolean insertTaskError = false;
 				
+				if(extraConsiderations.length() > 75) {
+					lblErrorMessage.setText("Considerations cannot be over 75 characters");
+					insertTaskError = true;
+				}
 				if(dueDate.equals("")) {
 					//System.out.println("Due date cannot be empty");
 					lblErrorMessage.setText("Due date cannot be empty");
@@ -279,10 +283,22 @@ public class GuiInsertTask extends JFrame {
 					//System.out.println("Description cannot be empty");
 					lblErrorMessage.setText("Description cannot be empty");
 					insertTaskError = true;
+				} else if(description.length() > 75) {
+					lblErrorMessage.setText("Description cannot be over 75 characters");
+					insertTaskError = true;
+				} else if(description.length() < 10) {
+					lblErrorMessage.setText("Description cannot be under 10 characters");
+					insertTaskError = true;
 				}
 				if(taskName.isBlank()) {
 					//System.out.println("Task name cannot be empty");
 					lblErrorMessage.setText("Task name cannot be empty");
+					insertTaskError = true;
+				} else if(taskName.length() > 30) {
+					lblErrorMessage.setText("Task name cannot be over 30 characters");
+					insertTaskError = true;	
+				} else if(taskName.length() < 7 && taskName.length() != 0) {
+					lblErrorMessage.setText("Task name cannot be under 7 characters");
 					insertTaskError = true;
 				}
 				if(insertTaskError == false) {
@@ -316,8 +332,9 @@ public class GuiInsertTask extends JFrame {
 					newTask.setNeedsPeerChecking(needsPeerChecking);
 					newTask.setExtraConsiderations(extraConsiderations);
 					
-					dbClass.addCaretakerTask(newTask);
+					//dbClass.addCaretakerTask(newTask);
 					//System.out.println("Insert");
+					CapytecGui.refreshTaskManagementGui();
 				} else {
 					lblErrorMessage.setVisible(true);
 				}

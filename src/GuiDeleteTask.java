@@ -87,8 +87,6 @@ public class GuiDeleteTask extends JFrame {
 						} else {
 							System.out.println("Do not delete");
 						}				
-						
-
 					}
 				}
 				if(!isFound) {

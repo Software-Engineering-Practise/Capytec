@@ -83,7 +83,6 @@ public class GuiSignTask extends JFrame {
 					Manager currentManager = dbClass.getAllManagers().get(i);
 					loggedIn = currentManager.getFullName();
 				}
-				
 				System.out.println("Signed by: " + loggedIn);
 			}
 		});

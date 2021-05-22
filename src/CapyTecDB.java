@@ -305,11 +305,7 @@ public class CapyTecDB{
 				while(sqlResult.next()) {
 					int id = 1;
 					for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
-						System.out.println("==========");
-						System.out.println(caretakerTask.getRecSkills().get(i));
-						System.out.println(sqlResult.getString(2));
 						if(caretakerTask.getRecSkills().get(i).contentEquals(sqlResult.getString(2))) {
-							System.out.println("got skill");
 							skills.add(id);
 						}
 					}
@@ -578,5 +574,23 @@ public class CapyTecDB{
 		}
 		
 		return pwdHash;
+	}
+	
+	public int getAccId(String username) {
+		
+		int id = 0;
+		if(username != null) {
+			
+			String sql = "SELECT login_user FROM login WHERE login_username = '"+username+"';";
+			
+			ResultSet userIdResult = database.RunSQLQuery(sql);
+			
+			try {
+				id = userIdResult.getInt(1);
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}
+		return id;
 	}
 }

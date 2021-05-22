@@ -23,7 +23,7 @@ public class CapytecGui extends JFrame {
 
 	private JPanel contentPane;
 	private JTable tableUserManagement;
-	private JTable tableTaskManagement;
+	private static JTable tableTaskManagement;
 	CapyTecDB dbClass = new CapyTecDB();
 	private JTable tableTaskLogging;
 
@@ -148,6 +148,12 @@ public class CapytecGui extends JFrame {
 		panelUserBottomButtons.add(btnAddTask);
 		
 		JButton btnAssignTask = new JButton("Assign Task");
+		btnAssignTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				GuiAllocateTask frameAllocateTask = new GuiAllocateTask();
+				frameAllocateTask.setVisible(true);
+			}
+		});
 		panelUserBottomButtons.add(btnAssignTask);
 		
 		JButton btnRemoveTask = new JButton("Remove Task");
@@ -178,12 +184,17 @@ public class CapytecGui extends JFrame {
 		JScrollPane scrollPaneTaskManagement = new JScrollPane();
 		panelTaskManagement.add(scrollPaneTaskManagement, BorderLayout.CENTER);
 		
-		tableTaskManagement = new JTable();
+		tableTaskManagement = new JTable() {
+			//Make it so user cannot edit the table at runtime
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
 		tableTaskManagement.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
 			new String[] {
-				"Task No.", "Task", "Assigned Member", "Description", "Type", "Start Date", "Due Date", "Completion Date", "Completionist", "Importance", "Days Until Repeat"
+				"Task No.", "Task", "Assigned Caretaker", "Description", "Type", "Start Date", "Due Date", "Completion Date", "Completionist", "Importance", "Days Until Repeat"
 			}
 		));
 		tableTaskManagement.getColumnModel().getColumn(1).setPreferredWidth(270);
@@ -205,17 +216,23 @@ public class CapytecGui extends JFrame {
 			String isRepeated;
 			String daysUntilRepeat;
 			String skillsList = " ";
+			String assignedCaretakers = " ";
+			
+			for(int y=0; y<currentItem.getTeamMembers().size(); y++) {
+				assignedCaretakers += currentItem.getTeamMembers().get(y) + " ";
+			}
+			
 			for(int x=0; x<currentItem.getRecSkills().size(); x++) {
 				skillsList += currentItem.getRecSkills().get(x) + " ";
 			}
 			if(repeat == 0) {
 				isRepeated = "One-off";
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
 			} else {
 				isRepeated = "Repeats";
 				daysUntilRepeat = "" + repeat;
 				
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),"Assigned Member",currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
+				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
 			}
 		}		
 		
@@ -433,6 +450,7 @@ public class CapytecGui extends JFrame {
 				lblTaskDropdown.setVisible(true);
 				comboBoxSelectedTask.setSelectedIndex(0);
 				lblReportingTitle.setText("Reporting - Task History");
+				textPaneReport.setText("");
 			}
 		});
 
@@ -447,6 +465,7 @@ public class CapytecGui extends JFrame {
 				lblCaretakerDropdown.setVisible(false);
 				lblTaskDropdown.setVisible(false);
 				lblReportingTitle.setText("Reporting - Current Tasks");
+				textPaneReport.setText("");
 			}
 		});
 		
@@ -462,6 +481,7 @@ public class CapytecGui extends JFrame {
 				lblTaskDropdown.setVisible(false);
 				comboBoxSelectedCaretaker.setSelectedIndex(0);
 				lblReportingTitle.setText("Reporting - Caretaker History");
+				textPaneReport.setText("");
 			}
 		});
 		
@@ -588,5 +608,15 @@ public class CapytecGui extends JFrame {
 		});
 		
 	}
+	
+	public static void refreshTaskManagementGui() {
+		System.out.println("Refresh method ran");
+		//Made table static. check if alright.
+		//tableTaskManagement.validate();
+		//tableTaskManagement.getSelectionModel().clearSelection();
+		//tableTaskManagement.repaint();
+	}
+	
+	
 
 }
