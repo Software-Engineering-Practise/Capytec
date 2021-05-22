@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultRowSorter;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -17,6 +18,8 @@ import javax.swing.border.EmptyBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.SwingConstants;
 import javax.swing.JTextPane;
+import javax.swing.RowSorter;
+import javax.swing.SortOrder;
 import javax.swing.JComboBox;
 
 public class CapytecGui extends JFrame {
@@ -209,6 +212,8 @@ public class CapytecGui extends JFrame {
 		tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(131);
 		
 		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
+		tableTaskManagement.setAutoCreateRowSorter(true);
+		//tableTaskManagement.getRowSorter().toggleSortOrder(0);
 		
 		for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
@@ -291,6 +296,7 @@ public class CapytecGui extends JFrame {
 				return false;
 			}
 		};
+		
 		tableTaskLogging.setModel(new DefaultTableModel(
 			new Object[][] {
 			},
