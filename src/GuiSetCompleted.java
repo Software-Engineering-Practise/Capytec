@@ -3,6 +3,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -74,6 +76,41 @@ public class GuiSetCompleted extends JFrame {
 		btnCompleteTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ". No functionality yet.");
+				
+				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+				{
+					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					{
+						CaretakerTask completedTask = currentTask;
+						CompletedTask newCompletion = new CompletedTask();
+						newCompletion.setTaskID(completedTask.getID());
+						newCompletion.setUserID(userLoggedIn);
+						
+						
+						
+						String taskDate = "";
+						//YYYY-MM-DD hh:mm:ss
+						
+						DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+						LocalDateTime now = LocalDateTime.now();
+							
+						taskDate += now.getYear();
+						taskDate += ("-" + now.getMonthValue());
+						taskDate += ("-" + now.getDayOfMonth());
+						taskDate += (" " + now.getHour());
+						taskDate += (":" + now.getMinute());
+						taskDate += (":" + now.getSecond());
+							
+						newCompletion.setDateCompleted(taskDate);
+						//dbClass.addCompletedTask(newCompletion);
+						System.out.println("Date is: " + taskDate);
+						
+						completedTask.setDateCompleted(taskDate);
+						//completedTask.setCompletionist();
+						//completedTask.setCompletionistID(userLoggedIn);
+					}
+				}				
 			}
 		});
 		btnCompleteTask.setEnabled(false);
@@ -83,9 +120,14 @@ public class GuiSetCompleted extends JFrame {
 		
 		dropdownTaskID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				//Button can only be accessed if a valid task has been selected.
+				//The first item (index 0) in the dropdown is not a valid task
 				if (dropdownTaskID.getSelectedIndex() != 0)
 				{
 					CaretakerTask currentTask = dbClass.getAllTasks().get((int)dropdownTaskID.getSelectedItem()-1);
+					//If the task needs to be peer checked, and hasn't been, or needs to be signed, and hasn't been, the button is disabled.
+					//Otherwise, if the user logged in is part of the task selected, the button can be selected
+					//However if this is not the case, the button is disabled.
 					if (currentTask.isNeedsPeerChecking() && currentTask.getPeerChecker() == null)
 					{
 						btnCompleteTask.setEnabled(false);
