@@ -135,7 +135,7 @@ public class GuiSetCompleted extends JFrame {
 						}
 						
 						//If it's a task that repeats, the task must be set to be re-signed or re-checked, if it needs checking or signing
-						//Checks to see if task repeates, then checks to see if it needs peer checking and signing
+						//Checks to see if task repeats, then checks to see if it needs peer checking and signing
 						//If it needs either, the person who has checked or signed is reset
 						if (completedTask.getDaysUntilRepeat() != 0)
 						{
