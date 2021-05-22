@@ -65,7 +65,7 @@ public class GuiDailyBriefing extends JFrame {
 			ArrayList<Integer> assignedMembers = currentTask.getTeamMembers(); 
 			for(int x=0; x<assignedMembers.size();x++) {
 				if(assignedMembers.get(x) == loggedInUser) {
-					currentTasks += currentTask.getTitle() + "\nDue: " + currentTask.getDesc() + "\nDue: " + currentTask.getDateDue() + "\r\n\n ";
+					currentTasks += currentTask.getTitle() + "\nDescription: " + currentTask.getDesc() + "\nDue: " + currentTask.getDateDue() + "\r\n\n ";
 				}
 			}
 		}
