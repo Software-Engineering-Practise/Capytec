@@ -12,7 +12,7 @@ public class TestingDBMethods {
 		//testGetAllCompletedTasks();
 		//testInsertTask();
 		//testUpdateCaretaker();
-		//testUpdateTask();
+		testUpdateTask();
 		
 	}
 	
@@ -237,14 +237,17 @@ public class TestingDBMethods {
 
 		testTask.getRecSkills().add(DBTest.getAllSkills().get(1));
 		testTask.getRecSkills().add(DBTest.getAllSkills().get(2));
+		testTask.setDateCompleted(null);
 		
-		
+
 		testTask.getTeamMembers().add(1);
 		
 		DBTest.updateCaretakerTask(testTask);
 		
 		testTask.setTitle("Task: Exist(Test)");
-
+		testTask.setDesc("Test Description");
+		testTask.setExtraConsiderations("Test Considerations");
+		
 		testTask.getRecSkills().clear();
 		testTask.getRecSkills().size();
 		testTask.getTeamMembers().clear();

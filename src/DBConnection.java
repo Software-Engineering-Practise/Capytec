@@ -67,4 +67,12 @@ public class DBConnection {
 		}
 		return result;
 	}
+	
+	public void CloseConn() {
+		try {
+			conn.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
 }
