@@ -55,6 +55,9 @@ public class GuiAllocateTask extends JFrame {
 		setContentPane(contentPane);
 		contentPane.setLayout(null);
 		
+		//Placeholder value until login system is implemented
+		int loggedInUser = 8;
+		
 		JLabel lblTaskName = new JLabel("Task Name:");
 		lblTaskName.setBounds(22, 70, 144, 14);
 		contentPane.add(lblTaskName);
@@ -122,6 +125,8 @@ public class GuiAllocateTask extends JFrame {
 		//Add line wrapping after words in text field.
 		textAreaDescription.setLineWrap(true);
 		textAreaDescription.setWrapStyleWord(true);
+		//Made it so user cannot edit box
+		textAreaDescription.setEditable(false);	
 		contentPane.add(textAreaDescription);
 		
 		JLabel lblTaskTypeOne = new JLabel("Placeholder");
@@ -164,9 +169,14 @@ public class GuiAllocateTask extends JFrame {
 		lblExtraConsiderations.setBounds(22, 531, 150, 14);
 		contentPane.add(lblExtraConsiderations);
 		
-		JTextPane textPaneExtraConsiderations = new JTextPane();
-		textPaneExtraConsiderations.setBounds(191, 525, 172, 50);
-		contentPane.add(textPaneExtraConsiderations);
+		JTextArea textAreaExtraConsiderations = new JTextArea();
+		textAreaExtraConsiderations.setBounds(191, 525, 172, 50);
+		//Add line wrapping after words in text field.
+		textAreaExtraConsiderations.setLineWrap(true);
+		textAreaExtraConsiderations.setWrapStyleWord(true);
+		//Make is so user cannot edit box
+		textAreaExtraConsiderations.setEditable(false);	
+		contentPane.add(textAreaExtraConsiderations);
 		
 		JLabel lblUserSkills = new JLabel("Your Skills:");
 		lblUserSkills.setBounds(157, 160, 83, 14);
@@ -184,10 +194,9 @@ public class GuiAllocateTask extends JFrame {
 		lblUserSkillThree.setBounds(157, 219, 76, 14);
 		contentPane.add(lblUserSkillThree);
 		
-		JButton btnAllocateTask = new JButton("Allocate Task");
 		
-		btnAllocateTask.setBounds(294, 623, 118, 36);
-		contentPane.add(btnAllocateTask);
+		
+		
 		
 		JComboBox<String> comboBoxTaskName = new JComboBox<String>();
 		
@@ -211,7 +220,7 @@ public class GuiAllocateTask extends JFrame {
 			Integer importance = currentTask.getPriority();
 			Boolean needsSigning = currentTask.isNeedsSigning();
 			Boolean needsPeerChecking = currentTask.isNeedsPeerChecking();
-			
+			String extraConsiderations = currentTask.getExtraConsiderations();
 			
 			if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
 				ArrayList<String> recSkills = currentTask.getRecSkills();
@@ -267,9 +276,14 @@ public class GuiAllocateTask extends JFrame {
 				lblImportanceValue.setText(importance.toString());
 				lblNeedsSigningValue.setText(needsSigning.toString());
 				lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
+				textAreaExtraConsiderations.setText(extraConsiderations);
+				
+				
+				
 				
 			}	
 		}
+		
 		
 		//Update values on change of task name dropdown
 		comboBoxTaskName.addActionListener(new ActionListener() {
@@ -287,6 +301,7 @@ public class GuiAllocateTask extends JFrame {
 					Integer importance = currentTask.getPriority();
 					Boolean needsSigning = currentTask.isNeedsSigning();
 					Boolean needsPeerChecking = currentTask.isNeedsPeerChecking();
+					String extraConsiderations = currentTask.getExtraConsiderations();
 					
 					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
 						ArrayList<String> recSkills = currentTask.getRecSkills();
@@ -327,7 +342,7 @@ public class GuiAllocateTask extends JFrame {
 						*/
 						
 						
-						
+						//Update GUI with task details
 						textAreaDescription.setText(currentTaskDesc);
 						lblTaskTypeOne.setText(recSkillOne);
 						lblTaskTypeTwo.setText(recSkillTwo);
@@ -342,6 +357,12 @@ public class GuiAllocateTask extends JFrame {
 						lblImportanceValue.setText(importance.toString());
 						lblNeedsSigningValue.setText(needsSigning.toString());
 						lblNeedsPeerCheckingValue.setText(needsPeerChecking.toString());
+						textAreaExtraConsiderations.setText(extraConsiderations);
+						
+						
+						
+						
+						
 						
 					}	
 				}
@@ -349,7 +370,31 @@ public class GuiAllocateTask extends JFrame {
 		});
 		
 		
+		JButton btnAllocateTask = new JButton("Allocate Task");
+		btnAllocateTask.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				for(int i=0; i<dbClass.getAllTasks().size(); i++) {
+					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+					//if(currentTask.getID() == 1);
+					if(currentTask.getTitle().equals(comboBoxTaskName.getSelectedItem().toString())) {
+						CaretakerTask updatedTask = currentTask;
+						ArrayList<Integer> assignedCaretakers = new ArrayList<Integer>();
+						//Template code for when login system is implemented
+						assignedCaretakers.add(loggedInUser);
+						updatedTask.setTeamMembers(assignedCaretakers);
+						dbClass.updateCaretakerTask(updatedTask);
+						CapytecGui.refreshTaskManagementGui();
+					}
+				}
+
+				
+				
+				
+			}
+		});
 		
+		btnAllocateTask.setBounds(294, 623, 118, 36);
+		contentPane.add(btnAllocateTask);
 		
 		
 		/*
