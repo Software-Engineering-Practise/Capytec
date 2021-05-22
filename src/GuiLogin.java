@@ -82,22 +82,37 @@ public class GuiLogin extends JFrame {
 				char [] passwordIn = passwordField.getPassword();
 				
 				
-				
-				try {
-					MessageDigest digest = MessageDigest.getInstance("SHA-256");
-					
-					byte[] hash = digest.digest(new String(passwordIn).getBytes());
-					
-					//String s = Base64.getEncoder().encodeToString(hash);
-					
-					//System.out.println("Hash: "+ s);
-					
-				} catch (NoSuchAlgorithmException e1) {
-					e1.printStackTrace();
-				}
-				
 				if((!usernameIn.isEmpty()) && !(passwordIn.length == 0)) {
 					//System.out.println("Valid!");
+					try {
+						
+						CapyTecDB db = new CapyTecDB();
+						
+						String dbHash = new String(); 
+								
+						if(db.getHash(usernameIn) != null) {
+							dbHash = db.getHash(usernameIn);
+						}
+						
+						//SHA-256 hashing is used.
+						MessageDigest digest = MessageDigest.getInstance("SHA-256");
+						
+						byte[] hash = digest.digest(new String(passwordIn).getBytes());
+						
+						
+						String hashIn = Base64.getEncoder().encodeToString(hash);
+						
+						if(dbHash.equals(hashIn)){
+							
+							System.out.println("Password matched!");
+							
+						}
+						
+						
+					} catch (NoSuchAlgorithmException e1) {
+						e1.printStackTrace();
+					}
+					
 					
 					CapytecGui frameMain = new CapytecGui();
 					frameMain.setVisible(true);
