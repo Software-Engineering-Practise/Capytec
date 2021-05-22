@@ -106,6 +106,7 @@ public class GuiSignTask extends JFrame {
 							taskToUpdate.setSignee(signeeName);
 							taskToUpdate.setSigneeID(signeeID);
 							System.out.println("New signee is " + signeeName);
+							taskToUpdate.setDateCompleted("");
 							dbClass.updateCaretakerTask(taskToUpdate);
 						}
 					}
