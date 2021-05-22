@@ -217,7 +217,12 @@ public class CapyTecDB{
 	public void addCaretaker(Caretaker caretaker) {
 			
 		String fname = caretaker.getFirstName();
+		fname = fname.replaceAll("[^\\x00-\\x7F]", "");
+		fname = fname.replaceAll("[';']", "");
+		
 		String lname = caretaker.getLastName();
+		lname = lname.replaceAll("[^\\x00-\\x7F]", "");
+		lname = lname.replaceAll("[';']", "");
 		
 		String sql = new String("INSERT INTO user (first_name, last_name, job_type) VALUES ("+fname+", "+lname+", 3);");
 		
@@ -268,56 +273,28 @@ public class CapyTecDB{
 		
 		int dbTaskID;
 		
-		//String title = caretakerTask.getTitle();
-		//String desc = caretakerTask.getDesc();
-		//String exConsider = caretakerTask.getExtraConsiderations();
-		//String dateCreated = caretakerTask.getDateCreated();
-		//String dateDue = caretakerTask.getDateDue();
-		
 		String title = caretakerTask.getTitle();
-		if(title == null || title.length() > 50) {
-			title = title.substring(0, Math.min(title.length(), 50));
-		} else {
-			title = caretakerTask.getTitle();
-		}
+		title = title.replaceAll("[^\\x00-\\x7F]", "");
+		title = title.replaceAll("[';']", "");
 		
 		String desc = caretakerTask.getDesc();
-		if(desc == null || desc.length() > 250) {
-			desc = desc.substring(0, Math.min(desc.length(), 250));
-		} else {
-			desc = caretakerTask.getDesc();
-		}
+		desc = desc.replaceAll("[^\\x00-\\x7F]", "");
+		desc = desc.replaceAll("[';']", "");
 		
 		String exConsider = caretakerTask.getExtraConsiderations();
-		if(exConsider == null || exConsider.length() > 250) {
-			exConsider = exConsider.substring(0, Math.min(exConsider.length(), 250));
-		} else {
-			exConsider = caretakerTask.getExtraConsiderations();
-		}
+		exConsider = exConsider.replaceAll("[^\\x00-\\x7F]", "");
+		exConsider = exConsider.replaceAll("[';']", "");
 		
-		String dateCreated;
-		if(caretakerTask.getDateCreated() == null) {
-			dateCreated = "";
-		} else {
-			dateCreated = caretakerTask.getDateCreated();
-		}
+		String dateCreated = caretakerTask.getDateCreated();
+		dateCreated = dateCreated.replaceAll("[^\\x00-\\x7F]", "");
+		dateCreated = dateCreated.replaceAll("[';']", "");
 		
-		String dateDue;
-		if(caretakerTask.getDateDue() == null) {
-			dateDue = "";
-		} else {
-			dateDue = caretakerTask.getDateDue();
-		}
+		String dateDue = caretakerTask.getDateDue();
+		dateCreated = dateCreated.replaceAll("[^\\x00-\\x7F]", "");
+		dateCreated = dateCreated.replaceAll("[';']", "");
 		
 		int priority = caretakerTask.getPriority();
-		if (0 < priority || priority < 4) {
-			priority = 1;
-		}
-		
 		int daysUntilRepeat = caretakerTask.getDaysUntilRepeat();
-		if(daysUntilRepeat < 0) {
-			daysUntilRepeat = 0;
-		}
 		int authorID = caretakerTask.getAuthorID();
 		int needsSigning = caretakerTask.isNeedsSigning() ? 1 : 0;
 		int needsPeerChecking = caretakerTask.isNeedsPeerChecking() ? 1 : 0;
@@ -376,13 +353,7 @@ public class CapyTecDB{
 		
 		int taskID = completedTask.getTaskID();
 		int userID = completedTask.getUserID();
-		
-		String dateCompleted;
-		if(completedTask.getDateCompleted() == null) {
-			dateCompleted = "";
-		} else {
-			dateCompleted = completedTask.getDateCompleted();
-		}
+		String dateCompleted = completedTask.getDateCompleted();
 		
 		String sql = "INSERT INTO completed_task (task, user, date) VALUES ("+taskID+", "+userID+", '"+dateCompleted+"');";
 		
@@ -454,64 +425,35 @@ public class CapyTecDB{
 			int id = caretakerTask.getID();
 			
 			String title = caretakerTask.getTitle();
-			if(title == null || title.length() > 50) {
-				title = title.substring(0, Math.min(title.length(), 50));
-			} else {
-				title = caretakerTask.getTitle();
-			}
+			title = title.replaceAll("[^\\x00-\\x7F]", "");
+			title = title.replaceAll("[';']", "");
 			
 			String desc = caretakerTask.getDesc();
-			if(desc == null || desc.length() > 250) {
-				desc = desc.substring(0, Math.min(desc.length(), 250));
-			} else {
-				desc = caretakerTask.getDesc();
-			}
+			desc = desc.replaceAll("[^\\x00-\\x7F]", "");
+			desc = desc.replaceAll("[';']", "");
 			
 			String exConsider = caretakerTask.getExtraConsiderations();
-			if(exConsider == null || exConsider.length() > 250) {
-				exConsider = exConsider.substring(0, Math.min(exConsider.length(), 250));
-			} else {
-				exConsider = caretakerTask.getExtraConsiderations();
-			}
+			exConsider = exConsider.replaceAll("[^\\x00-\\x7F]", "");
+			exConsider = exConsider.replaceAll("[';']", "");
 			
-			String dateCreated;
-			if(caretakerTask.getDateCreated() == null) {
-				dateCreated = "";
-			} else {
-				dateCreated = caretakerTask.getDateCreated();
-			}
+			String dateCreated = caretakerTask.getDateCreated();
+			dateCreated = dateCreated.replaceAll("[^\\x00-\\x7F]", "");
+			dateCreated = dateCreated.replaceAll("[';']", "");
 			
-			String dateDue;
-			if(caretakerTask.getDateDue() == null) {
-				dateDue = "";
-			} else {
-				dateDue = caretakerTask.getDateDue();
-			}
+			String dateDue = caretakerTask.getDateDue();
+			dateDue = dateDue.replaceAll("[^\\x00-\\x7F]", "");
+			dateDue = dateDue.replaceAll("[';']", "");
 			
-			String dateUpdated;
-			if(caretakerTask.getDateUpdated() == null) {
-				dateUpdated = "";
-			} else {
-				dateUpdated = caretakerTask.getDateUpdated();
-			}
+			String dateUpdated = caretakerTask.getDateUpdated();
+			dateUpdated = dateUpdated.replaceAll("[^\\x00-\\x7F]", "");
+			dateUpdated = dateUpdated.replaceAll("[';']", "");
 			
-			String dateCompleted;
-			if(caretakerTask.getDateCompleted() == null) {
-				dateCompleted = "";
-			} else {
-				dateCompleted = caretakerTask.getDateCompleted();
-			}
+			String dateCompleted = caretakerTask.getDateCompleted();
+			dateCompleted = dateCompleted.replaceAll("[^\\x00-\\x7F]", "");
+			dateCompleted = dateCompleted.replaceAll("[';']", "");
 			
 			int priority = caretakerTask.getPriority();
-			if (0 < priority || priority < 4) {
-				priority = 1;
-			}
-			
 			int daysUntilRepeat = caretakerTask.getDaysUntilRepeat();
-			if(daysUntilRepeat < 0) {
-				daysUntilRepeat = 0;
-			}
-			
 			int authorID = caretakerTask.getAuthorID();
 			int completionistID = caretakerTask.getCompletionistID();
 			int signeeID = caretakerTask.getSigneeID();
@@ -658,6 +600,9 @@ public class CapyTecDB{
 		
 		String pwdHash = null;
 		
+		username = username.replaceAll("[^\\x00-\\x7F]", "");
+		username = username.replaceAll("[';']", "");
+		
 		String sql = "SELECT login_username, login_pass FROM login WHERE login_username = '"+username+"';";
 		
 		ResultSet hashResultSet = database.RunSQLQuery(sql);
@@ -676,7 +621,11 @@ public class CapyTecDB{
 	public int getAccId(String username) {
 		
 		int id = 0;
+		
 		if(username != null) {
+			
+			username = username.replaceAll("[^\\x00-\\x7F]", "");
+			username = username.replaceAll("[';']", "");
 			
 			String sql = "SELECT login_user FROM login WHERE login_username = '"+username+"';";
 			
@@ -689,13 +638,5 @@ public class CapyTecDB{
 			}
 		}
 		return id;
-	}
-	
-	//CLOSE connection Method
-	
-	public void closeConn() {
-		
-		database.CloseConn();
-		
 	}
 }
