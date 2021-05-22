@@ -409,6 +409,8 @@ public class CapyTecDB{
 			String exConsider = caretakerTask.getExtraConsiderations();
 			String dateCreated = caretakerTask.getDateCreated();
 			String dateDue = caretakerTask.getDateDue();
+			String dateUpdated = caretakerTask.getDateUpdated();
+			String dateCompleted = caretakerTask.getDateCompleted();
 			int priority = caretakerTask.getPriority();
 			int daysUntilRepeat = caretakerTask.getDaysUntilRepeat();
 			int authorID = caretakerTask.getAuthorID();
@@ -424,7 +426,7 @@ public class CapyTecDB{
 			ResultSet sqlResult = database.RunSQLQuery(sql);
 			try {
 				sql = "UPDATE task SET task_title = '"+title+"', task_desc = '"+desc+"', extra_considerations = '"+exConsider+"', need_signing = "+needsSigning+", need_peer_check = "+needsPeerChecking+", "  
-						+" date_created = '"+dateCreated+"', date_due = '"+dateDue+"', priority = "+priority+", created_by = "+authorID+", days_till_repeat = "+daysUntilRepeat+", "
+						+" date_created = '"+dateCreated+"', date_due = '"+dateDue+"', date_updated = '"+dateUpdated+"', date_completed = '"+dateCompleted+"', priority = "+priority+", created_by = "+authorID+", days_till_repeat = "+daysUntilRepeat+", "
 						+" completed_by ="+completionistID+", signed_by ="+signeeID+", peer_checked_by = "+peerCheckerID
 						+" WHERE task_id = "+id+";";
 				
@@ -453,7 +455,6 @@ public class CapyTecDB{
 						int skillID = sqlResult.getInt(1);
 						for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
 							if(caretakerTask.getRecSkills().get(i).equals(sqlResult.getString(2))) {
-								System.out.println("got skill : " + skillID);
 								newerSkills.add(skillID);
 								break;
 							}
@@ -491,7 +492,6 @@ public class CapyTecDB{
 						int memberID = sqlResult.getInt(1);
 						for(int i = 0 ; i < caretakerTask.getTeamMembers().size() ; i++) {
 							if(caretakerTask.getTeamMembers().get(i).equals(sqlResult.getInt(1))) {
-								System.out.println("got member : " + memberID);
 								newerMembers.add(memberID);
 								break;
 							}
@@ -500,7 +500,6 @@ public class CapyTecDB{
 					//Add team members to db for task
 					for (int i = 0 ; i < newerMembers.size(); i++) {
 						sql = "INSERT INTO team (task, member) VALUES ("+id+", "+newerMembers.get(i)+");";
-						System.out.println("added team member!");
 						success = database.RunSQL(sql);
 						if(!success) {
 							System.out.println("Failed to run query: "+sql);
@@ -511,7 +510,6 @@ public class CapyTecDB{
 				e.printStackTrace();
 			}
 		} else {
-			System.out.println("Not Valid Task ID");
 		}
 	}
 	
