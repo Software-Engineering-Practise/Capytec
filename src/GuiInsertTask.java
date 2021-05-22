@@ -60,11 +60,11 @@ public class GuiInsertTask extends JFrame {
 		contentPane.add(textFieldTaskName);
 		textFieldTaskName.setColumns(10);
 		
-		JLabel lblTaskName = new JLabel("Task Name:");
+		JLabel lblTaskName = new JLabel("Task Name: *");
 		lblTaskName.setBounds(90, 70, 76, 14);
 		contentPane.add(lblTaskName);
 		
-		JLabel lblDescription = new JLabel("Description:");
+		JLabel lblDescription = new JLabel("Description: *");
 		lblDescription.setBounds(90, 101, 76, 14);
 		contentPane.add(lblDescription);
 		
@@ -75,7 +75,7 @@ public class GuiInsertTask extends JFrame {
 		textAreaDescription.setWrapStyleWord(true);
 		contentPane.add(textAreaDescription);
 		
-		JLabel lblTaskType = new JLabel("Type:");
+		JLabel lblTaskType = new JLabel("Type: *");
 		lblTaskType.setBounds(90, 155, 76, 14);
 		contentPane.add(lblTaskType);
 		
@@ -107,8 +107,8 @@ public class GuiInsertTask extends JFrame {
 			
 		}
 		
-		JLabel lblFrequency = new JLabel("Frequency(Days Until Repeat):");
-		lblFrequency.setBounds(90, 283, 76, 14);
+		JLabel lblFrequency = new JLabel("Days Until Repeat:");
+		lblFrequency.setBounds(48, 283, 118, 14);
 		contentPane.add(lblFrequency);
 		
 		JComboBox comboBoxFrequency = new JComboBox();
@@ -133,7 +133,7 @@ public class GuiInsertTask extends JFrame {
 	    datePickerStart.setBounds(191, 340, 125, 20);
 		contentPane.add(datePickerStart);
 		
-		JLabel lblStartDate = new JLabel("Start Date:");
+		JLabel lblStartDate = new JLabel("Start Date: *");
 		lblStartDate.setBounds(90, 340, 76, 14);
 		contentPane.add(lblStartDate);
 		
@@ -152,7 +152,7 @@ public class GuiInsertTask extends JFrame {
 	    datePickerDue.setBounds(191, 380, 125, 20);
 		contentPane.add(datePickerDue);
 		
-		JLabel lblDueDate = new JLabel("Due Date:");
+		JLabel lblDueDate = new JLabel("Due Date: *");
 		lblDueDate.setBounds(90, 380, 76, 14);
 		contentPane.add(lblDueDate);
 		
