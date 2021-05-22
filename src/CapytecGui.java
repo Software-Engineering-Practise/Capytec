@@ -228,11 +228,11 @@ public class CapytecGui extends JFrame {
 		tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(131);
 		
 		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
-		AbstractTableModel aTableModelTaskManagement = (AbstractTableModel)tableTaskManagement.getModel();
-		//aTableModelTaskManagement.fireTableDataChanged
 		
+		//Add row sorting for task management table
 		tableTaskManagement.setAutoCreateRowSorter(true);
 		
+		//Populate task management table
 		for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
 			int repeat = currentItem.getDaysUntilRepeat();
@@ -241,20 +241,23 @@ public class CapytecGui extends JFrame {
 			String skillsList = " ";
 			String assignedCaretakers = " ";
 			
+			//Add assigned caretakers to task table
 			for(int y=0; y<currentItem.getTeamMembers().size(); y++) {
 				assignedCaretakers += currentItem.getTeamMembers().get(y) + " ";
 			}
 			
+			//Add recommended skills to task table
 			for(int x=0; x<currentItem.getRecSkills().size(); x++) {
 				skillsList += currentItem.getRecSkills().get(x) + " ";
 			}
+			
+			//Set whether a task is a one-off task, or how many days until it needs to be repeated
 			if(repeat == 0) {
 				isRepeated = "One-off";
 				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
 			} else {
 				isRepeated = "Repeats";
 				daysUntilRepeat = "" + repeat;
-				
 				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
 			}
 		}		
@@ -633,14 +636,6 @@ public class CapytecGui extends JFrame {
 		
 	}
 	
-	public static void refreshTaskManagementGui() {
-		System.out.println("Refresh method ran");
-		//Made table static. check if alright.
-		//tableTaskManagement.validate();
-		//tableTaskManagement.getSelectionModel().clearSelection();
-		//tableTaskManagement.repaint();
-		
-	}
 	
 	
 
