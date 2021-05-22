@@ -69,7 +69,7 @@ public class GuiCheckTask extends JFrame {
 		dropdownTaskID.addItem("Select a Task ID");
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-			if (currentTask.isNeedsPeerChecking() && !currentTask.getTeamMembers().contains(userLoggedIn))
+			if (currentTask.isNeedsPeerChecking() && !currentTask.getTeamMembers().contains(userLoggedIn) && (currentTask.getPeerChecker() == null))
 			{
 				dropdownTaskID.addItem(currentTask.getID());
 			}
@@ -90,16 +90,16 @@ public class GuiCheckTask extends JFrame {
 						taskToUpdate.setPeerCheckerID(userLoggedIn);
 						String checkerName = "";
 						int checkerID = 0;
-						for (int i2 = 0 ; i2 < dbClass.getAllCaretakers().size() ; i2++) {
-							Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i2);
+						for (int j = 0 ; j < dbClass.getAllCaretakers().size() ; j++) {
+							Caretaker currentCaretaker = dbClass.getAllCaretakers().get(j);
 							if (currentCaretaker.getID() == userLoggedIn)
 							{
 								checkerName = currentCaretaker.getFullName();
 								checkerID = currentCaretaker.getID();
 							}
 						}
-						for (int i2 = 0 ; i2 < dbClass.getAllManagers().size() ; i2++) {
-							Manager currentManager = dbClass.getAllManagers().get(i2);
+						for (int j = 0 ; j < dbClass.getAllManagers().size() ; j++) {
+							Manager currentManager = dbClass.getAllManagers().get(j);
 							if (currentManager.getID() == userLoggedIn)
 							{
 								checkerName = currentManager.getFullName();

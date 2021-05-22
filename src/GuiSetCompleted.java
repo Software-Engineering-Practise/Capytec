@@ -103,12 +103,54 @@ public class GuiSetCompleted extends JFrame {
 						taskDate += (":" + now.getSecond());
 							
 						newCompletion.setDateCompleted(taskDate);
-						//dbClass.addCompletedTask(newCompletion);
 						System.out.println("Date is: " + taskDate);
 						
+						Caretaker currentUserC;
+						Manager currentUserM;
+						
 						completedTask.setDateCompleted(taskDate);
-						//completedTask.setCompletionist();
-						//completedTask.setCompletionistID(userLoggedIn);
+						for (int j = 0 ; j < dbClass.getAllCaretakers().size() ; j++)
+						{
+							Caretaker currentCaretaker = dbClass.getAllCaretakers().get(j);
+							if (currentCaretaker.getID() == userLoggedIn)
+							{
+								currentUserC = currentCaretaker;
+								completedTask.setCompletionist(currentUserC.getFullName());
+								completedTask.setCompletionistID(currentUserC.getID());
+							}
+						}
+						
+						for (int j = 0 ; j < dbClass.getAllManagers().size() ; j++)
+						{
+							Manager currentManager = dbClass.getAllManagers().get(j);
+							if (currentManager.getID() == userLoggedIn)
+							{
+								currentUserM = currentManager;
+								completedTask.setCompletionist(currentUserM.getFullName());
+								completedTask.setCompletionistID(currentUserM.getID());
+							}
+						}
+						
+						//If it's a task that repeats, the task must be set to be re-signed or re-checked, if it needs checking or sighning
+						if (completedTask.getDaysUntilRepeat() != 0)
+						{
+							if (completedTask.isNeedsPeerChecking())
+							{
+								completedTask.setPeerChecker(null);
+								completedTask.setPeerCheckerID(0);
+							}
+							if (completedTask.isNeedsSigning())
+							{
+								completedTask.setSignee(null);
+								completedTask.setSigneeID(0);
+							}
+						}
+						
+						//Adds an entry to the completed task database
+						//Updates task with new details
+						dbClass.addCompletedTask(newCompletion);
+						dbClass.updateCaretakerTask(completedTask);
+						
 					}
 				}				
 			}

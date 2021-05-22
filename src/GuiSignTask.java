@@ -63,7 +63,8 @@ public class GuiSignTask extends JFrame {
 		dropdownTaskID.addItem("Select a Task ID");
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-			if (currentTask.isNeedsSigning() && !currentTask.getTeamMembers().contains(userLoggedIn))
+			//if (currentTask.isNeedsSigning() && !currentTask.getTeamMembers().contains(userLoggedIn))
+			if (currentTask.isNeedsSigning() && (currentTask.getSignee() == null))
 			{
 				dropdownTaskID.addItem(currentTask.getID());
 			}
@@ -74,16 +75,41 @@ public class GuiSignTask extends JFrame {
 		JButton btnSignTask = new JButton("Set Task as Signed");
 		btnSignTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Sign button pressed. No funtionality yet.");
-				System.out.println("Task " + (dropdownTaskID.getSelectedItem()));
 				
-				String loggedIn = "";
-				for (int i = 0 ; i < dbClass.getAllManagers().size() ; i++)
+				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ".");
+				
+				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
-					Manager currentManager = dbClass.getAllManagers().get(i);
-					loggedIn = currentManager.getFullName();
+					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					{
+						CaretakerTask taskToUpdate = currentTask;
+						taskToUpdate.setSigneeID(userLoggedIn);
+						String signeeName = "";
+						int signeeID = 0;
+						for (int j = 0 ; j < dbClass.getAllManagers().size() ; j++)
+						{
+							Manager currentManager = dbClass.getAllManagers().get(j);
+							if (currentManager.getID() == userLoggedIn)
+							{
+								signeeName = currentManager.getFullName();
+								signeeID = currentManager.getID();
+							}
+						}
+						
+						if (signeeName == "")
+						{
+							System.out.println("An error occured, invalid signee name. Please try again");
+						}
+						else
+						{
+							taskToUpdate.setSignee(signeeName);
+							taskToUpdate.setSigneeID(signeeID);
+							System.out.println("New signee is " + signeeName);
+							dbClass.updateCaretakerTask(taskToUpdate);
+						}
+					}
 				}
-				System.out.println("Signed by: " + loggedIn);
 			}
 		});
 		btnSignTask.setEnabled(false);
