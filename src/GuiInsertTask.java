@@ -122,8 +122,8 @@ public class GuiInsertTask extends JFrame {
 		contentPane.add(lblFrequency);
 		
 		//Dropdown input allowing user to select how often task is repeated
-		JComboBox comboBoxFrequency = new JComboBox();
-		comboBoxFrequency.setModel(new DefaultComboBoxModel(new String[] {"One-off", "1", "7", "14", "30", "182", "365"}));
+		JComboBox<String> comboBoxFrequency = new JComboBox<String>();
+		comboBoxFrequency.setModel(new DefaultComboBoxModel<String>(new String[] {"One-off", "1", "7", "14", "30", "182", "365"}));
 		comboBoxFrequency.setBounds(191, 279, 96, 22);
 		contentPane.add(comboBoxFrequency);
 		
@@ -177,8 +177,8 @@ public class GuiInsertTask extends JFrame {
 		contentPane.add(lblImportance);
 		
 		//Dropdown box allowing user to choose importance level of task
-		JComboBox comboBoxImportance = new JComboBox();
-		comboBoxImportance.setModel(new DefaultComboBoxModel(new String[] {"1", "2", "3"}));
+		JComboBox<String> comboBoxImportance = new JComboBox<String>();
+		comboBoxImportance.setModel(new DefaultComboBoxModel<String>(new String[] {"1", "2", "3"}));
 		comboBoxImportance.setBounds(191, 424, 40, 22);
 		contentPane.add(comboBoxImportance);
 		
