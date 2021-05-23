@@ -4,7 +4,8 @@ public class CapytecMain {
 
 	public static void main(String[] args) {
 		
-		boolean useLogin = true;
+		boolean useLogin = false;
+		boolean noLoginManager = false;
 		boolean isManager;
 		
 		if (useLogin) {
@@ -38,7 +39,7 @@ public class CapytecMain {
 		}
 		else
 		{
-			isManager = true;
+			isManager = noLoginManager;
 			CapytecGui mainGui = new CapytecGui(isManager, useLogin);
 			mainGui.setLoggedInId(5);
 			mainGui.setVisible(true);
