@@ -3,6 +3,8 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 
 import javax.swing.DefaultComboBoxModel;
@@ -564,10 +566,16 @@ public class CapytecGui extends JFrame {
 		JButton btnHistoricTasks = new JButton("Historic Tasks");
 		panelReportingButtons.add(btnHistoricTasks);
 		
+		
+		JScrollPane scrollPaneReport = new JScrollPane();
+		panelReportPresentation.add(scrollPaneReport, BorderLayout.CENTER);
+		
 		//Define the text pane.
 		JTextPane textPaneReport = new JTextPane();
 		textPaneReport.setEditable(false);
-		panelReportPresentation.add(textPaneReport, BorderLayout.CENTER);
+		scrollPaneReport.add(textPaneReport);
+		
+		scrollPaneReport.setViewportView(textPaneReport);
 		
 		//Report generation button and panel.
 		JPanel panelGenerateButton = new JPanel();
@@ -577,7 +585,6 @@ public class CapytecGui extends JFrame {
 		btnGenerateReport.setVisible(false);
 		panelGenerateButton.add(btnGenerateReport);
 	
-		
 		//Report type buttons
 		btnHistoricTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -660,7 +667,7 @@ public class CapytecGui extends JFrame {
 					{
 						currentTaskEntry = "";
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-						if (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals("")))
+						if (currentTask.getDaysUntilRepeat() == 0 && (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals(""))))
 						{
 							currentTaskEntry = "Task: " + currentTask.getID() + "\n";
 						}
@@ -681,23 +688,23 @@ public class CapytecGui extends JFrame {
 					
 					//Task completion log
 					//Will show every time a task has been completed, regardless of it if was a one off task, or a repeated task.
-					reportText += "\n" + "Previously completed tasks: " + "\n";
-					for (int i = 0 ; i < dbClass.getAllCompletedTasks().size() ; i++)
+					reportText += "\n" + "Completed tasks: " + "\n";
+					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 					{
 						currentTaskEntry ="";
-						CompletedTask currentTask = dbClass.getAllCompletedTasks().get(i);
-						if (currentTask.getUserID() == (int) comboBoxSelectedCaretaker.getSelectedItem())
+						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+						if (currentTask.getTeamMembers().contains((int) comboBoxSelectedCaretaker.getSelectedItem()) && currentTask.getDaysUntilRepeat() == 0 && !(currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals("")))
 						{
-							currentTaskEntry = "Task " + currentTask.getTaskID() + ", Completed on: " + currentTask.getDateCompleted() + "\n";
+							currentTaskEntry = "Task " + currentTask.getID() + ", Completed on: " + currentTask.getDateCompleted() + "\n";
 						}
 						reportText += currentTaskEntry;
 					}
 					break;
 				case 1:
 					//Report system for current tasks.
-					System.out.println("Current Tasks");
+					System.out.println("Current Tasks Report");
 					String currentReportEntry = "";
-					reportText += "Current Tasks: \n \n";
+					reportText += "Current Tasks Report \n \n";
 					reportText += "One off tasks: "  + "\n";
 					//Loops through all tasks, checks to see if the current task is a one-off, which hasn't been completed.
 					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
@@ -708,17 +715,91 @@ public class CapytecGui extends JFrame {
 						{
 							String teamMembers = new String();
 							
-							for (int j = 0 ; j < currentTask.getTeamMembers().size() ; j++)
+							//teamMembers += "testing";
+							
+							for (int j = 0 ; j < dbClass.getAllCaretakers().size() ; j++)
 							{
-								Caretaker currentCaretaker  = dbClass.getAllCaretakers().get(j);
-								teamMembers += currentCaretaker.getFullName() + "(ID: " + currentCaretaker.getID() + ")";
+								Caretaker currentCaretaker = dbClass.getAllCaretakers().get(j);
+								if (currentTask.getTeamMembers().contains(currentCaretaker.getID()))
+								{
+									teamMembers += currentCaretaker.getFullName() + (" (ID: " + currentCaretaker.getID() + ")");
+								}
 							}
-							currentReportEntry = "Task: " + currentTask.getID() + ". This task is currently assigned to: " + teamMembers + ".\n" + "                This task is due: " + currentTask.getDateDue();
-							if (false) // Date comparison
-								currentReportEntry += ". This task is overdue. ";
+							
+							if (teamMembers.isEmpty())
+							{
+								teamMembers = ". This task is currently not assigned to anyone";
+							}
+							else
+								teamMembers = ". This task is currently assigned to caretaker: " + teamMembers;
+							
+							currentReportEntry = "Task: " + currentTask.getID() + teamMembers + ".\n" + "                This task is due: " + currentTask.getDateDue();
+							boolean overdue = false;
+							 // Date comparison
+							String currentDueDate = currentTask.getDateDue();
+							
+							DateTimeFormatter chosenFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+							LocalDateTime now = LocalDateTime.now();
+							
+							String currentDate = chosenFormat.format(now);
+							
+							int dueYear = currentDueDate.charAt(0) + currentDueDate.charAt(1) + currentDueDate.charAt(2) + currentDueDate.charAt(3);
+							int currentYear = currentDate.charAt(0) + currentDate.charAt(1) + currentDate.charAt(2) + currentDate.charAt(3);
+							int dueMonth = currentDueDate.charAt(5) + currentDueDate.charAt(6);
+							int currentMonth = currentDate.charAt(5) + currentDate.charAt(6);
+							int dueDayofMonth = currentDueDate.charAt(8) + currentDueDate.charAt(9);
+							int currentDayofMonth = currentDate.charAt(8) + currentDate.charAt(9);
+							
+							if (currentYear > dueYear)
+								overdue = true;
+							else if (currentYear < dueYear)
+								overdue = false;
+							else if (currentMonth > dueMonth)
+								overdue = true;
+							else if (currentMonth < dueMonth)
+								overdue = false;
+							else if (currentDayofMonth > dueDayofMonth)
+								overdue = true;
+							else if (currentDayofMonth < dueDayofMonth)
+								overdue = false;
+							else
+								overdue = false;
+								
+							//if (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals(""))
+							//{
+							//	currentReportEntry += ". This task has not been completed. \n";
+							
+							if (overdue)
+							{
+								currentReportEntry += ". This task is overdue.";
+							}
+							else if (currentDayofMonth == dueDayofMonth)
+							{
+								currentReportEntry += ". This task is due today.";
+							}
+							//}
+							//else
+							//{
+							//	currentReportEntry += ". This task was completed on: " + currentTask.getDateCompleted();
+							//}
+							
+							
+							currentReportEntry += "\n";
+							
+							currentReportEntry += "                Task Details: " + currentTask.getTitle() + "\n";
+							currentReportEntry += "                Task Description: " + currentTask.getDesc() + "\n";
+							if (currentTask.getExtraConsiderations() == null || currentTask.getExtraConsiderations().equals("") || currentTask.getExtraConsiderations().equals(null))
+								currentReportEntry += "                No extra details provided \n";
+							else
+							{
+								currentReportEntry += "                Extra considerations: " + currentTask.getExtraConsiderations() + "\n";
+							}
+							
 							currentReportEntry += "\n";
 						}
+						
 						reportText += currentReportEntry;
+						
 					}
 					reportText += currentReportEntry = "\n" + "Repeated tasks: " + "\n";
 					//Then loops through all tasks again, checking to see if it is a repeated task.
@@ -736,6 +817,21 @@ public class CapytecGui extends JFrame {
 							else
 								lastCompleted = " - This task was last completed: " + currentTask.getDateCompleted();
 							currentReportEntry = "Task: " + currentTask.getID() + lastCompleted +"\n";
+							
+							currentReportEntry += "                This task should be repeated every " + currentTask.getDaysUntilRepeat() + " days. \n";
+							
+							currentReportEntry += "                Task Details: " + currentTask.getTitle() + "\n";
+							currentReportEntry += "                Task Description: " + currentTask.getDesc() + "\n";
+							if (currentTask.getExtraConsiderations() == null || currentTask.getExtraConsiderations().equals("") || currentTask.getExtraConsiderations().equals(null))
+								currentReportEntry += "                No extra details provided \n";
+							else
+							{
+								currentReportEntry += "                Extra considerations: " + currentTask.getExtraConsiderations() + "\n";
+							}
+							
+							currentReportEntry += "\n";
+							
+							
 						}
 						reportText += currentReportEntry;
 					}
