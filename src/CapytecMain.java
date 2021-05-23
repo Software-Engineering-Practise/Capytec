@@ -13,7 +13,6 @@ public class CapytecMain {
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
-			//System.out.println("Not Logged In");
 		}
 		
 		boolean isManager = loginGui.checkUser(loginGui.getLoggedInId());
@@ -21,16 +20,6 @@ public class CapytecMain {
 		CapytecGui mainGui = new CapytecGui(isManager);
 		mainGui.setLoggedInId(loginGui.getLoggedInId());
 		mainGui.setVisible(true);
-		
-		
-		if(isManager) {
-			System.out.println("Manager Mode");
-			mainGui.setVisible(true);
-		}else {
-			mainGui.setVisible(true);
-			System.out.println("Caretaker Mode");
-		}
-		
 	}
 
 }
