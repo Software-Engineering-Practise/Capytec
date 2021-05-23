@@ -12,7 +12,7 @@ public class TestingDBMethods {
 		//testGetAllCompletedTasks();
 		//testInsertTask();
 		//testUpdateCaretaker();
-		testUpdateTask();
+		//testUpdateTask();
 		
 	}
 	
@@ -280,5 +280,4 @@ public class TestingDBMethods {
 		}
 		
 	}
-	
 }
