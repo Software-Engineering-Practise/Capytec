@@ -769,6 +769,19 @@ public class CapyTecDB{
 		
 	}
 	
+	public void updateLogin(String hash, String username, int userId) {
+		
+		if(username != null) {
+			username = username.replaceAll("[^\\x00-\\x7F]", "");
+			username = username.replaceAll("[';']", "");
+		}
+		
+		String sql = "UPDATE login SET login_user = "+userId+", login_username = '"+username+"', login_pass = '"+hash+"';";
+		
+		database.RunSQL(sql);
+		
+	}
+	
 	public int getLastInsertId() {
 		
 		int id = 0;
@@ -781,7 +794,6 @@ public class CapyTecDB{
 		} catch (SQLException e) {
 			
 		}
-		
 		return id;
 	}
 	
