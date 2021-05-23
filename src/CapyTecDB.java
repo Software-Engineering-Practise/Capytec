@@ -647,7 +647,7 @@ public class CapyTecDB{
 	}
 	
 	//DELETE FUNCTIONS
-	public void DeleteUser(int userID) {
+	public void deleteUser(int userID) {
 		
 		String sql = "DELETE FROM user WHERE user_id = "+userID+";";
 		
@@ -659,13 +659,41 @@ public class CapyTecDB{
 
 	}
 	
-	public void DeleteCaretakerTask(int taskID) {
+	public void deleteCaretakerTask(int taskID) {
 		
 		String sql = new String("DELETE FROM task WHERE task_id = "+taskID+";");
 		
 		boolean success = database.RunSQL(sql);
 		
 		sql = "DELETE FROM task_skill WHERE task = "+taskID+";";
+		
+		success = database.RunSQL(sql);
+		
+	}
+	
+	public void deleteManager(int id) {
+		
+		String sql = "DELETE FROM user WHERE user_id = "+id+";";
+		
+		boolean success = database.RunSQL(sql);
+		
+		sql = "DELETE FROM login WHERE login_user = "+id+";";
+		
+		success = database.RunSQL(sql);
+		
+	}
+	
+	public void deleteCaretaker(int id) {
+		
+		String sql = "DELETE FROM user WHERE user_id = "+id+";";
+		
+		boolean success = database.RunSQL(sql);
+		
+		sql = "DELETE FROM login WHERE login_user = "+id+";";
+		
+		success = database.RunSQL(sql);
+		
+		sql = "DELETE FROM user_skill WHERE user = "+id+";";
 		
 		success = database.RunSQL(sql);
 		
