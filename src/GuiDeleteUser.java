@@ -105,6 +105,7 @@ public class GuiDeleteUser extends JFrame {
 				if(!isFound) {
 					lblNotify.setText("Invalid user ID, Check user table for ID!");
 				}
+				}
 			}
 		});
 		btnDeleteUser.setBounds(304, 211, 118, 36);
