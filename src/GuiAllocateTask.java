@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import org.jdatepicker.impl.JDatePanelImpl;
 import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.JComboBox;
@@ -88,7 +87,6 @@ public class GuiAllocateTask extends JFrame {
 		pStart.put("text.today", "Today");
 		pStart.put("text.month", "Month");
 		pStart.put("text.year", "Year");
-		JDatePanelImpl datePanelStart = new JDatePanelImpl(modelStartDate, pStart);
 		
 		JLabel lblStartDate = new JLabel("Start Date:");
 		lblStartDate.setBounds(22, 340, 144, 14);
@@ -99,7 +97,6 @@ public class GuiAllocateTask extends JFrame {
 		pDue.put("text.today", "Today");
 		pDue.put("text.month", "Month");
 		pDue.put("text.year", "Year");
-		JDatePanelImpl datePanelDue = new JDatePanelImpl(modelDueDate, pDue);
 		
 		//Label to tell user they are reading the selected tasks due date that is adjacent to the label
 		JLabel lblDueDate = new JLabel("Due Date:");
@@ -208,16 +205,16 @@ public class GuiAllocateTask extends JFrame {
 		lblUserSkills.setBounds(157, 160, 83, 14);
 		contentPane.add(lblUserSkills);
 		
-		JLabel lblUserSkillOne = new JLabel("New label");
-		lblUserSkillOne.setBounds(157, 183, 76, 14);
+		JLabel lblUserSkillOne = new JLabel("Placeholder Skill One");
+		lblUserSkillOne.setBounds(157, 183, 180, 14);
 		contentPane.add(lblUserSkillOne);
 		
-		JLabel lblUserSkillTwo = new JLabel("New label");
-		lblUserSkillTwo.setBounds(157, 200, 76, 14);
+		JLabel lblUserSkillTwo = new JLabel("Placeholder Skill Two");
+		lblUserSkillTwo.setBounds(157, 200, 132, 14);
 		contentPane.add(lblUserSkillTwo);
 		
-		JLabel lblUserSkillThree = new JLabel("New label");
-		lblUserSkillThree.setBounds(157, 219, 76, 14);
+		JLabel lblUserSkillThree = new JLabel("Placeholder Skill Three");
+		lblUserSkillThree.setBounds(157, 219, 132, 14);
 		contentPane.add(lblUserSkillThree);
 		
 		
