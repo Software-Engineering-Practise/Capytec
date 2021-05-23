@@ -31,7 +31,7 @@ public class GuiCheckTask extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GuiCheckTask frame = new GuiCheckTask();
+					GuiCheckTask frame = new GuiCheckTask(7);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -43,7 +43,7 @@ public class GuiCheckTask extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GuiCheckTask() {
+	public GuiCheckTask(int passedLoggedIn) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -61,7 +61,7 @@ public class GuiCheckTask extends JFrame {
 		lblSelectedTask.setBounds(96, 64, 46, 14);
 		contentPane.add(lblSelectedTask);
 		
-		int userLoggedIn = 7;
+		int userLoggedIn = passedLoggedIn;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		

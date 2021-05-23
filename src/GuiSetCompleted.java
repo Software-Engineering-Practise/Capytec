@@ -27,7 +27,7 @@ public class GuiSetCompleted extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GuiSetCompleted frame = new GuiSetCompleted();
+					GuiSetCompleted frame = new GuiSetCompleted(8);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -39,7 +39,7 @@ public class GuiSetCompleted extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GuiSetCompleted() {
+	public GuiSetCompleted(int passedLoggedIn) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -57,7 +57,7 @@ public class GuiSetCompleted extends JFrame {
 		lblSelectedTask.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTask);
 		
-		int userLoggedIn = 8;
+		int userLoggedIn = passedLoggedIn;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		dropdownTaskID.setModel(new DefaultComboBoxModel());

@@ -25,7 +25,7 @@ public class GuiSignTask extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GuiSignTask frame = new GuiSignTask();
+					GuiSignTask frame = new GuiSignTask(1);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +37,7 @@ public class GuiSignTask extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GuiSignTask() {
+	public GuiSignTask(int passedLoggedIn) {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -55,7 +55,7 @@ public class GuiSignTask extends JFrame {
 		lblSelectedTaskLabel.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTaskLabel);
 		
-		int userLoggedIn = 4;
+		int userLoggedIn = passedLoggedIn;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		
@@ -106,7 +106,7 @@ public class GuiSignTask extends JFrame {
 							taskToUpdate.setSignee(signeeName);
 							taskToUpdate.setSigneeID(signeeID);
 							System.out.println("New signee is " + signeeName);
-							taskToUpdate.setDateCompleted(null);
+							taskToUpdate.setDateCompleted("");
 							dbClass.updateCaretakerTask(taskToUpdate);
 						}
 					}
