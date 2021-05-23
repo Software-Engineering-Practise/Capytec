@@ -214,28 +214,52 @@ public class CapyTecDB{
 		return compTasks;
 	}
 	//INSERT FUNCTIONS
-	public void addCaretaker(Caretaker caretaker) {
-			
-		String fname = caretaker.getFirstName();
+	public void addManager(Manager manager) {
+		
+		String fname = manager.getFirstName();
 		fname = fname.replaceAll("[^\\x00-\\x7F]", "");
 		fname = fname.replaceAll("[';']", "");
 		if (fname == null) {
 			fname = "";
 		}
 		
-		String lname = caretaker.getLastName();
+		String lname = manager.getLastName();
 		lname = lname.replaceAll("[^\\x00-\\x7F]", "");
 		lname = lname.replaceAll("[';']", "");
 		if (lname == null) {
 			lname = "";
 		}
 		
-		String sql = new String("INSERT INTO user (first_name, last_name, job_type) VALUES ("+fname+", "+lname+", 3);");
+		String sql = "INSERT INTO user (first_name, last_name, job_type) VALUES ('"+fname+"','"+lname+"', 1)";
+		
+		database.RunSQL(sql);
+		
+	}
+	
+	public void addCaretaker(Caretaker caretaker) {
+			
+		String fname = caretaker.getFirstName();
+		if (fname == null) {
+			fname = "";
+		}
+		fname = fname.replaceAll("[^\\x00-\\x7F]", "");
+		fname = fname.replaceAll("[';']", "");
+
+		
+		String lname = caretaker.getLastName();
+		if (lname == null) {
+			lname = "";
+		}
+		lname = lname.replaceAll("[^\\x00-\\x7F]", "");
+		lname = lname.replaceAll("[';']", "");
+
+		
+		String sql = new String("INSERT INTO user (first_name, last_name, job_type) VALUES ('"+fname+"', '"+lname+"', 3);");
 		
 		boolean success = database.RunSQL(sql);
 		
 		if(!success) {
-			System.out.println("Failed to run query: "+sql);
+			//System.out.println("Failed to run query: "+sql);
 		}
 		
 		sql = "SELECT skill_id, skill_name FROM skill;";
@@ -255,20 +279,12 @@ public class CapyTecDB{
 					}
 					id++;
 				}
-				
-				sql = "INSERT INTO user_skill (user, skill) VALUES";
-				
-				for(int i = 0 ; i < skills.size() ; i++) {
-					sql = sql + " (" + caretaker.getID() + ", " + skills.get(i) + ")";
-					if(i < skills.size()) sql = sql + ",";
+
+				for (int i = 0 ; i < skills.size(); i++) {
+					sql = "INSERT INTO user_skill (user, skill) VALUES ("+getLastInsertId()+", "+skills.get(i)+");";
+					success = database.RunSQL(sql);
 				}
-				
-				success = database.RunSQL(sql);
-				
-				if(!success) {
-					System.out.println("Failed to run query: "+sql);
-				}
-				
+
 			} catch (SQLException e) {
 				e.printStackTrace();
 			}
@@ -280,11 +296,12 @@ public class CapyTecDB{
 		int dbTaskID;
 		
 		String title = caretakerTask.getTitle();
-		title = title.replaceAll("[^\\x00-\\x7F]", "");
-		title = title.replaceAll("[';']", "");
 		if (title == null) {
 			title = "";
 		}
+		title = title.replaceAll("[^\\x00-\\x7F]", "");
+		title = title.replaceAll("[';']", "");
+
 		if(title == null || title.length() > 50) {
             title = title.substring(0, Math.min(title.length(), 50));
         } else {
@@ -292,11 +309,11 @@ public class CapyTecDB{
         }
 		
 		String desc = caretakerTask.getDesc();
-		desc = desc.replaceAll("[^\\x00-\\x7F]", "");
-		desc = desc.replaceAll("[';']", "");
 		if (desc == null) {
 			desc = "";
 		}
+		desc = desc.replaceAll("[^\\x00-\\x7F]", "");
+		desc = desc.replaceAll("[';']", "");
 		if(desc == null || desc.length() > 250) {
 			desc = desc.substring(0, Math.min(desc.length(), 250));
         } else {
@@ -304,11 +321,11 @@ public class CapyTecDB{
         }
 		
 		String exConsider = caretakerTask.getExtraConsiderations();
-		exConsider = exConsider.replaceAll("[^\\x00-\\x7F]", "");
-		exConsider = exConsider.replaceAll("[';']", "");
 		if (exConsider == null) {
 			exConsider = "";
 		}
+		exConsider = exConsider.replaceAll("[^\\x00-\\x7F]", "");
+		exConsider = exConsider.replaceAll("[';']", "");
 		if(exConsider == null || exConsider.length() > 250) {
 			exConsider = exConsider.substring(0, Math.min(exConsider.length(), 250));
         } else {
@@ -318,18 +335,20 @@ public class CapyTecDB{
 		
 		
 		String dateCreated = caretakerTask.getDateCreated();
-		dateCreated = dateCreated.replaceAll("[^\\x00-\\x7F]", "");
-		dateCreated = dateCreated.replaceAll("[';']", "");
 		if (dateCreated == null) {
 			dateCreated = "";
 		}
+		dateCreated = dateCreated.replaceAll("[^\\x00-\\x7F]", "");
+		dateCreated = dateCreated.replaceAll("[';']", "");
+
 		
 		String dateDue = caretakerTask.getDateDue();
-		dateDue = dateDue.replaceAll("[^\\x00-\\x7F]", "");
-		dateDue = dateDue.replaceAll("[';']", "");
 		if (dateDue == null) {
 			dateDue = "";
 		}
+		dateDue = dateDue.replaceAll("[^\\x00-\\x7F]", "");
+		dateDue = dateDue.replaceAll("[';']", "");
+
 		
 		int priority = caretakerTask.getPriority();
 		if (priority == 0) {
@@ -350,20 +369,11 @@ public class CapyTecDB{
 		
 		boolean success = database.RunSQL(sql);
 		
-		
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
-		
 		sql = "SELECT skill_id, skill_name FROM skill;";
 		
 		if(caretakerTask.getRecSkills().size() != 0) {
 			try {
 				ResultSet sqlResult = database.RunSQLQuery(sql);
-				
-				sql = "SELECT last_insert_rowid();";
-				
-				dbTaskID = database.RunSQLQuery(sql).getInt(1);
 				
 				ArrayList<Integer> skills = new ArrayList<Integer>();
 				
@@ -378,17 +388,12 @@ public class CapyTecDB{
 				}
 				
 				for(int i = 0 ; i < skills.size() ; i++) {
-					sql = "INSERT INTO task_skill (task, skill) VALUES ("+dbTaskID+", "+skills.get(i)+");";
-					
+					sql = "INSERT INTO task_skill (task, skill) VALUES ("+getLastInsertId()+", "+skills.get(i)+");";
 					success = database.RunSQL(sql);
-					
-					if(!success) {
-						System.out.println("Failed to run query: "+sql);
-					}
 				}
 				
 			} catch (SQLException e) {
-				e.printStackTrace();
+				
 			}
 		}
 			
@@ -406,22 +411,19 @@ public class CapyTecDB{
 		String sql = "INSERT INTO completed_task (task, user, date) VALUES ("+taskID+", "+userID+", '"+dateCompleted+"');";
 		
 		boolean success = database.RunSQL(sql);
-		
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
 	}
 	//UPDATE FUNCITONS
 	
 	public void updateCaretaker(Caretaker caretaker) {
 		
 		int id = caretaker.getID();
+		
 		String fname = caretaker.getFirstName();
-		fname = fname.replaceAll("[^\\x00-\\x7F]", "");
-		fname = fname.replaceAll("[';']", "");
 		if(fname == null) {
 			fname = "";
 		}
+		fname = fname.replaceAll("[^\\x00-\\x7F]", "");
+		fname = fname.replaceAll("[';']", "");
 		if(fname == null || fname.length() > 20) {
 			fname = fname.substring(0, Math.min(fname.length(), 20));
         } else {
@@ -429,11 +431,12 @@ public class CapyTecDB{
         }
 		
 		String lname = caretaker.getLastName();
-		lname = lname.replaceAll("[^\\x00-\\x7F]", "");
-		lname = lname.replaceAll("[';']", "");
 		if(lname == null) {
 			lname = "";
 		}
+		lname = lname.replaceAll("[^\\x00-\\x7F]", "");
+		lname = lname.replaceAll("[';']", "");
+
 		if(lname == null || lname.length() > 20) {
 			lname = lname.substring(0, Math.min(lname.length(), 20));
         } else {
@@ -444,17 +447,10 @@ public class CapyTecDB{
 		
 		boolean success = database.RunSQL(sql);
 		
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
-		
 		//Delete older caretaker skills from db
 		sql = "DELETE FROM user_skill WHERE user = "+id+";";
 		
 		success = database.RunSQL(sql);
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
 		
 		if(caretaker.getSkills().size() != 0) {
 			try {
@@ -477,12 +473,9 @@ public class CapyTecDB{
 				for (int i = 0 ; i < newerSkills.size(); i++) {
 					sql = "INSERT INTO user_skill (user, skill) VALUES ("+id+", "+newerSkills.get(i)+");";
 					success = database.RunSQL(sql);
-					if(!success) {
-						System.out.println("Failed to run query: "+sql);
-					}
 				}
 			} catch (SQLException e) {
-				e.printStackTrace();
+				
 			}
 		}
 	}
@@ -494,11 +487,11 @@ public class CapyTecDB{
 			int id = caretakerTask.getID();
 			
 			String title = caretakerTask.getTitle();
-			title = title.replaceAll("[^\\x00-\\x7F]", "");
-			title = title.replaceAll("[';']", "");
 			if (title == null) {
 				title = "";
 			}
+			title = title.replaceAll("[^\\x00-\\x7F]", "");
+			title = title.replaceAll("[';']", "");
 			if(title == null || title.length() > 50) {
 	            title = title.substring(0, Math.min(title.length(), 50));
 	        } else {
@@ -506,11 +499,11 @@ public class CapyTecDB{
 	        }
 			
 			String desc = caretakerTask.getDesc();
-			desc = desc.replaceAll("[^\\x00-\\x7F]", "");
-			desc = desc.replaceAll("[';']", "");
 			if (desc == null) {
 				desc = "";
 			}
+			desc = desc.replaceAll("[^\\x00-\\x7F]", "");
+			desc = desc.replaceAll("[';']", "");
 			if(desc == null || desc.length() > 250) {
 				desc = desc.substring(0, Math.min(desc.length(), 250));
 	        } else {
@@ -518,11 +511,11 @@ public class CapyTecDB{
 	        }
 			
 			String exConsider = caretakerTask.getExtraConsiderations();
-			exConsider = exConsider.replaceAll("[^\\x00-\\x7F]", "");
-			exConsider = exConsider.replaceAll("[';']", "");
 			if (exConsider == null) {
 				exConsider = "";
 			}
+			exConsider = exConsider.replaceAll("[^\\x00-\\x7F]", "");
+			exConsider = exConsider.replaceAll("[';']", "");
 			if(exConsider == null || exConsider.length() > 250) {
 				exConsider = exConsider.substring(0, Math.min(exConsider.length(), 250));
 	        } else {
@@ -530,11 +523,11 @@ public class CapyTecDB{
 	        }
 			
 			String dateCreated = caretakerTask.getDateCreated();
-			dateCreated = dateCreated.replaceAll("[^\\x00-\\x7F]", "");
-			dateCreated = dateCreated.replaceAll("[';']", "");
 			if (dateCreated == null) {
 				dateCreated = "";
 			}
+			dateCreated = dateCreated.replaceAll("[^\\x00-\\x7F]", "");
+			dateCreated = dateCreated.replaceAll("[';']", "");
 			
 			String dateDue = caretakerTask.getDateDue();
 			if (dateDue == null) {
@@ -545,26 +538,31 @@ public class CapyTecDB{
 				dateDue = dateDue.replaceAll("[^\\x00-\\x7F]", "");
 				dateDue = dateDue.replaceAll("[';']", "");
 			}
+
 			
 			String dateUpdated = caretakerTask.getDateUpdated();
 			if (dateUpdated == null) {
 				dateUpdated = "";
 			}
+
 			else
 			{
 				dateUpdated = dateUpdated.replaceAll("[^\\x00-\\x7F]", "");
 				dateUpdated = dateUpdated.replaceAll("[';']", "");
 			}
+
 			
 			String dateCompleted = caretakerTask.getDateCompleted();
 			if (dateCompleted == null) {
 				dateCompleted = "";
 			}
+
 			else
 			{
 				dateCompleted = dateCompleted.replaceAll("[^\\x00-\\x7F]", "");
 				dateCompleted = dateCompleted.replaceAll("[';']", "");
 			}
+
 			
 			int priority = caretakerTask.getPriority();
 			if (priority == 0) {
@@ -594,18 +592,12 @@ public class CapyTecDB{
 						+" WHERE task_id = "+id+";";
 				
 				boolean success = database.RunSQL(sql);
-				if(!success) {
-					System.out.println("Failed to run query: "+sql);
-				}
 				
 				//Delete old version of skills
 				sql = "DELETE FROM task_skill WHERE task = "+id+";";
 				
 				success = database.RunSQL(sql);
-				if(!success) {
-					System.out.println("Failed to run query: "+sql);
-				}
-				
+
 				if(caretakerTask.getRecSkills().size() != 0) {
 					
 					sql = "SELECT skill_id, skill_name FROM skill;";
@@ -627,9 +619,6 @@ public class CapyTecDB{
 					for (int i = 0 ; i < newerSkills.size(); i++) {
 						sql = "INSERT INTO task_skill (task, skill) VALUES ("+id+", "+newerSkills.get(i)+");";
 						success = database.RunSQL(sql);
-						if(!success) {
-							System.out.println("Failed to run query: "+sql);
-						}
 					}
 				}
 				
@@ -637,10 +626,6 @@ public class CapyTecDB{
 				sql = "DELETE FROM team WHERE task = "+id+";";
 				
 				success = database.RunSQL(sql);
-				
-				if(!success) {
-					System.out.println("Failed to run query: "+sql);
-				}
 				
 				if(caretakerTask.getTeamMembers().size() != 0) {
 					
@@ -664,55 +649,65 @@ public class CapyTecDB{
 					for (int i = 0 ; i < newerMembers.size(); i++) {
 						sql = "INSERT INTO team (task, member) VALUES ("+id+", "+newerMembers.get(i)+");";
 						success = database.RunSQL(sql);
-						if(!success) {
-							System.out.println("Failed to run query: "+sql);
-						}
 					}
 				}
 			} catch(SQLException e) {
-				e.printStackTrace();
+				
 			}
 		} else {
 		}
 	}
 	
 	//DELETE FUNCTIONS
-	public void DeleteUser(int userID) {
+	public void deleteUser(int userID) {
 		
 		String sql = "DELETE FROM user WHERE user_id = "+userID+";";
 		
 		boolean success = database.RunSQL(sql);
 		
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
-		
 		sql = "DELETE FROM user_skill WHERE user = "+userID+";";
 		
 		success = database.RunSQL(sql);
-		
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
+
 	}
 	
-	public void DeleteCaretakerTask(int taskID) {
+	public void deleteCaretakerTask(int taskID) {
 		
 		String sql = new String("DELETE FROM task WHERE task_id = "+taskID+";");
 		
 		boolean success = database.RunSQL(sql);
 		
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
-		
 		sql = "DELETE FROM task_skill WHERE task = "+taskID+";";
 		
 		success = database.RunSQL(sql);
 		
-		if(!success) {
-			System.out.println("Failed to run query: "+sql);
-		}
+	}
+	
+	public void deleteManager(int id) {
+		
+		String sql = "DELETE FROM user WHERE user_id = "+id+";";
+		
+		boolean success = database.RunSQL(sql);
+		
+		sql = "DELETE FROM login WHERE login_user = "+id+";";
+		
+		success = database.RunSQL(sql);
+		
+	}
+	
+	public void deleteCaretaker(int id) {
+		
+		String sql = "DELETE FROM user WHERE user_id = "+id+";";
+		
+		boolean success = database.RunSQL(sql);
+		
+		sql = "DELETE FROM login WHERE login_user = "+id+";";
+		
+		success = database.RunSQL(sql);
+		
+		sql = "DELETE FROM user_skill WHERE user = "+id+";";
+		
+		success = database.RunSQL(sql);
 		
 	}
 	
@@ -737,7 +732,7 @@ public class CapyTecDB{
 				pwdHash = hashResultSet.getString(2);
 			}
 		} catch (SQLException e) {
-			e.printStackTrace();
+			
 		}
 		
 		return pwdHash;
@@ -759,9 +754,51 @@ public class CapyTecDB{
 			try {
 				id = userIdResult.getInt(1);
 			} catch (SQLException e) {
-				e.printStackTrace();
+				
 			}
 		}
 		return id;
 	}
+	
+	public void addLogin(String hash, String username, int userId) {
+		
+		if(username != null) {
+			username = username.replaceAll("[^\\x00-\\x7F]", "");
+			username = username.replaceAll("[';']", "");
+		}
+		
+		String sql = "INSERT INTO login (login_user, login_username, login_pass) VALUES ("+userId+", '"+username+"', '"+hash+"');";
+		
+		database.RunSQL(sql);
+		
+	}
+	
+	public void updateLogin(String hash, String username, int userId) {
+		
+		if(username != null) {
+			username = username.replaceAll("[^\\x00-\\x7F]", "");
+			username = username.replaceAll("[';']", "");
+		}
+		
+		String sql = "UPDATE login SET login_user = "+userId+", login_username = '"+username+"', login_pass = '"+hash+"';";
+		
+		database.RunSQL(sql);
+		
+	}
+	
+	public int getLastInsertId() {
+		
+		int id = 0;
+		String sql = "select last_insert_rowid();";
+		
+		ResultSet result = database.RunSQLQuery(sql);
+		
+		try {
+			id = result.getInt(1);
+		} catch (SQLException e) {
+			
+		}
+		return id;
+	}
+	
 }

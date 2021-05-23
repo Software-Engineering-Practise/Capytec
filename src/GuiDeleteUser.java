@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -11,12 +12,13 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class GuiDeleteUser extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldID;
-	CapyTecDB dbClass = new CapyTecDB();
 	/**
 	 * Launch the application.
 	 */
@@ -27,7 +29,7 @@ public class GuiDeleteUser extends JFrame {
 					GuiDeleteUser frame = new GuiDeleteUser();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					
 				}
 			}
 		});
@@ -53,6 +55,12 @@ public class GuiDeleteUser extends JFrame {
 		lblID.setBounds(90, 70, 76, 14);
 		contentPane.add(lblID);
 		
+		JLabel lblNotify = new JLabel("");
+		lblNotify.setForeground(new Color(204, 51, 0));
+		lblNotify.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNotify.setBounds(0, 132, 434, 14);
+		contentPane.add(lblNotify);
+		
 		JLabel lblDeleteUser = new JLabel("Delete User");
 		lblDeleteUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblDeleteUser.setBounds(87, 20, 202, 34);
@@ -61,32 +69,40 @@ public class GuiDeleteUser extends JFrame {
 		JButton btnDeleteUser = new JButton("Delete User");
 		btnDeleteUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String inputID = textFieldID.getText();
+				int inputID = Integer.parseInt(textFieldID.getText());
 				boolean isFound = false;
 				
-				for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
-					Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
-					String retrievedID = Integer.toString(currentCaretaker.getID());
-					if(inputID.equals(retrievedID)) {
-						System.out.println("ID found for caretaker " + currentCaretaker.getFullName());
+				CapyTecDB dbClass = new CapyTecDB();
+				
+				ArrayList<Caretaker> ctrs = dbClass.getAllCaretakers();
+				ArrayList<Manager> mgrs = dbClass.getAllManagers();
+				
+				for(int i=0; i<ctrs.size(); i++) {
+					if(inputID == ctrs.get(i).getID()) {
+						//System.out.println("ID found for caretaker " + currentCaretaker.getFullName());
 						isFound = true;
 					}
 				}
-				for(int i=0; i<dbClass.getAllManagers().size(); i++) {
-					Manager currentManager = dbClass.getAllManagers().get(i);
-					String retrievedID = Integer.toString(currentManager.getID());
-					if(inputID.equals(retrievedID)) {
-						System.out.println("ID found for manager " + currentManager.getFullName());
+				for(int i=0; i<mgrs.size(); i++) {
+					if(inputID == mgrs.get(i).getID()) {
+						//System.out.println("ID found for manager " + currentManager.getFullName());
 						isFound = true;
 					}
 				}
-				if(!isFound) {
-					System.out.println("ID Invalid");
-				}		
+				if(isFound) {
+					
+					dbClass.DeleteUser(inputID);
+					lblNotify.setText("DELETED User: "+ inputID);
+				} else {
+					lblNotify.setText("Invalid user ID, Check user table for ID!");
+					//System.out.println("ID Invalid");
+				}
 			}
 		});
 		btnDeleteUser.setBounds(304, 211, 118, 36);
 		contentPane.add(btnDeleteUser);
+		
+
 
 	}
 }
