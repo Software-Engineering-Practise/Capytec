@@ -55,7 +55,7 @@ public class GuiSignTask extends JFrame {
 		lblSelectedTaskLabel.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTaskLabel);
 		
-		int userLoggedIn = 4;
+		int userLoggedIn = 3;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		
@@ -106,7 +106,7 @@ public class GuiSignTask extends JFrame {
 							taskToUpdate.setSignee(signeeName);
 							taskToUpdate.setSigneeID(signeeID);
 							System.out.println("New signee is " + signeeName);
-							taskToUpdate.setDateCompleted(null);
+							taskToUpdate.setDateCompleted("");
 							dbClass.updateCaretakerTask(taskToUpdate);
 						}
 					}

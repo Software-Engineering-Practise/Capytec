@@ -39,15 +39,20 @@ public class CapytecGui extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(boolean isManager) {
+	public static void main(boolean isManager, boolean usingLogin) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					
-					//GuiLogin login = new GuiLogin();
-					//login.setVisible(true);
+
+					if (usingLogin)
+					{
+						GuiLogin login = new GuiLogin();
+						login.setVisible(true);
+					}
+
 					
-					CapytecGui frame = new CapytecGui(isManager);
+					CapytecGui frame = new CapytecGui(isManager, usingLogin);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,7 +64,7 @@ public class CapytecGui extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CapytecGui(boolean isManager) {
+	public CapytecGui(boolean isManager, boolean usingLogin) {
 		//Exit application when JFrame is closed
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Set size of JFrame and other window settings. Display the frame.
@@ -151,7 +156,9 @@ public class CapytecGui extends JFrame {
 				tableModelUserManagement.addRow(new Object[] {currentManager.getID(),currentManager.getFullName(),currentManager.getJobTitle(),"Skill"});
 			}
 			scrollPaneUserManagement.setViewportView(tableUserManagement);
-		
+		//
+		}
+		if(true) {
 			//Add task management as a tab to the tabbedPane
 			JPanel panelTaskManagement = new JPanel();
 			tabbedPane.addTab("Task Management", null, panelTaskManagement, null);
@@ -273,6 +280,11 @@ public class CapytecGui extends JFrame {
 			}		
 			
 			scrollPaneTaskManagement.setViewportView(tableTaskManagement);
+			if(isManager) {
+				btnAssignTask.setVisible(false);
+				btnGetBriefing.setVisible(false);
+			}
+			
 		}
 		//Task Logging - Mission 9
 		
@@ -332,7 +344,7 @@ public class CapytecGui extends JFrame {
 			new Object[][] {
 			},
 			new String[] {
-				"Assigned Caretaker(s)", "Task ID", "Task", "Task Set", "Repeated Task?", "Repeat Period", "Completed Date", "Extra Requirements", "Checked By", "Signed By", "Priority"
+				"Assigned Caretaker(s)", "Task ID", "Task", "Task Set", "Repeated Task?", "Repeat Period", "Due Date", "Completed Date", "Extra Requirements", "Checked By", "Signed By", "Priority"
 			}
 		));
 		
@@ -386,7 +398,7 @@ public class CapytecGui extends JFrame {
 			if ((currentItem.getDateCompleted() == null || currentItem.getDateCompleted().equals("")) && isRepeated != "Yes")
 			{
 				//System.out.println("Current item " + currentItem.getID() + ". Completed date: " + currentItem.getDateCompleted());
-				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
 			}
 		}
 		
@@ -436,7 +448,7 @@ public class CapytecGui extends JFrame {
 						signedBy = "N/A";
 						checkedBy = "N/A"; }
 					if (isRepeated == "Yes")
-						tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+						tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
 				}
 		
 		//Load all completed tasks
@@ -488,7 +500,7 @@ public class CapytecGui extends JFrame {
 			{
 				String currentDate = currentItem.getDateCompleted();
 				//System.out.println("Current item " + currentItem.getID() + ". Completed date: " + currentItem.getDateCompleted() + currentItem.getDateCompleted().compareTo(""));
-				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
 			}
 		}
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
@@ -917,4 +929,5 @@ public class CapytecGui extends JFrame {
 	public void setLoggedInId(int loggedInId) {
 		this.loggedInId = loggedInId;
 	}
+	
 }
