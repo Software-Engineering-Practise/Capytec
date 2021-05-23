@@ -3,6 +3,9 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.Base64;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -86,27 +89,26 @@ public class GuiInsertUser extends JFrame {
 		contentPane.add(lblInsertUser);
 		
 		JComboBox comboBoxPosition = new JComboBox();
-		comboBoxPosition.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
-		comboBoxPosition.setModel(new DefaultComboBoxModel(new String[] {"Caretaker", "Manager"}));
+		comboBoxPosition.setModel(new DefaultComboBoxModel(new String[] {"", "Caretaker", "Manager"}));
 		comboBoxPosition.setBounds(191, 227, 96, 22);
 		contentPane.add(comboBoxPosition);
 		
 		JComboBox<String> comboBoxSkill1 = new JComboBox();
 		comboBoxSkill1.setBounds(191, 260, 96, 24);
 		contentPane.add(comboBoxSkill1);
+		comboBoxSkill1.setVisible(false);
 		
 		JComboBox<String> comboBoxSkill2 = new JComboBox();
 		comboBoxSkill2.setModel(new DefaultComboBoxModel<String>(new String[] {""}));
 		comboBoxSkill2.setBounds(191, 295, 96, 24);
 		contentPane.add(comboBoxSkill2);
+		comboBoxSkill2.setVisible(false);
 		
 		JComboBox<String> comboBoxSkill3 = new JComboBox();
 		comboBoxSkill3.setModel(new DefaultComboBoxModel<String>(new String[] {""}));
 		comboBoxSkill3.setBounds(191, 330, 96, 24);
 		contentPane.add(comboBoxSkill3);
+		comboBoxSkill3.setVisible(false);
 		
 		JLabel lblUsrBox = new JLabel("");
 		lblUsrBox.setForeground(new Color(204, 51, 0));
@@ -136,14 +138,39 @@ public class GuiInsertUser extends JFrame {
 		JLabel lblSkill1 = new JLabel("Skill 1:");
 		lblSkill1.setBounds(90, 265, 76, 14);
 		contentPane.add(lblSkill1);
+		lblSkill1.setVisible(false);
 		
 		JLabel lblSkill2 = new JLabel("Skill 2:");
 		lblSkill2.setBounds(90, 300, 76, 14);
 		contentPane.add(lblSkill2);
+		lblSkill2.setVisible(false);
 		
 		JLabel lblSkill3 = new JLabel("Skill 3:");
 		lblSkill3.setBounds(90, 335, 76, 14);
 		contentPane.add(lblSkill3);
+		lblSkill3.setVisible(false);
+		
+		comboBoxPosition.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				String position = (String)comboBoxPosition.getSelectedItem();
+				if(position == "Manager") {
+					comboBoxSkill1.setVisible(false);
+					comboBoxSkill2.setVisible(false);
+					comboBoxSkill3.setVisible(false);
+					lblSkill1.setVisible(false);
+					lblSkill2.setVisible(false);
+					lblSkill3.setVisible(false);
+				}
+				if(position == "Caretaker") {
+					comboBoxSkill1.setVisible(true);
+					comboBoxSkill2.setVisible(true);
+					comboBoxSkill3.setVisible(true);
+					lblSkill1.setVisible(true);
+					lblSkill2.setVisible(true);
+					lblSkill3.setVisible(true);
+				}
+			}
+		});
 		
 		JLabel lblUsername = new JLabel("Username:");
 		lblUsername.setBounds(90, 135, 76, 14);
@@ -185,6 +212,10 @@ public class GuiInsertUser extends JFrame {
 				char [] conPassword = passwordFieldConfirm.getPassword();
 				String position = comboBoxPosition.getSelectedItem().toString();
 				
+				String skill1 = (String) comboBoxSkill1.getSelectedItem();
+				String skill2 = (String) comboBoxSkill2.getSelectedItem();
+				String skill3 = (String) comboBoxSkill3.getSelectedItem();
+				
 				if(firstName.isEmpty()) {
 					lblFName.setText("Missing First Name");
 				} else {
@@ -211,7 +242,6 @@ public class GuiInsertUser extends JFrame {
 					lblNewLabel_1.setText("");
 				}
 				
-				
 				if(!firstName.isEmpty() && !surname.isEmpty() && password.length > 0 && conPassword.length > 0 && !username.isEmpty() && conPassword.length == password.length) {
 					boolean pwdMatch = false;
 					int i;
@@ -231,14 +261,44 @@ public class GuiInsertUser extends JFrame {
 						newManager.setFirstName(firstName);
 						newManager.setLastName(surname);
 						
+						CapyTecDB db = new CapyTecDB();
+						db.addManager(newManager);
+						
+						try {
+							MessageDigest digest = MessageDigest.getInstance("SHA-256");
+							byte[] hash = digest.digest(new String(password).getBytes());
+							String hashIn = Base64.getEncoder().encodeToString(hash);
+							db.addLogin(hashIn, username, db.getLastInsertId());
+						} catch (NoSuchAlgorithmException e) {
+							
+						}		
 					}
 					if(pwdMatch && position == "Caretaker") {
 						
 						Caretaker caretaker = new Caretaker();
 						
+						caretaker.setFirstName(firstName);
+						caretaker.setLastName(surname);
 						
+						caretaker.getSkills().add(skill1);
+						if(skill2 != "" || skill2 != null) {
+							caretaker.getSkills().add(skill2);
+						}
+						if(skill3 != "" || skill3 != null) {
+							caretaker.getSkills().add(skill3);
+						}
+						CapyTecDB db = new CapyTecDB();
+						db.addCaretaker(caretaker);
+						
+						try {
+							MessageDigest digest = MessageDigest.getInstance("SHA-256");
+							byte[] hash = digest.digest(new String(password).getBytes());
+							String hashIn = Base64.getEncoder().encodeToString(hash);
+							db.addLogin(hashIn, username, db.getLastInsertId());
+						} catch (NoSuchAlgorithmException e) {
+							
+						}
 					}
-					
 				} else {
 					
 				}
