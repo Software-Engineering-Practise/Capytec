@@ -642,14 +642,28 @@ public class CapytecGui extends JFrame {
 					//Individual caretaker reports
 					System.out.println("Caretaker Report");
 					//Checks to see the currently assigned tasks, so has to loop through.
-					reportText += "Selected caretaker: " + comboBoxSelectedCaretaker.getSelectedItem() + "\n";
+					reportText += "Caretaker Report \n";
+					reportText += "Selected caretaker: " + comboBoxSelectedCaretaker.getSelectedItem() + "\n \n";
 					reportText += "Currently assigned tasks: " + "\n";
+					reportText += "One-off tasks: \n";
 					String currentTaskEntry = "";
 					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 					{
 						currentTaskEntry = "";
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-						if (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDateCompleted() == null || currentTask.getDaysUntilRepeat() != 0))
+						if (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals("")))
+						{
+							currentTaskEntry = "Task: " + currentTask.getID() + "\n";
+						}
+						reportText += currentTaskEntry;
+					}
+					//Repeat tasks
+					reportText += "\n" + "Repeating tasks: \n";
+					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+					{
+						currentTaskEntry = "";
+						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+						if (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDaysUntilRepeat() != 0))
 						{
 							currentTaskEntry = "Task: " + currentTask.getID() + "\n";
 						}
@@ -658,7 +672,7 @@ public class CapytecGui extends JFrame {
 					
 					//Task completion log
 					//Will show every time a task has been completed, regardless of it if was a one off task, or a repeated task.
-					reportText += "Previously completed tasks: " + "\n";
+					reportText += "\n" + "Previously completed tasks: " + "\n";
 					for (int i = 0 ; i < dbClass.getAllCompletedTasks().size() ; i++)
 					{
 						currentTaskEntry ="";
@@ -674,7 +688,7 @@ public class CapytecGui extends JFrame {
 					//Report system for current tasks.
 					System.out.println("Current Tasks");
 					String currentReportEntry = "";
-					reportText += "Current Tasks: \n";
+					reportText += "Current Tasks: \n \n";
 					reportText += "One off tasks: "  + "\n";
 					//Loops through all tasks, checks to see if the current task is a one-off, which hasn't been completed.
 					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
@@ -683,14 +697,21 @@ public class CapytecGui extends JFrame {
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 						if (currentTask.getDateCompleted() == null && currentTask.getDaysUntilRepeat() == 0)
 						{
-							currentReportEntry = "Task: " + currentTask.getID() + ", This task is due: " + currentTask.getDateDue();
+							String teamMembers = new String();
+							
+							for (int j = 0 ; j < currentTask.getTeamMembers().size() ; j++)
+							{
+								Caretaker currentCaretaker  = dbClass.getAllCaretakers().get(j);
+								teamMembers += currentCaretaker.getFullName() + "(ID: " + currentCaretaker.getID() + ")";
+							}
+							currentReportEntry = "Task: " + currentTask.getID() + ". This task is currently assigned to: " + teamMembers + ".\n" + "                This task is due: " + currentTask.getDateDue();
 							if (false) // Date comparison
 								currentReportEntry += ". This task is overdue. ";
 							currentReportEntry += "\n";
 						}
 						reportText += currentReportEntry;
 					}
-					reportText += currentReportEntry = "Repeated tasks: " + "\n";
+					reportText += currentReportEntry = "\n" + "Repeated tasks: " + "\n";
 					//Then loops through all tasks again, checking to see if it is a repeated task.
 					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 					{
@@ -698,7 +719,14 @@ public class CapytecGui extends JFrame {
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 						if (currentTask.getDaysUntilRepeat() != 0)
 						{
-							currentReportEntry = "Task: " + currentTask.getID() + "\n";
+							String lastCompleted = new String();
+							if (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals(""))
+							{
+								lastCompleted = " - This task has not been completed before.";
+							}
+							else
+								lastCompleted = " - This task was last completed: " + currentTask.getDateCompleted();
+							currentReportEntry = "Task: " + currentTask.getID() + lastCompleted +"\n";
 						}
 						reportText += currentReportEntry;
 					}
@@ -707,10 +735,20 @@ public class CapytecGui extends JFrame {
 				case 2:
 					//Goes through all completed tasks, checking if task ID is equal to the one selected.
 					System.out.println("Historic Task Report");
+					
+					reportText += "History of task " + comboBoxSelectedTask.getSelectedItem() + "\n";
+					reportText += "Task details: \n";
+					
+					CaretakerTask currentTask = dbClass.getAllTasks().get((int) comboBoxSelectedTask.getSelectedItem());
+					
+					reportText += "Task repeats once every " + currentTask.getDaysUntilRepeat() + " days. \n";
+					//What if the task was a one-off?
+					
+					reportText += "\n" + "Completion history: \n";
 					for (int i = 0 ; i < dbClass.getAllCompletedTasks().size() ; i++)
 					{
-						currentReportEntry = "";
 						CompletedTask currentRepeatedTask = dbClass.getAllCompletedTasks().get(i);
+						currentReportEntry = "";
 						if (currentRepeatedTask.getTaskID() == (int) comboBoxSelectedTask.getSelectedItem())
 						{
 							currentReportEntry = "Task: " + currentRepeatedTask.getTaskID() + " was completed on: " + currentRepeatedTask.getDateCompleted() + "\n";
