@@ -178,7 +178,7 @@ public class TestingDBMethods {
 		}
 		
 		
-		DBTest.DeleteCaretakerTask(id);
+		DBTest.deleteCaretakerTask(id);
 		
 	}
 	

@@ -91,7 +91,7 @@ public class GuiDeleteUser extends JFrame {
 				}
 				if(isFound) {
 					
-					dbClass.DeleteUser(inputID);
+					dbClass.deleteUser(inputID);
 					lblNotify.setText("DELETED User: "+ inputID);
 				} else {
 					lblNotify.setText("Invalid user ID, Check user table for ID!");
