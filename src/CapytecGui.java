@@ -25,7 +25,9 @@ import javax.swing.JComboBox;
 
 //Main GUI Class
 public class CapytecGui extends JFrame {
-
+	
+	private int loggedInId = 0;
+	
 	private JPanel contentPane;
 	private JTable tableUserManagement;
 	private static JTable tableTaskManagement;
@@ -35,11 +37,15 @@ public class CapytecGui extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(String[] args) {
+	public static void main(boolean isManager) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					CapytecGui frame = new CapytecGui();
+					
+					GuiLogin login = new GuiLogin();
+					login.setVisible(true);
+					
+					CapytecGui frame = new CapytecGui(isManager);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -51,7 +57,7 @@ public class CapytecGui extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CapytecGui() {
+	public CapytecGui(boolean isManager) {
 		//Exit application when JFrame is closed
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Set size of JFrame and other window settings. Display the frame.
@@ -65,205 +71,206 @@ public class CapytecGui extends JFrame {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
 		contentPane.add(tabbedPane, BorderLayout.CENTER);
 		
-		JPanel panelUserManagement = new JPanel();
-		tabbedPane.addTab("User Management", null, panelUserManagement, null);
-		panelUserManagement.setLayout(new BorderLayout(0, 0));
+		if(isManager) {
+			JPanel panelUserManagement = new JPanel();
+			tabbedPane.addTab("User Management", null, panelUserManagement, null);
+			panelUserManagement.setLayout(new BorderLayout(0, 0));
 		
-		//Add a JPanel which will store the buttons across the bottom of the application
-		JPanel panelTaskBottomButtons = new JPanel();
-		panelUserManagement.add(panelTaskBottomButtons, BorderLayout.SOUTH);
 		
-		JButton btnAddUser = new JButton("Add User");
-		btnAddUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-				GuiInsertUser frameInsertUser = new GuiInsertUser();
-				frameInsertUser.setVisible(true);
+			//Add a JPanel which will store the buttons across the bottom of the application
+			JPanel panelTaskBottomButtons = new JPanel();
+			panelUserManagement.add(panelTaskBottomButtons, BorderLayout.SOUTH);
+			
+			JButton btnAddUser = new JButton("Add User");
+			btnAddUser.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent arg0) {
+					GuiInsertUser frameInsertUser = new GuiInsertUser();
+					frameInsertUser.setVisible(true);
+				}
+			});
+			panelTaskBottomButtons.add(btnAddUser);
+			
+			JButton btnUpdateUser = new JButton("Update User");
+			btnUpdateUser.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GuiUpdateUser frameUpdateUser = new GuiUpdateUser();
+					frameUpdateUser.setVisible(true);
+				}
+			});
+			panelTaskBottomButtons.add(btnUpdateUser);
+			
+			JButton btnRemoveUser = new JButton("Remove User");
+			btnRemoveUser.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GuiDeleteUser frameDeleteUser = new GuiDeleteUser();
+					frameDeleteUser.setVisible(true);
+				}
+			});
+			panelTaskBottomButtons.add(btnRemoveUser);
+			
+			JPanel panelUserTitle = new JPanel();
+			panelUserManagement.add(panelUserTitle, BorderLayout.NORTH);
+			
+			//User management tab title
+			JLabel lblUserManagement = new JLabel("User Management");
+			lblUserManagement.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			panelUserTitle.add(lblUserManagement);
+			
+			//Scroll pane along with table displaying users within the application and their details
+			JScrollPane scrollPaneUserManagement = new JScrollPane();
+			panelUserManagement.add(scrollPaneUserManagement, BorderLayout.CENTER);
+			tableUserManagement = new JTable();
+			//Create table layout
+			//System.out.println(dbClass.getAllCaretakers().get(1).getFullName());
+			tableUserManagement.setModel(new DefaultTableModel(
+				new Object[][] {
+					{null, null, null, null},
+				},
+				new String[] {
+					"ID", "User", "Position", "Skills"
+				}
+			));
+			//Set dimensions of table columns
+			tableUserManagement.getColumnModel().getColumn(0).setPreferredWidth(121);
+			tableUserManagement.getColumnModel().getColumn(1).setPreferredWidth(351);
+			tableUserManagement.getColumnModel().getColumn(2).setPreferredWidth(197);
+			tableUserManagement.getColumnModel().getColumn(3).setPreferredWidth(226);
+			
+			DefaultTableModel tableModelUserManagement = (DefaultTableModel)tableUserManagement.getModel();
+			
+			//Add rows for all caretakers and managers
+			for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
+				Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
+				tableModelUserManagement.addRow(new Object[] {currentCaretaker.getID(),currentCaretaker.getFullName(),currentCaretaker.getJobTitle(),"Skill"});
 			}
-		});
-		panelTaskBottomButtons.add(btnAddUser);
-		
-		JButton btnUpdateUser = new JButton("Update User");
-		btnUpdateUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GuiUpdateUser frameUpdateUser = new GuiUpdateUser();
-				frameUpdateUser.setVisible(true);
+			for(int i=0; i<dbClass.getAllManagers().size(); i++) {
+				Manager currentManager = dbClass.getAllManagers().get(i);
+				tableModelUserManagement.addRow(new Object[] {currentManager.getID(),currentManager.getFullName(),currentManager.getJobTitle(),"Skill"});
 			}
-		});
-		panelTaskBottomButtons.add(btnUpdateUser);
+			scrollPaneUserManagement.setViewportView(tableUserManagement);
 		
-		JButton btnRemoveUser = new JButton("Remove User");
-		btnRemoveUser.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GuiDeleteUser frameDeleteUser = new GuiDeleteUser();
-				frameDeleteUser.setVisible(true);
-			}
-		});
-		panelTaskBottomButtons.add(btnRemoveUser);
-		
-		JPanel panelUserTitle = new JPanel();
-		panelUserManagement.add(panelUserTitle, BorderLayout.NORTH);
-		
-		//User management tab title
-		JLabel lblUserManagement = new JLabel("User Management");
-		lblUserManagement.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		panelUserTitle.add(lblUserManagement);
-		
-		//Scroll pane along with table displaying users within the application and their details
-		JScrollPane scrollPaneUserManagement = new JScrollPane();
-		panelUserManagement.add(scrollPaneUserManagement, BorderLayout.CENTER);
-		tableUserManagement = new JTable();
-		//Create table layout
-		System.out.println(dbClass.getAllCaretakers().get(1).getFullName());
-		tableUserManagement.setModel(new DefaultTableModel(
-			new Object[][] {
-				{null, null, null, null},
-			},
-			new String[] {
-				"ID", "User", "Position", "Skills"
-			}
-		));
-		//Set dimensions of table columns
-		tableUserManagement.getColumnModel().getColumn(0).setPreferredWidth(121);
-		tableUserManagement.getColumnModel().getColumn(1).setPreferredWidth(351);
-		tableUserManagement.getColumnModel().getColumn(2).setPreferredWidth(197);
-		tableUserManagement.getColumnModel().getColumn(3).setPreferredWidth(226);
-		
-		DefaultTableModel tableModelUserManagement = (DefaultTableModel)tableUserManagement.getModel();
-		
-		//Add rows for all caretakers and managers
-		for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
-			Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
-			tableModelUserManagement.addRow(new Object[] {currentCaretaker.getID(),currentCaretaker.getFullName(),currentCaretaker.getJobTitle(),"Skill"});
+			//Add task management as a tab to the tabbedPane
+			JPanel panelTaskManagement = new JPanel();
+			tabbedPane.addTab("Task Management", null, panelTaskManagement, null);
+			panelTaskManagement.setLayout(new BorderLayout(0, 0));
+			
+			JPanel panelUserBottomButtons = new JPanel();
+			panelTaskManagement.add(panelUserBottomButtons, BorderLayout.SOUTH);
+			
+			//Add task button which opens the insert task form on click
+			JButton btnAddTask = new JButton("Add Task");
+			btnAddTask.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GuiInsertTask frameInsertTask = new GuiInsertTask();
+					frameInsertTask.setVisible(true);
+				}
+			});
+			panelUserBottomButtons.add(btnAddTask);
+			
+			//Assign task button which opens the assign task form on click
+			JButton btnAssignTask = new JButton("Assign Task");
+			btnAssignTask.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GuiAllocateTask frameAllocateTask = new GuiAllocateTask();
+					frameAllocateTask.setVisible(true);
+				}
+			});
+			panelUserBottomButtons.add(btnAssignTask);
+			
+			//Remove task button which opens the remove task form on click
+			JButton btnRemoveTask = new JButton("Remove Task");
+			btnRemoveTask.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GuiDeleteTask frameDeleteTask = new GuiDeleteTask();
+					frameDeleteTask.setVisible(true);
+				}
+			});
+			panelUserBottomButtons.add(btnRemoveTask);
+			
+			//Daily briefing button which generates currently logged in user daily briefing on click
+			JButton btnGetBriefing = new JButton("Daily Briefing");
+			btnGetBriefing.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					GuiDailyBriefing frameDailyBriefing = new GuiDailyBriefing();
+					frameDailyBriefing.setVisible(true);
+				}
+			});
+			panelUserBottomButtons.add(btnGetBriefing);
+			
+			JPanel panelTaskTitle = new JPanel();
+			panelTaskManagement.add(panelTaskTitle, BorderLayout.NORTH);
+			
+			//Add task management title
+			JLabel lblTaskManagement = new JLabel("Task Management");
+			lblTaskManagement.setFont(new Font("Tahoma", Font.PLAIN, 20));
+			panelTaskTitle.add(lblTaskManagement);
+			
+			//Add task management to scroll pane
+			JScrollPane scrollPaneTaskManagement = new JScrollPane();
+			panelTaskManagement.add(scrollPaneTaskManagement, BorderLayout.CENTER);
+			
+			//Create table structure for task management
+			tableTaskManagement = new JTable() {
+				//Make it so user cannot edit the table at runtime
+				public boolean editCellAt(int row, int column, java.util.EventObject e) {
+					return false;
+				}
+			};
+			tableTaskManagement.setModel(new DefaultTableModel(
+				new Object[][] {
+				},
+				new String[] {
+					"Task No.", "Task", "Assigned Caretaker", "Description", "Type", "Start Date", "Due Date", "Completion Date", "Completionist", "Importance", "Days Until Repeat"
+				}
+			));
+			tableTaskManagement.getColumnModel().getColumn(1).setPreferredWidth(270);
+			tableTaskManagement.getColumnModel().getColumn(2).setPreferredWidth(173);
+			tableTaskManagement.getColumnModel().getColumn(3).setPreferredWidth(342);
+			tableTaskManagement.getColumnModel().getColumn(4).setPreferredWidth(129);
+			tableTaskManagement.getColumnModel().getColumn(5).setPreferredWidth(162);
+			tableTaskManagement.getColumnModel().getColumn(6).setPreferredWidth(162);
+			tableTaskManagement.getColumnModel().getColumn(7).setPreferredWidth(175);
+			tableTaskManagement.getColumnModel().getColumn(8).setPreferredWidth(192);
+			tableTaskManagement.getColumnModel().getColumn(9).setPreferredWidth(98);
+			tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(131);
+			
+			DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
+			
+			//Add row sorting for task management table
+			tableTaskManagement.setAutoCreateRowSorter(true);
+			
+			//Populate task management table
+			for(int i=0; i<dbClass.getAllTasks().size(); i++) {
+				CaretakerTask currentItem = dbClass.getAllTasks().get(i);
+				int repeat = currentItem.getDaysUntilRepeat();
+				String isRepeated;
+				String daysUntilRepeat;
+				String skillsList = " ";
+				String assignedCaretakers = " ";
+				
+				//Add assigned caretakers to task table
+				for(int y=0; y<currentItem.getTeamMembers().size(); y++) {
+					assignedCaretakers += currentItem.getTeamMembers().get(y) + " ";
+				}
+				
+				//Add recommended skills to task table
+				for(int x=0; x<currentItem.getRecSkills().size(); x++) {
+					skillsList += currentItem.getRecSkills().get(x) + " ";
+				}
+				
+				//Set whether a task is a one-off task, or how many days until it needs to be repeated
+				if(repeat == 0) {
+					isRepeated = "One-off";
+					tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
+				} else {
+					isRepeated = "Repeats";
+					daysUntilRepeat = "" + repeat;
+					tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
+				}
+			}		
+			
+			scrollPaneTaskManagement.setViewportView(tableTaskManagement);
 		}
-		for(int i=0; i<dbClass.getAllManagers().size(); i++) {
-			Manager currentManager = dbClass.getAllManagers().get(i);
-			tableModelUserManagement.addRow(new Object[] {currentManager.getID(),currentManager.getFullName(),currentManager.getJobTitle(),"Skill"});
-		}
-		scrollPaneUserManagement.setViewportView(tableUserManagement);
-		
-		
-		//Add task management as a tab to the tabbedPane
-		JPanel panelTaskManagement = new JPanel();
-		tabbedPane.addTab("Task Management", null, panelTaskManagement, null);
-		panelTaskManagement.setLayout(new BorderLayout(0, 0));
-		
-		JPanel panelUserBottomButtons = new JPanel();
-		panelTaskManagement.add(panelUserBottomButtons, BorderLayout.SOUTH);
-		
-		//Add task button which opens the insert task form on click
-		JButton btnAddTask = new JButton("Add Task");
-		btnAddTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GuiInsertTask frameInsertTask = new GuiInsertTask();
-				frameInsertTask.setVisible(true);
-			}
-		});
-		panelUserBottomButtons.add(btnAddTask);
-		
-		//Assign task button which opens the assign task form on click
-		JButton btnAssignTask = new JButton("Assign Task");
-		btnAssignTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GuiAllocateTask frameAllocateTask = new GuiAllocateTask();
-				frameAllocateTask.setVisible(true);
-			}
-		});
-		panelUserBottomButtons.add(btnAssignTask);
-		
-		//Remove task button which opens the remove task form on click
-		JButton btnRemoveTask = new JButton("Remove Task");
-		btnRemoveTask.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GuiDeleteTask frameDeleteTask = new GuiDeleteTask();
-				frameDeleteTask.setVisible(true);
-			}
-		});
-		panelUserBottomButtons.add(btnRemoveTask);
-		
-		//Daily briefing button which generates currently logged in user daily briefing on click
-		JButton btnGetBriefing = new JButton("Daily Briefing");
-		btnGetBriefing.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				GuiDailyBriefing frameDailyBriefing = new GuiDailyBriefing();
-				frameDailyBriefing.setVisible(true);
-			}
-		});
-		panelUserBottomButtons.add(btnGetBriefing);
-		
-		JPanel panelTaskTitle = new JPanel();
-		panelTaskManagement.add(panelTaskTitle, BorderLayout.NORTH);
-		
-		//Add task management title
-		JLabel lblTaskManagement = new JLabel("Task Management");
-		lblTaskManagement.setFont(new Font("Tahoma", Font.PLAIN, 20));
-		panelTaskTitle.add(lblTaskManagement);
-		
-		//Add task management to scroll pane
-		JScrollPane scrollPaneTaskManagement = new JScrollPane();
-		panelTaskManagement.add(scrollPaneTaskManagement, BorderLayout.CENTER);
-		
-		//Create table structure for task management
-		tableTaskManagement = new JTable() {
-			//Make it so user cannot edit the table at runtime
-			public boolean editCellAt(int row, int column, java.util.EventObject e) {
-				return false;
-			}
-		};
-		tableTaskManagement.setModel(new DefaultTableModel(
-			new Object[][] {
-			},
-			new String[] {
-				"Task No.", "Task", "Assigned Caretaker", "Description", "Type", "Start Date", "Due Date", "Completion Date", "Completionist", "Importance", "Days Until Repeat"
-			}
-		));
-		tableTaskManagement.getColumnModel().getColumn(1).setPreferredWidth(270);
-		tableTaskManagement.getColumnModel().getColumn(2).setPreferredWidth(173);
-		tableTaskManagement.getColumnModel().getColumn(3).setPreferredWidth(342);
-		tableTaskManagement.getColumnModel().getColumn(4).setPreferredWidth(129);
-		tableTaskManagement.getColumnModel().getColumn(5).setPreferredWidth(162);
-		tableTaskManagement.getColumnModel().getColumn(6).setPreferredWidth(162);
-		tableTaskManagement.getColumnModel().getColumn(7).setPreferredWidth(175);
-		tableTaskManagement.getColumnModel().getColumn(8).setPreferredWidth(192);
-		tableTaskManagement.getColumnModel().getColumn(9).setPreferredWidth(98);
-		tableTaskManagement.getColumnModel().getColumn(10).setPreferredWidth(131);
-		
-		DefaultTableModel tableModelTaskManagement = (DefaultTableModel)tableTaskManagement.getModel();
-		
-		//Add row sorting for task management table
-		tableTaskManagement.setAutoCreateRowSorter(true);
-		
-		//Populate task management table
-		for(int i=0; i<dbClass.getAllTasks().size(); i++) {
-			CaretakerTask currentItem = dbClass.getAllTasks().get(i);
-			int repeat = currentItem.getDaysUntilRepeat();
-			String isRepeated;
-			String daysUntilRepeat;
-			String skillsList = " ";
-			String assignedCaretakers = " ";
-			
-			//Add assigned caretakers to task table
-			for(int y=0; y<currentItem.getTeamMembers().size(); y++) {
-				assignedCaretakers += currentItem.getTeamMembers().get(y) + " ";
-			}
-			
-			//Add recommended skills to task table
-			for(int x=0; x<currentItem.getRecSkills().size(); x++) {
-				skillsList += currentItem.getRecSkills().get(x) + " ";
-			}
-			
-			//Set whether a task is a one-off task, or how many days until it needs to be repeated
-			if(repeat == 0) {
-				isRepeated = "One-off";
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
-			} else {
-				isRepeated = "Repeats";
-				daysUntilRepeat = "" + repeat;
-				tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
-			}
-		}		
-		
-		scrollPaneTaskManagement.setViewportView(tableTaskManagement);
-		
 		//Task Logging - Mission 9
 		
 		JPanel panelTaskLogging = new JPanel();
@@ -427,6 +434,8 @@ public class CapytecGui extends JFrame {
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
 		
 		//Reporting - Mission 10
+		
+		if(isManager) {
 		
 		JPanel panelReporting = new JPanel();
 		tabbedPane.addTab("Reporting", null, panelReporting, null);
@@ -693,10 +702,14 @@ public class CapytecGui extends JFrame {
 					btnGenerateReport.setVisible(true);
 			}
 		});
-		
+		}
 	}
-	
-	
-	
 
+	public int getLoggedInId() {
+		return loggedInId;
+	}
+
+	public void setLoggedInId(int loggedInId) {
+		this.loggedInId = loggedInId;
+	}
 }

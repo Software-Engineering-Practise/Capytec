@@ -13,13 +13,17 @@ import javax.swing.JPasswordField;
 import java.awt.event.ActionListener;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
 
 public class GuiLogin extends JFrame {
-
+	
+	private boolean notLoggedIn = true;
+	int loggedInId = 0;
+	
 	private JPanel contentPane;
 	private JTextField usernameField;
 	private JPasswordField passwordField;
@@ -99,7 +103,6 @@ public class GuiLogin extends JFrame {
 				
 				String usernameIn = usernameField.getText();
 				char [] passwordIn = passwordField.getPassword();
-				int loggedInId;
 				
 				if(usernameIn.isEmpty()) {
 					lblUserBox.setText("Please enter a username!");
@@ -112,8 +115,7 @@ public class GuiLogin extends JFrame {
 					lblPwdBox.setText("");
 				}
 				
-				if((!usernameIn.isEmpty()) && !(passwordIn.length == 0)) {
-					System.out.println("Input not null!");
+				if((!usernameIn.isEmpty()) && !(passwordIn.length == 0) && loggedInId == 0) {
 					lblNotify.setText("");
 					try {
 						
@@ -122,7 +124,6 @@ public class GuiLogin extends JFrame {
 						String dbHash = new String(); 
 						
 						if(db.getHash(usernameIn) != null) {
-							System.out.println("hash retrieved!");
 							dbHash = db.getHash(usernameIn);
 						}
 						
@@ -138,24 +139,18 @@ public class GuiLogin extends JFrame {
 						if(dbHash.equals(hashIn)){
 							
 							loggedInId = db.getAccId(usernameIn);
-							System.out.println("Welcome "+usernameIn+" UserID "+ loggedInId);
-							CapytecGui frameMain = new CapytecGui();
-							frameMain.setVisible(true);
+							setNotLoggedIn(false);
+							//System.exit(DISPOSE_ON_CLOSE);
 							
 						}
-						
 						
 					} catch (NoSuchAlgorithmException e1) {
 						e1.printStackTrace();
 					}
 					
 					
-					//CapytecGui frameMain = new CapytecGui();
-					//frameMain.setVisible(true);
 					
-					//System.exit(DISPOSE_ON_CLOSE);
-					
-				}else {
+				}else{
 					lblNotify.setText("Invalid Username or Password!");
 				}
 				
@@ -174,4 +169,32 @@ public class GuiLogin extends JFrame {
 		
 		
 	}
+	
+	public boolean isNotLoggedIn() {
+		return this.notLoggedIn;
+	}
+	public void setNotLoggedIn(boolean notLoggedIn) {
+		this.notLoggedIn = notLoggedIn;
+	}
+	
+	public int getLoggedInId() {
+		return this.loggedInId;
+	}
+	
+	public boolean checkUser(int userId) {
+		
+		CapyTecDB db = new CapyTecDB();
+		
+		boolean isManager = false;
+		
+		ArrayList<Manager> mgrs = db.getAllManagers();
+		
+		for(int i = 0 ; i < mgrs.size() ; i++) {
+			if(userId == mgrs.get(i).getID()) {
+				isManager = true;
+			}
+		}
+		return isManager;
+	}
+	
 }
