@@ -116,7 +116,7 @@ public class GuiCheckTask extends JFrame {
 							System.out.println("New checker is " + checkerName);
 							taskToUpdate.setPeerChecker(checkerName);
 							taskToUpdate.setPeerCheckerID(checkerID);
-							taskToUpdate.setDateCompleted("");
+							taskToUpdate.setDateCompleted(null);
 							dbClass.updateCaretakerTask(taskToUpdate);
 						}
 					}
