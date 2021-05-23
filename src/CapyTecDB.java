@@ -755,4 +755,34 @@ public class CapyTecDB{
 		}
 		return id;
 	}
+	
+	public void addLogin(String hash, String username, int userId) {
+		
+		if(username != null) {
+			username = username.replaceAll("[^\\x00-\\x7F]", "");
+			username = username.replaceAll("[';']", "");
+		}
+		
+		String sql = "INSERT INTO login (login_user, login_username, login_pass) VALUES ("+userId+", '"+username+"', '"+hash+"');";
+		
+		database.RunSQL(sql);
+		
+	}
+	
+	public int getLastInsertId() {
+		
+		int id = 0;
+		String sql = "select last_insert_rowid();";
+		
+		ResultSet result = database.RunSQLQuery(sql);
+		
+		try {
+			id = result.getInt(1);
+		} catch (SQLException e) {
+			
+		}
+		
+		return id;
+	}
+	
 }
