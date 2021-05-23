@@ -11,6 +11,8 @@ import javax.swing.JTextField;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.SwingConstants;
+import java.awt.Color;
 
 public class GuiDeleteUser extends JFrame {
 
@@ -53,6 +55,12 @@ public class GuiDeleteUser extends JFrame {
 		lblID.setBounds(90, 70, 76, 14);
 		contentPane.add(lblID);
 		
+		JLabel lblNotify = new JLabel("");
+		lblNotify.setForeground(new Color(204, 51, 0));
+		lblNotify.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNotify.setBounds(0, 132, 434, 14);
+		contentPane.add(lblNotify);
+		
 		JLabel lblDeleteUser = new JLabel("Delete User");
 		lblDeleteUser.setFont(new Font("Tahoma", Font.PLAIN, 20));
 		lblDeleteUser.setBounds(87, 20, 202, 34);
@@ -68,7 +76,7 @@ public class GuiDeleteUser extends JFrame {
 					Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
 					String retrievedID = Integer.toString(currentCaretaker.getID());
 					if(inputID.equals(retrievedID)) {
-						System.out.println("ID found for caretaker " + currentCaretaker.getFullName());
+						//System.out.println("ID found for caretaker " + currentCaretaker.getFullName());
 						isFound = true;
 					}
 				}
@@ -76,17 +84,20 @@ public class GuiDeleteUser extends JFrame {
 					Manager currentManager = dbClass.getAllManagers().get(i);
 					String retrievedID = Integer.toString(currentManager.getID());
 					if(inputID.equals(retrievedID)) {
-						System.out.println("ID found for manager " + currentManager.getFullName());
+						//System.out.println("ID found for manager " + currentManager.getFullName());
 						isFound = true;
 					}
 				}
 				if(!isFound) {
-					System.out.println("ID Invalid");
+					lblNotify.setText("Invalid user ID, Check user table for ID!");
+					//System.out.println("ID Invalid");
 				}		
 			}
 		});
 		btnDeleteUser.setBounds(304, 211, 118, 36);
 		contentPane.add(btnDeleteUser);
+		
+
 
 	}
 }
