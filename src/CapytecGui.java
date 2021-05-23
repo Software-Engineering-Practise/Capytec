@@ -520,8 +520,10 @@ public class CapytecGui extends JFrame {
 		
 		//Reporting - Mission 10
 		
+		//Only managers should be capable of seeing reports, so the entire report section is hidden if it's not a manager logged in
 		if(isManager) {
 		
+		//Creates the setup for the reporting page, including the  main panel, subpanels, labels, buttons, etc.
 		JPanel panelReporting = new JPanel();
 		tabbedPane.addTab("Reporting", null, panelReporting, null);
 		panelReporting.setLayout(new BorderLayout(0, 0));
@@ -543,6 +545,8 @@ public class CapytecGui extends JFrame {
 		JPanel panelReportSettings = new JPanel();
 		panelReportPresentation.add(panelReportSettings, BorderLayout.NORTH);
 		
+		//Creates labels for the pair of dropdown boxes
+		//These are hidden by default, as  they are only needed depending on which report mode is selected.
 		JLabel lblTaskDropdown = new JLabel("Selected Task:");
 		lblTaskDropdown.setVisible(false);
 		panelReportSettings.add(lblTaskDropdown);
@@ -551,6 +555,8 @@ public class CapytecGui extends JFrame {
 		lblCaretakerDropdown.setVisible(false);
 		panelReportSettings.add(lblCaretakerDropdown);
 		
+		//Creates the first dropdown box, for all caretakers.
+		//This is also hidden by default, as it only needs to be shown if a caretaker report is being made.
 		JComboBox comboBoxSelectedCaretaker = new JComboBox();
 		panelReportSettings.add(comboBoxSelectedCaretaker);
 		comboBoxSelectedCaretaker.setVisible(false);
@@ -558,6 +564,7 @@ public class CapytecGui extends JFrame {
 		comboBoxSelectedCaretaker.setModel(new DefaultComboBoxModel());
 		comboBoxSelectedCaretaker.addItem("Select a Caretaker");
 		
+		//Creates a loop to go through all caretakers, in order to add their IDs to the dropdown box.
 		ArrayList<Caretaker> allCaretakers = dbClass.getAllCaretakers();
 		
 		for (int i = 0 ; i < allCaretakers.size(); i++)
@@ -566,7 +573,8 @@ public class CapytecGui extends JFrame {
 			comboBoxSelectedCaretaker.addItem(currentCaretaker.getID());
 		}
 		
-		
+		//Similar to previous, creates a second dropdown box for all tasks.
+		//Also hidden by default as it is only needed if a task history report is being made.
 		JComboBox comboBoxSelectedTask = new JComboBox();
 		panelReportSettings.add(comboBoxSelectedTask);
 		comboBoxSelectedTask.setVisible(false);
@@ -574,6 +582,7 @@ public class CapytecGui extends JFrame {
 		comboBoxSelectedTask.setModel(new DefaultComboBoxModel());
 		comboBoxSelectedTask.addItem("Select a Task");;
 		
+		//Creates a loop to go through all tasks, in order to add their IDs to the dropdown box.
 		ArrayList<CaretakerTask> allTasks = dbClass.getAllTasks();
 		
 		for (int i = 0 ; i < allTasks.size(); i++)
@@ -592,7 +601,8 @@ public class CapytecGui extends JFrame {
 		JButton btnHistoricTasks = new JButton("Historic Tasks");
 		panelReportingButtons.add(btnHistoricTasks);
 		
-		
+		//Defines a scroll pane for the report text to sit on.
+		//Allows text to scroll when it becomes too large.
 		JScrollPane scrollPaneReport = new JScrollPane();
 		panelReportPresentation.add(scrollPaneReport, BorderLayout.CENTER);
 		
@@ -607,16 +617,19 @@ public class CapytecGui extends JFrame {
 		JPanel panelGenerateButton = new JPanel();
 		panelReportPresentation.add(panelGenerateButton, BorderLayout.SOUTH);
 		
+		//Generate report button, used to actually generate the report once the option type has been selected.
 		JButton btnGenerateReport = new JButton("Generate Report");
 		btnGenerateReport.setVisible(false);
 		panelGenerateButton.add(btnGenerateReport);
 	
-		//Report type buttons
+		//Event listeners for the 3 report type buttons, historic task, current task, and caretaker reports.
+		//Each button will set certain comboboxes and their labels to visible or invisible, as well as changing the title and resetting the report text.
+		//Also changed the "mode" which is used by the generate report button.
 		btnHistoricTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Historic tasks report button");
+				//System.out.println("Historic tasks report button");
 				int mode = 2;
-				System.out.println("Mode: " + mode);
+				//System.out.println("Mode: " + mode);
 				comboBoxSelectedCaretaker.setVisible(false);
 				comboBoxSelectedTask.setVisible(true);
 				btnGenerateReport.setVisible(false);
@@ -630,9 +643,9 @@ public class CapytecGui extends JFrame {
 
 		btnCurrentTasksReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Current tasks report button");
+				//System.out.println("Current tasks report button");
 				int mode = 1;
-				System.out.println("Mode: " + mode);
+				//System.out.println("Mode: " + mode);
 				comboBoxSelectedCaretaker.setVisible(false);
 				comboBoxSelectedTask.setVisible(false);
 				btnGenerateReport.setVisible(true);
@@ -645,9 +658,9 @@ public class CapytecGui extends JFrame {
 		
 		btnCaretakerReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Caretaker report button");
+				//System.out.println("Caretaker report button");
 				int mode = 0;
-				System.out.println("Mode: " + mode);
+				//System.out.println("Mode: " + mode);
 				comboBoxSelectedCaretaker.setVisible(true);
 				comboBoxSelectedTask.setVisible(false);
 				btnGenerateReport.setVisible(false);
@@ -660,7 +673,8 @@ public class CapytecGui extends JFrame {
 		});
 		
 		
-		//Generate Report button
+		//Generate Report button event listener
+		//When this is pressed, the report is generated.
 		btnGenerateReport.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Report text is reset.
@@ -682,10 +696,21 @@ public class CapytecGui extends JFrame {
 				{
 				case 0:
 					//Individual caretaker reports
-					System.out.println("Caretaker Report");
+					//System.out.println("Caretaker Report");
 					//Checks to see the currently assigned tasks, so has to loop through.
 					reportText += "Caretaker Report \n";
-					reportText += "Selected caretaker: " + comboBoxSelectedCaretaker.getSelectedItem() + "\n \n";
+					reportText += "Selected caretaker: " + comboBoxSelectedCaretaker.getSelectedItem() + "\n";
+					String caretakerName = "unknown";
+					
+					for (int i = 0 ; i < dbClass.getAllCaretakers().size() ; i++)
+					{
+						if (dbClass.getAllCaretakers().get(i).getID() == (int) comboBoxSelectedCaretaker.getSelectedItem())
+						{
+							caretakerName = dbClass.getAllCaretakers().get(i).getFullName();
+						}
+					}
+					
+					reportText += "Caretaker name: " + caretakerName + "\n" + "\n";
 					reportText += "Currently assigned tasks: " + "\n";
 					reportText += "One-off tasks: \n";
 					String currentTaskEntry = "";
@@ -693,13 +718,14 @@ public class CapytecGui extends JFrame {
 					{
 						currentTaskEntry = "";
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
+						//This first loop only reports on current one-off tasks
 						if (currentTask.getDaysUntilRepeat() == 0 && (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals(""))))
 						{
 							currentTaskEntry = "Task: " + currentTask.getID() + "\n";
 						}
 						reportText += currentTaskEntry;
 					}
-					//Repeat tasks
+					//This next loop then goes through all tasks again, but only adds repeated tasks to the report.
 					reportText += "\n" + "Repeating tasks: \n";
 					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 					{
@@ -712,8 +738,9 @@ public class CapytecGui extends JFrame {
 						reportText += currentTaskEntry;
 					}
 					
-					//Task completion log
-					//Will show every time a task has been completed, regardless of it if was a one off task, or a repeated task.
+					//Completed task.
+					//Finally goes through all one-off tasks that have been completed.
+					//Will not show all times a task has been completed, that can instead be seen through the historic task log.
 					reportText += "\n" + "Completed tasks: " + "\n";
 					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 					{
@@ -728,7 +755,7 @@ public class CapytecGui extends JFrame {
 					break;
 				case 1:
 					//Report system for current tasks.
-					System.out.println("Current Tasks Report");
+					//System.out.println("Current Tasks Report");
 					String currentReportEntry = "";
 					reportText += "Current Tasks Report \n \n";
 					reportText += "One off tasks: "  + "\n";
@@ -761,7 +788,9 @@ public class CapytecGui extends JFrame {
 							
 							currentReportEntry = "Task: " + currentTask.getID() + teamMembers + ".\n" + "                This task is due: " + currentTask.getDateDue();
 							boolean overdue = false;
-							 // Date comparison
+							 // Date comparison.
+							//This is done in order to see if a task is overdue
+							//The current date is found out
 							String currentDueDate = currentTask.getDateDue();
 							
 							DateTimeFormatter chosenFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
@@ -769,6 +798,7 @@ public class CapytecGui extends JFrame {
 							
 							String currentDate = chosenFormat.format(now);
 							
+							//The year, month, and day of month for the due date and current date are collected, for comparison.
 							int dueYear = currentDueDate.charAt(0) + currentDueDate.charAt(1) + currentDueDate.charAt(2) + currentDueDate.charAt(3);
 							int currentYear = currentDate.charAt(0) + currentDate.charAt(1) + currentDate.charAt(2) + currentDate.charAt(3);
 							int dueMonth = currentDueDate.charAt(5) + currentDueDate.charAt(6);
@@ -776,6 +806,7 @@ public class CapytecGui extends JFrame {
 							int dueDayofMonth = currentDueDate.charAt(8) + currentDueDate.charAt(9);
 							int currentDayofMonth = currentDate.charAt(8) + currentDate.charAt(9);
 							
+							//The due and current dates are then compared to determine if the task is overdue.
 							if (currentYear > dueYear)
 								overdue = true;
 							else if (currentYear < dueYear)
@@ -795,6 +826,7 @@ public class CapytecGui extends JFrame {
 							//{
 							//	currentReportEntry += ". This task has not been completed. \n";
 							
+							//If the task is overdue, the report then mentions that
 							if (overdue)
 							{
 								currentReportEntry += ". This task is overdue.";
@@ -809,7 +841,7 @@ public class CapytecGui extends JFrame {
 							//	currentReportEntry += ". This task was completed on: " + currentTask.getDateCompleted();
 							//}
 							
-							
+							//Task description is then added to the report.
 							currentReportEntry += "\n";
 							
 							currentReportEntry += "                Task Details: " + currentTask.getTitle() + "\n";
@@ -827,6 +859,7 @@ public class CapytecGui extends JFrame {
 						reportText += currentReportEntry;
 						
 					}
+					//Then has to loop through all tasks again, to document repeat tasks, as these are presented seperately to and managers.
 					reportText += currentReportEntry = "\n" + "Repeated tasks: " + "\n";
 					//Then loops through all tasks again, checking to see if it is a repeated task.
 					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
@@ -842,6 +875,7 @@ public class CapytecGui extends JFrame {
 							}
 							else
 								lastCompleted = " - This task was last completed: " + currentTask.getDateCompleted();
+							//Similar to before, task information is documented to the report.
 							currentReportEntry = "Task: " + currentTask.getID() + lastCompleted +"\n";
 							
 							currentReportEntry += "                This task should be repeated every " + currentTask.getDaysUntilRepeat() + " days. \n";
@@ -861,20 +895,49 @@ public class CapytecGui extends JFrame {
 						}
 						reportText += currentReportEntry;
 					}
-					//If it is a task that was a one-off, which has been completed, it won't show up here.
+					//If it is a task that was a one-off, which has been completed, it won't show up here, as this is only for current tasks.
 					break;
 				case 2:
 					//Goes through all completed tasks, checking if task ID is equal to the one selected.
-					System.out.println("Historic Task Report");
+					//System.out.println("Historic Task Report");
 					
+					//Sets task as task 0 (ID 1), in order to make it defined
+					CaretakerTask currentTask = dbClass.getAllTasks().get(0);
+					
+					//Then loops through all tasks to assign "current task" to the task ID selected from the dropdown box
+					for (int i = 0 ; i < dbClass.getAllTasks().size(); i++)
+					{
+						CaretakerTask currentLoopTask = dbClass.getAllTasks().get(i);
+						if (dbClass.getAllTasks().get(i).getID() == (int) comboBoxSelectedTask.getSelectedItem())
+						{
+							currentTask = currentLoopTask;
+						}
+					}
+					
+					//Information on the selected task is then provided for the report, including its title and description.
 					reportText += "History of task " + comboBoxSelectedTask.getSelectedItem() + "\n";
 					reportText += "Task details: \n";
 					
-					CaretakerTask currentTask = dbClass.getAllTasks().get((int) comboBoxSelectedTask.getSelectedItem());
+					reportText += "                Task Details: " + currentTask.getTitle() + "\n";
+					reportText += "                Task Description: " + currentTask.getDesc() + "\n";
+					if (currentTask.getExtraConsiderations() == null || currentTask.getExtraConsiderations().equals("") || currentTask.getExtraConsiderations().equals(null))
+						reportText += "                No extra details provided \n";
+					else
+					{
+						reportText += "                Extra considerations: " + currentTask.getExtraConsiderations() + "\n";
+					}
 					
-					reportText += "Task repeats once every " + currentTask.getDaysUntilRepeat() + " days. \n";
-					//What if the task was a one-off?
+					reportText += "\n";
 					
+					//Whether or not the task repeated, and how often it did, if it did, is then also presented to the user.
+					if (currentTask.getDaysUntilRepeat() != 0)
+						reportText += "                Task repeats once every " + currentTask.getDaysUntilRepeat() + " days. \n";
+					else
+						reportText += "                This task is not a repeat. \n";
+					
+					//Everytime the task has been completed is then shown to the user.
+					//If the task is a 1-off, it can only have been completed once or never, assuming that the completed table is in parity with the main task table.
+					//However, repeated tasks can show up multiple times, as they are completed more than once.
 					reportText += "\n" + "Completion history: \n";
 					for (int i = 0 ; i < dbClass.getAllCompletedTasks().size() ; i++)
 					{
@@ -883,40 +946,51 @@ public class CapytecGui extends JFrame {
 						if (currentRepeatedTask.getTaskID() == (int) comboBoxSelectedTask.getSelectedItem())
 						{
 							currentReportEntry = "Task: " + currentRepeatedTask.getTaskID() + " was completed on: " + currentRepeatedTask.getDateCompleted() + "\n";
+							currentReportEntry += "                It was completed by user ID: " + currentRepeatedTask.getUserID() + "\n";
 						}
+						
+						//Information about when the task was completed and by who is then added to the report.
 						
 						reportText += currentReportEntry;
 					}
 					break;
 				default:
-					System.out.println("Something went wrong, please try again.");
+					//If something goes wrong, the report simply says an error has occured, although this shouldnt happen in normal use.
+					//System.out.println("Something went wrong, please try again.");
 					reportText = "Something went wrong, please try again.";
 					break;
 				}
 				
-				System.out.println(reportText);
+				//System.out.println(reportText);
 				//Report text is presented to the user
 				textPaneReport.setText(reportText);
 			}
 		});
 		
 		//Drop down boxes event listeners for report selection.
+		//The generate report button will only show up if "current tasks" is selected earlier, or if the user then clicks on which task or user they want a report on.
 		//Caretaker
 		comboBoxSelectedCaretaker.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Is the caretaker chosen a valid option? Make the generate report button visible
-				System.out.println("Interacted with caretaker");
+				//If it's not valid, the button is made hidden again.
+				//System.out.println("Interacted with caretaker");
 				if (comboBoxSelectedCaretaker.getSelectedIndex() != 0)
 					btnGenerateReport.setVisible(true);
+				else
+					btnGenerateReport.setVisible(false);
 			}
 		});
 		//Tasks
 		comboBoxSelectedTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Is the task chosen a valid option? Make the generate report button visible
-				System.out.println("Interacted with task");
+				//If it's not valid, the button is made hidden again.
+				//System.out.println("Interacted with task");
 				if (comboBoxSelectedTask.getSelectedIndex() != 0)
 					btnGenerateReport.setVisible(true);
+				else
+					btnGenerateReport.setVisible(false);
 			}
 		});
 		}

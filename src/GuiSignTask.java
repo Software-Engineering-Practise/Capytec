@@ -76,7 +76,7 @@ public class GuiSignTask extends JFrame {
 		btnSignTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				
-				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ".");
+				//System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ".");
 				
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
@@ -99,13 +99,13 @@ public class GuiSignTask extends JFrame {
 						
 						if (signeeName == "")
 						{
-							System.out.println("An error occured, invalid signee name. Please try again");
+							//System.out.println("An error occured, invalid signee name. Please try again");
 						}
 						else
 						{
 							taskToUpdate.setSignee(signeeName);
 							taskToUpdate.setSigneeID(signeeID);
-							System.out.println("New signee is " + signeeName);
+							//System.out.println("New signee is " + signeeName);
 							taskToUpdate.setDateCompleted("");
 							dbClass.updateCaretakerTask(taskToUpdate);
 						}

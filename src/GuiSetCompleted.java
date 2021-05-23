@@ -75,7 +75,7 @@ public class GuiSetCompleted extends JFrame {
 		JButton btnCompleteTask = new JButton("Select a Task");
 		btnCompleteTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + " selected");
+				//System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + " selected");
 				
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
@@ -92,7 +92,7 @@ public class GuiSetCompleted extends JFrame {
 						String taskDate = "";
 						//YYYY-MM-DD hh:mm:ss
 						
-						DateTimeFormatter chosenFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+						DateTimeFormatter chosenFormat = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 						LocalDateTime now = LocalDateTime.now();
 						
 						taskDate = chosenFormat.format(now);
@@ -105,7 +105,7 @@ public class GuiSetCompleted extends JFrame {
 						//taskDate += (":" + now.getSecond());
 							
 						newCompletion.setDateCompleted(taskDate);
-						System.out.println("Date is: " + taskDate);
+						//System.out.println("Date is: " + taskDate);
 						
 						Caretaker currentUserC;
 						Manager currentUserM;
@@ -158,7 +158,7 @@ public class GuiSetCompleted extends JFrame {
 						//Updates task with new details
 						dbClass.updateCaretakerTask(completedTask);
 						
-						System.out.println("Task " + completedTask.getID() + ". Set as completed on date: " + completedTask.getDateCompleted());
+						//System.out.println("Task " + completedTask.getID() + ". Set as completed on date: " + completedTask.getDateCompleted());
 					}
 				}				
 			}

@@ -80,7 +80,7 @@ public class GuiCheckTask extends JFrame {
 		JButton btnCheckTask = new JButton("Set Task as Checked");
 		btnCheckTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ".");
+				//System.out.println("Button pressed. Task " + (dropdownTaskID.getSelectedItem()) + ".");
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
@@ -109,11 +109,11 @@ public class GuiCheckTask extends JFrame {
 						taskToUpdate.setPeerChecker(checkerName);
 						if (checkerName.isEmpty())
 						{
-							System.out.println("Current user logged in is invalid.");
+							//System.out.println("Current user logged in is invalid.");
 						}
 						else
 						{
-							System.out.println("New checker is " + checkerName);
+							//System.out.println("New checker is " + checkerName);
 							taskToUpdate.setPeerChecker(checkerName);
 							taskToUpdate.setPeerCheckerID(checkerID);
 							taskToUpdate.setDateCompleted(null);
