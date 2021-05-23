@@ -18,6 +18,7 @@ import java.util.Base64;
 import java.util.concurrent.TimeUnit;
 import java.awt.event.ActionEvent;
 import java.awt.Color;
+import javax.swing.JTextArea;
 
 public class GuiLogin extends JFrame {
 	
@@ -96,6 +97,17 @@ public class GuiLogin extends JFrame {
 		lblNotify.setBounds(10, 70, 430, 14);
 		contentPane.add(lblNotify);
 		
+		JLabel lblSignedIn = new JLabel("A User is Currently Logged In!");
+		lblSignedIn.setFont(new Font("Tahoma", Font.PLAIN, 24));
+		lblSignedIn.setHorizontalAlignment(SwingConstants.CENTER);
+		lblSignedIn.setBounds(0, 144, 450, 37);
+		contentPane.add(lblSignedIn);
+		lblSignedIn.setVisible(false);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(170, 185, 225, 37);
+		contentPane.add(passwordField);
+		
 		JButton btnLogin = new JButton("LOGIN");
 		
 		btnLogin.addActionListener(new ActionListener() {
@@ -140,8 +152,17 @@ public class GuiLogin extends JFrame {
 							
 							loggedInId = db.getAccId(usernameIn);
 							setNotLoggedIn(false);
-							//System.exit(DISPOSE_ON_CLOSE);
 							
+							lblSignedIn.setVisible(true);
+							lblNotify.setVisible(false);
+							lblUsername.setVisible(false);
+							lblPassword.setVisible(false);
+							lblPwdBox.setVisible(false);
+							lblUserBox.setVisible(false);
+							btnLogin.setVisible(false);
+							
+							passwordField.setVisible(false);
+							usernameField.setVisible(false);
 						}
 						
 					} catch (NoSuchAlgorithmException e1) {
@@ -161,13 +182,6 @@ public class GuiLogin extends JFrame {
 		btnLogin.setFont(new Font("Tahoma", Font.PLAIN, 18));
 		btnLogin.setBounds(166, 251, 110, 37);
 		contentPane.add(btnLogin);
-		
-		passwordField = new JPasswordField();
-		passwordField.setBounds(170, 185, 225, 37);
-		contentPane.add(passwordField);
-		
-		
-		
 	}
 	
 	public boolean isNotLoggedIn() {
@@ -196,5 +210,4 @@ public class GuiLogin extends JFrame {
 		}
 		return isManager;
 	}
-	
 }

@@ -42,8 +42,8 @@ public class CapytecGui extends JFrame {
 			public void run() {
 				try {
 					
-					GuiLogin login = new GuiLogin();
-					login.setVisible(true);
+					//GuiLogin login = new GuiLogin();
+					//login.setVisible(true);
 					
 					CapytecGui frame = new CapytecGui(isManager);
 					frame.setVisible(true);
@@ -64,12 +64,13 @@ public class CapytecGui extends JFrame {
 		setBounds(100, 100, 1127, 984);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-		contentPane.setLayout(new BorderLayout(0, 0));
 		setContentPane(contentPane);
+		contentPane.setLayout(null);
 		
 		//Create a multi-tab frame, with each tab to encompass a different feature within the application
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		contentPane.add(tabbedPane, BorderLayout.CENTER);
+		tabbedPane.setBounds(5, 5, 1101, 912);
+		contentPane.add(tabbedPane);
 		
 		if(isManager) {
 			JPanel panelUserManagement = new JPanel();
@@ -489,6 +490,19 @@ public class CapytecGui extends JFrame {
 			}
 		}
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
+		
+		JButton btnNewButton = new JButton("Account Settings");
+		btnNewButton.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+				//Change Account settings here!
+				
+			}
+		});
+		btnNewButton.setBounds(931, 922, 155, 23);
+		contentPane.add(btnNewButton);
+		
+		
 		
 		//Reporting - Mission 10
 		

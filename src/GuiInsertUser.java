@@ -95,7 +95,6 @@ public class GuiInsertUser extends JFrame {
 		contentPane.add(comboBoxPosition);
 		
 		JComboBox<String> comboBoxSkill1 = new JComboBox();
-		comboBoxSkill1.setModel(new DefaultComboBoxModel<String>(new String[] {""}));
 		comboBoxSkill1.setBounds(191, 260, 96, 24);
 		contentPane.add(comboBoxSkill1);
 		
@@ -109,25 +108,30 @@ public class GuiInsertUser extends JFrame {
 		comboBoxSkill3.setBounds(191, 330, 96, 24);
 		contentPane.add(comboBoxSkill3);
 		
-		JLabel lblUsrBox = new JLabel("New label");
+		JLabel lblUsrBox = new JLabel("");
 		lblUsrBox.setForeground(new Color(204, 51, 0));
 		lblUsrBox.setBounds(297, 135, 126, 14);
 		contentPane.add(lblUsrBox);
 		
-		JLabel lblPwdBox = new JLabel("New label");
+		JLabel lblPwdBox = new JLabel("");
 		lblPwdBox.setForeground(new Color(204, 51, 0));
 		lblPwdBox.setBounds(297, 166, 126, 14);
 		contentPane.add(lblPwdBox);
 		
-		JLabel lblFName = new JLabel("New label");
+		JLabel lblFName = new JLabel("");
 		lblFName.setForeground(new Color(204, 51, 0));
 		lblFName.setBounds(297, 73, 126, 14);
 		contentPane.add(lblFName);
 		
-		JLabel lblSName = new JLabel("New label");
+		JLabel lblSName = new JLabel("");
 		lblSName.setForeground(new Color(204, 51, 0));
 		lblSName.setBounds(297, 104, 126, 14);
 		contentPane.add(lblSName);
+		
+		JLabel lblNewLabel_1 = new JLabel("");
+		lblNewLabel_1.setForeground(new Color(204, 51, 0));
+		lblNewLabel_1.setBounds(297, 197, 126, 14);
+		contentPane.add(lblNewLabel_1);
 		
 		JLabel lblSkill1 = new JLabel("Skill 1:");
 		lblSkill1.setBounds(90, 265, 76, 14);
@@ -177,20 +181,66 @@ public class GuiInsertUser extends JFrame {
 				String firstName = textFieldFirstName.getText();
 				String surname = textFieldSurname.getText();
 				String username = textFieldUsername.getText();
+				char [] password = passwordFieldIn.getPassword();
+				char [] conPassword = passwordFieldConfirm.getPassword();
 				String position = comboBoxPosition.getSelectedItem().toString();
-				if(firstName.isBlank() || surname.isBlank()) {
-					System.out.println("Name cannot be empty");
+				
+				if(firstName.isEmpty()) {
+					lblFName.setText("Missing First Name");
 				} else {
-					System.out.println(firstName + " " + surname);
-					if(position.equals("Caretaker")) {
-						System.out.println("Is caretaker");
-						Caretaker newCaretaker = new Caretaker();
-						newCaretaker.setFirstName(firstName);
-						newCaretaker.setLastName(surname);
-						dbClass.addCaretaker(newCaretaker);
-					} else {
-						System.out.println("Is manager");
+					lblFName.setText("");
+				}
+				if(surname.isEmpty()) {
+					lblSName.setText("Missing Surname!");
+				} else {
+					lblSName.setText("");
+				}
+				if(username.isEmpty()) {
+					lblUsrBox.setText("Missing Username!");
+				} else {
+					lblUsrBox.setText("");
+				}
+				if(password.length == 0) {
+					lblPwdBox.setText("Missing password!");
+				} else {
+					lblPwdBox.setText("");
+				}
+				if(conPassword.length == 0) {
+					lblNewLabel_1.setText("Confirm password!");
+				} else {
+					lblNewLabel_1.setText("");
+				}
+				
+				
+				if(!firstName.isEmpty() && !surname.isEmpty() && password.length > 0 && conPassword.length > 0 && !username.isEmpty() && conPassword.length == password.length) {
+					boolean pwdMatch = false;
+					int i;
+					for( i = 0 ; i < password.length ; i++) {
+						if(password[i] != conPassword[i]) {
+							break;
+						} 
 					}
+					if (i == password.length) {
+						pwdMatch = true;
+					}
+					
+					if(pwdMatch && position == "Manager") {
+						
+						Manager newManager = new Manager();
+						
+						newManager.setFirstName(firstName);
+						newManager.setLastName(surname);
+						
+					}
+					if(pwdMatch && position == "Caretaker") {
+						
+						Caretaker caretaker = new Caretaker();
+						
+						
+					}
+					
+				} else {
+					
 				}
 				
 			}
