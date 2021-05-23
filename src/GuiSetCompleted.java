@@ -92,15 +92,17 @@ public class GuiSetCompleted extends JFrame {
 						String taskDate = "";
 						//YYYY-MM-DD hh:mm:ss
 						
-						DateTimeFormatter format = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+						DateTimeFormatter chosenFormat = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
 						LocalDateTime now = LocalDateTime.now();
-							
-						taskDate += now.getYear();
-						taskDate += ("-" + now.getMonthValue());
-						taskDate += ("-" + now.getDayOfMonth());
-						taskDate += (" " + now.getHour());
-						taskDate += (":" + now.getMinute());
-						taskDate += (":" + now.getSecond());
+						
+						taskDate = chosenFormat.format(now);
+						
+						//taskDate += now.getYear();
+						//taskDate += ("-" + now.getMonthValue());
+						//taskDate += ("-" + now.getDayOfMonth());
+						//taskDate += (" " + now.getHour());
+						//taskDate += (":" + now.getMinute());
+						//taskDate += (":" + now.getSecond());
 							
 						newCompletion.setDateCompleted(taskDate);
 						System.out.println("Date is: " + taskDate);
