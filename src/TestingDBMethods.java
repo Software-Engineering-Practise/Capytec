@@ -10,7 +10,7 @@ public class TestingDBMethods {
 		//testGetAllCaretakers();
 		//testGetAllTasks();
 		//testGetAllCompletedTasks();
-		//testInsertTask();
+		testInsertTask();
 		//testUpdateCaretaker();
 		//testUpdateTask();
 		
@@ -127,6 +127,9 @@ public class TestingDBMethods {
 		testTask.setAuthorID(1);
 		testTask.setPriority(2);
 		testTask.getRecSkills().add(DBTest.getAllSkills().get(1));
+		testTask.getRecSkills().add(DBTest.getAllSkills().get(2));
+		testTask.getRecSkills().add(DBTest.getAllSkills().get(3));
+		testTask.getTeamMembers().add(DBTest.getAllCaretakers().get(0).getID());
 		
 		System.out.println("Reccomended Skill: " + testTask.getRecSkills().get(0));
 		
