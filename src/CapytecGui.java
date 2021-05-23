@@ -39,15 +39,18 @@ public class CapytecGui extends JFrame {
 	/**
 	 * Launch the application.
 	 */
-	public static void main(boolean isManager) {
+	public static void main(boolean isManager, boolean usingLogin) {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
 					
-					GuiLogin login = new GuiLogin();
-					login.setVisible(true);
+					if (usingLogin)
+					{
+						GuiLogin login = new GuiLogin();
+						login.setVisible(true);
+					}
 					
-					CapytecGui frame = new CapytecGui(isManager);
+					CapytecGui frame = new CapytecGui(isManager, usingLogin);
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -59,7 +62,7 @@ public class CapytecGui extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public CapytecGui(boolean isManager) {
+	public CapytecGui(boolean isManager, boolean usingLogin) {
 		//Exit application when JFrame is closed
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		//Set size of JFrame and other window settings. Display the frame.
@@ -150,7 +153,9 @@ public class CapytecGui extends JFrame {
 				tableModelUserManagement.addRow(new Object[] {currentManager.getID(),currentManager.getFullName(),currentManager.getJobTitle(),"Skill"});
 			}
 			scrollPaneUserManagement.setViewportView(tableUserManagement);
-		
+		//
+		}
+		if(true) {
 			//Add task management as a tab to the tabbedPane
 			JPanel panelTaskManagement = new JPanel();
 			tabbedPane.addTab("Task Management", null, panelTaskManagement, null);
@@ -272,6 +277,11 @@ public class CapytecGui extends JFrame {
 			}		
 			
 			scrollPaneTaskManagement.setViewportView(tableTaskManagement);
+			if(isManager) {
+				btnAssignTask.setVisible(false);
+				btnGetBriefing.setVisible(false);
+			}
+			
 		}
 		//Task Logging - Mission 9
 		
@@ -292,7 +302,7 @@ public class CapytecGui extends JFrame {
 		JButton btnSignTask = new JButton("Sign Task");
 		btnSignTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GuiSignTask frameSignTask = new GuiSignTask(getLoggedInId());
+				GuiSignTask frameSignTask = new GuiSignTask();
 				frameSignTask.setVisible(true);
 			}
 		});
@@ -301,7 +311,7 @@ public class CapytecGui extends JFrame {
 		JButton btnSetCompleted = new JButton("Set Completed");
 		btnSetCompleted.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GuiSetCompleted frameSetCompleted = new GuiSetCompleted(getLoggedInId());
+				GuiSetCompleted frameSetCompleted = new GuiSetCompleted();
 				frameSetCompleted.setVisible(true);
 			}
 		});
@@ -310,7 +320,7 @@ public class CapytecGui extends JFrame {
 		JButton btnCheckTask = new JButton("Check Task");
 		btnCheckTask.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				GuiCheckTask frameCheckTask = new GuiCheckTask(getLoggedInId());
+				GuiCheckTask frameCheckTask = new GuiCheckTask();
 				frameCheckTask.setVisible(true);
 			}
 		});

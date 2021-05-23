@@ -25,7 +25,7 @@ public class GuiSignTask extends JFrame {
 		EventQueue.invokeLater(new Runnable() {
 			public void run() {
 				try {
-					GuiSignTask frame = new GuiSignTask(1);
+					GuiSignTask frame = new GuiSignTask();
 					frame.setVisible(true);
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -37,7 +37,7 @@ public class GuiSignTask extends JFrame {
 	/**
 	 * Create the frame.
 	 */
-	public GuiSignTask(int passedLoggedIn) {
+	public GuiSignTask() {
 		setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -55,7 +55,7 @@ public class GuiSignTask extends JFrame {
 		lblSelectedTaskLabel.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTaskLabel);
 		
-		int userLoggedIn = passedLoggedIn;
+		int userLoggedIn = 3;
 		
 		JComboBox dropdownTaskID = new JComboBox();
 		

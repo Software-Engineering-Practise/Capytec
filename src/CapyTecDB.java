@@ -537,24 +537,33 @@ public class CapyTecDB{
 			}
 			
 			String dateDue = caretakerTask.getDateDue();
-			dateDue = dateDue.replaceAll("[^\\x00-\\x7F]", "");
-			dateDue = dateDue.replaceAll("[';']", "");
 			if (dateDue == null) {
 				dateDue = "";
 			}
+			else
+			{
+				dateDue = dateDue.replaceAll("[^\\x00-\\x7F]", "");
+				dateDue = dateDue.replaceAll("[';']", "");
+			}
 			
 			String dateUpdated = caretakerTask.getDateUpdated();
-			dateUpdated = dateUpdated.replaceAll("[^\\x00-\\x7F]", "");
-			dateUpdated = dateUpdated.replaceAll("[';']", "");
 			if (dateUpdated == null) {
 				dateUpdated = "";
 			}
+			else
+			{
+				dateUpdated = dateUpdated.replaceAll("[^\\x00-\\x7F]", "");
+				dateUpdated = dateUpdated.replaceAll("[';']", "");
+			}
 			
 			String dateCompleted = caretakerTask.getDateCompleted();
-			dateCompleted = dateCompleted.replaceAll("[^\\x00-\\x7F]", "");
-			dateCompleted = dateCompleted.replaceAll("[';']", "");
 			if (dateCompleted == null) {
 				dateCompleted = "";
+			}
+			else
+			{
+				dateCompleted = dateCompleted.replaceAll("[^\\x00-\\x7F]", "");
+				dateCompleted = dateCompleted.replaceAll("[';']", "");
 			}
 			
 			int priority = caretakerTask.getPriority();
