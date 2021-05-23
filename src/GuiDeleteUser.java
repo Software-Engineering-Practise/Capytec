@@ -2,6 +2,7 @@ import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -18,7 +19,6 @@ public class GuiDeleteUser extends JFrame {
 
 	private JPanel contentPane;
 	private JTextField textFieldID;
-	CapyTecDB dbClass = new CapyTecDB();
 	/**
 	 * Launch the application.
 	 */
@@ -29,7 +29,7 @@ public class GuiDeleteUser extends JFrame {
 					GuiDeleteUser frame = new GuiDeleteUser();
 					frame.setVisible(true);
 				} catch (Exception e) {
-					e.printStackTrace();
+					
 				}
 			}
 		});
@@ -69,29 +69,34 @@ public class GuiDeleteUser extends JFrame {
 		JButton btnDeleteUser = new JButton("Delete User");
 		btnDeleteUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-				String inputID = textFieldID.getText();
+				int inputID = Integer.parseInt(textFieldID.getText());
 				boolean isFound = false;
 				
-				for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
-					Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
-					String retrievedID = Integer.toString(currentCaretaker.getID());
-					if(inputID.equals(retrievedID)) {
+				CapyTecDB dbClass = new CapyTecDB();
+				
+				ArrayList<Caretaker> ctrs = dbClass.getAllCaretakers();
+				ArrayList<Manager> mgrs = dbClass.getAllManagers();
+				
+				for(int i=0; i<ctrs.size(); i++) {
+					if(inputID == ctrs.get(i).getID()) {
 						//System.out.println("ID found for caretaker " + currentCaretaker.getFullName());
 						isFound = true;
 					}
 				}
-				for(int i=0; i<dbClass.getAllManagers().size(); i++) {
-					Manager currentManager = dbClass.getAllManagers().get(i);
-					String retrievedID = Integer.toString(currentManager.getID());
-					if(inputID.equals(retrievedID)) {
+				for(int i=0; i<mgrs.size(); i++) {
+					if(inputID == mgrs.get(i).getID()) {
 						//System.out.println("ID found for manager " + currentManager.getFullName());
 						isFound = true;
 					}
 				}
-				if(!isFound) {
+				if(isFound) {
+					
+					dbClass.DeleteUser(inputID);
+					lblNotify.setText("DELETED User: "+ inputID);
+				} else {
 					lblNotify.setText("Invalid user ID, Check user table for ID!");
 					//System.out.println("ID Invalid");
-				}		
+				}
 			}
 		});
 		btnDeleteUser.setBounds(304, 211, 118, 36);
