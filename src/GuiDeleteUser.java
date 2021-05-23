@@ -69,6 +69,9 @@ public class GuiDeleteUser extends JFrame {
 		JButton btnDeleteUser = new JButton("Delete User");
 		btnDeleteUser.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
+				if (textFieldID.getText() != "") {
+					int inputID = Integer.parseInt(textFieldID.getText());
+				}
 				int inputID = Integer.parseInt(textFieldID.getText());
 				boolean isFound = false;
 				
@@ -80,29 +83,32 @@ public class GuiDeleteUser extends JFrame {
 				for(int i=0; i<ctrs.size(); i++) {
 					if(inputID == ctrs.get(i).getID()) {
 						//System.out.println("ID found for caretaker " + currentCaretaker.getFullName());
+						dbClass.deleteCaretaker(inputID);
+						lblNotify.setText("DELETED Caretaker: "+ inputID);
 						isFound = true;
 					}
 				}
 				for(int i=0; i<mgrs.size(); i++) {
 					if(inputID == mgrs.get(i).getID()) {
 						//System.out.println("ID found for manager " + currentManager.getFullName());
+						dbClass.deleteManager(inputID);
+						lblNotify.setText("DELETED Manager: "+ inputID);
 						isFound = true;
 					}
 				}
+
 				if(isFound) {
 					
 					dbClass.deleteUser(inputID);
 					lblNotify.setText("DELETED User: "+ inputID);
 				} else {
+				if(!isFound) {
 					lblNotify.setText("Invalid user ID, Check user table for ID!");
-					//System.out.println("ID Invalid");
 				}
 			}
 		});
 		btnDeleteUser.setBounds(304, 211, 118, 36);
 		contentPane.add(btnDeleteUser);
 		
-
-
 	}
 }
