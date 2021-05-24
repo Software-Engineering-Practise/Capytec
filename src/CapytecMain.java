@@ -35,11 +35,11 @@ public class CapytecMain {
 			mainGui.setVisible(true);
 			
 			if(isManager) {
-				System.out.println("Manager Mode");
+				//System.out.println("Manager Mode");
 				mainGui.setVisible(true);
 			}else {
 				mainGui.setVisible(true);
-				System.out.println("Caretaker Mode");
+				//System.out.println("Caretaker Mode");
 			}
 			
 		}
@@ -51,11 +51,11 @@ public class CapytecMain {
 			mainGui.setVisible(true);
 			
 			if(isManager) {
-				System.out.println("Manager Mode");
+				//System.out.println("Manager Mode");
 				mainGui.setVisible(true);
 			}else {
 				mainGui.setVisible(true);
-				System.out.println("Caretaker Mode");
+				//System.out.println("Caretaker Mode");
 			}
 			
 		}
