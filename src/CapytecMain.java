@@ -5,7 +5,7 @@ public class CapytecMain {
 	public static void main(String[] args) {
 		
 		boolean useLogin = false;
-		boolean noLoginManager = false;
+		boolean noLoginManager = true;
 		boolean isManager;
 		
 		if (useLogin) {
