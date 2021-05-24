@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -14,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.SystemColor;
 
 public class GuiSetCompleted extends JFrame {
 
@@ -59,14 +60,24 @@ public class GuiSetCompleted extends JFrame {
 		
 		int userLoggedIn = 8;
 		
-		JComboBox dropdownTaskID = new JComboBox();
-		dropdownTaskID.setModel(new DefaultComboBoxModel());
+		JTextArea textAreaUpdated = new JTextArea();
+		textAreaUpdated.setEditable(false);
+		textAreaUpdated.setBackground(SystemColor.menu);
+		textAreaUpdated.setFont(new Font("Tahoma", Font.BOLD, 11));
+		textAreaUpdated.setText("Task details have been updated.\r\n\r\nPlease restart GUI to view changes.");
+		textAreaUpdated.setBounds(114, 107, 224, 52);
+		contentPane.add(textAreaUpdated);
+		textAreaUpdated.setVisible(false);
+		
+		
+		JComboBox<String> dropdownTaskID = new JComboBox<String>();
+		dropdownTaskID.setModel(new DefaultComboBoxModel<String>());
 		dropdownTaskID.addItem("Select a Task ID");
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			if (currentTask.getTeamMembers().contains(userLoggedIn) && (currentTask.getDaysUntilRepeat() != 0 || currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals("")))
 			{
-				dropdownTaskID.addItem(currentTask.getID());
+				dropdownTaskID.addItem("" + currentTask.getID());
 			}
 		}
 		dropdownTaskID.setBounds(208, 60, 138, 22);
@@ -80,7 +91,7 @@ public class GuiSetCompleted extends JFrame {
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					if (("" + currentTask.getID()).equals(dropdownTaskID.getSelectedItem()))
 					{
 						CaretakerTask completedTask = currentTask;
 						CompletedTask newCompletion = new CompletedTask();
@@ -158,6 +169,9 @@ public class GuiSetCompleted extends JFrame {
 						//Updates task with new details
 						dbClass.updateCaretakerTask(completedTask);
 						
+						btnCompleteTask.setEnabled(false);
+						textAreaUpdated.setVisible(true);
+						
 						//System.out.println("Task " + completedTask.getID() + ". Set as completed on date: " + completedTask.getDateCompleted());
 					}
 				}				
@@ -167,14 +181,23 @@ public class GuiSetCompleted extends JFrame {
 		btnCompleteTask.setBounds(96, 170, 250, 42);
 		contentPane.add(btnCompleteTask);
 		
-		
 		dropdownTaskID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//Button can only be accessed if a valid task has been selected.
 				//The first item (index 0) in the dropdown is not a valid task
 				if (dropdownTaskID.getSelectedIndex() != 0)
 				{
-					CaretakerTask currentTask = dbClass.getAllTasks().get((int)dropdownTaskID.getSelectedItem()-1);
+					CaretakerTask currentTask = dbClass.getAllTasks().get(0);
+					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+					{
+						
+						CaretakerTask loopTask = dbClass.getAllTasks().get(i);
+						if (("" + loopTask.getID()).equals("" + dropdownTaskID.getSelectedItem()))
+						{
+							currentTask = loopTask;
+						}
+					}
+					//CaretakerTask currentTask = dbClass.getAllTasks().get((int)dropdownTaskID.getSelectedItem()-1);
 					//If the task needs to be peer checked, and hasn't been, or needs to be signed, and hasn't been, the button is disabled.
 					//Otherwise, if the user logged in is part of the task selected, the button can be selected
 					//However if this is not the case, the button is disabled.
@@ -210,5 +233,4 @@ public class GuiSetCompleted extends JFrame {
 		
 		
 	}
-
 }

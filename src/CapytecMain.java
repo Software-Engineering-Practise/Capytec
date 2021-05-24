@@ -4,7 +4,13 @@ public class CapytecMain {
 
 	public static void main(String[] args) {
 		
+		//Disable the login system
+		//(true = use login)
+		//(false = bypass login)
 		boolean useLogin = false;
+		//If login system is disabled, manager permissions
+		//(True = manager)
+		//(false = caretaker)
 		boolean noLoginManager = true;
 		boolean isManager;
 		
