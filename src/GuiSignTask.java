@@ -56,7 +56,9 @@ public class GuiSignTask extends JFrame {
 		lblSelectedTaskLabel.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTaskLabel);
 		
-		int userLoggedIn = 3;
+		//Manually set user logged in
+		//2 = Sam Farnworth (Manager)
+		int userLoggedIn = 2;
 		
 		JTextArea textAreaUpdated = new JTextArea();
 		textAreaUpdated.setEditable(false);
@@ -119,6 +121,7 @@ public class GuiSignTask extends JFrame {
 							taskToUpdate.setDateCompleted("");
 							dbClass.updateCaretakerTask(taskToUpdate);
 							textAreaUpdated.setVisible(true);
+							btnSignTask.setEnabled(false);
 						}
 					}
 				}

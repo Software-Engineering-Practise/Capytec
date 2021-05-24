@@ -58,7 +58,9 @@ public class GuiSetCompleted extends JFrame {
 		lblSelectedTask.setBounds(114, 64, 46, 14);
 		contentPane.add(lblSelectedTask);
 		
-		int userLoggedIn = 8;
+		//Manually set who is logged in
+		//5 = Chris Rook
+		int userLoggedIn = 5;
 		
 		JTextArea textAreaUpdated = new JTextArea();
 		textAreaUpdated.setEditable(false);

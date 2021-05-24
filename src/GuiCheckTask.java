@@ -58,7 +58,9 @@ public class GuiCheckTask extends JFrame {
 		lblSelectedTask.setBounds(96, 64, 46, 14);
 		contentPane.add(lblSelectedTask);
 		
-		int userLoggedIn = 7;
+		//Manually change who is logged in
+		//6 = Dan Hodgson
+		int userLoggedIn = 6;
 		
 		JTextArea textAreaUpdated = new JTextArea();
 		textAreaUpdated.setEditable(false);
@@ -125,6 +127,7 @@ public class GuiCheckTask extends JFrame {
 							taskToUpdate.setDateCompleted(null);
 							dbClass.updateCaretakerTask(taskToUpdate);
 							textAreaUpdated.setVisible(true);
+							btnCheckTask.setEnabled(false);
 						}
 					}
 				}
