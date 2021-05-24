@@ -496,7 +496,7 @@ public class CapytecGui extends JFrame {
 			if (currentItem.getDateCompleted() != null && !currentItem.getDateCompleted().equals("") && isRepeated != "Yes")
 			{
 				//System.out.println("Current item " + currentItem.getID() + ". Completed date: " + currentItem.getDateCompleted() + currentItem.getDateCompleted().compareTo(""));
-				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentDate, isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
 			}
 		}
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
@@ -553,11 +553,11 @@ public class CapytecGui extends JFrame {
 		
 		//Creates the first dropdown box, for all caretakers.
 		//This is also hidden by default, as it only needs to be shown if a caretaker report is being made.
-		JComboBox comboBoxSelectedCaretaker = new JComboBox();
+		JComboBox<String> comboBoxSelectedCaretaker = new JComboBox<String>();
 		panelReportSettings.add(comboBoxSelectedCaretaker);
 		comboBoxSelectedCaretaker.setVisible(false);
 		
-		comboBoxSelectedCaretaker.setModel(new DefaultComboBoxModel());
+		comboBoxSelectedCaretaker.setModel(new DefaultComboBoxModel<String>());
 		comboBoxSelectedCaretaker.addItem("Select a Caretaker");
 		
 		//Creates a loop to go through all caretakers, in order to add their IDs to the dropdown box.
@@ -566,16 +566,16 @@ public class CapytecGui extends JFrame {
 		for (int i = 0 ; i < allCaretakers.size(); i++)
 		{
 			Caretaker currentCaretaker = allCaretakers.get(i);
-			comboBoxSelectedCaretaker.addItem(currentCaretaker.getID());
+			comboBoxSelectedCaretaker.addItem("" + currentCaretaker.getID());
 		}
 		
 		//Similar to previous, creates a second dropdown box for all tasks.
 		//Also hidden by default as it is only needed if a task history report is being made.
-		JComboBox comboBoxSelectedTask = new JComboBox();
+		JComboBox<String> comboBoxSelectedTask = new JComboBox<String>();
 		panelReportSettings.add(comboBoxSelectedTask);
 		comboBoxSelectedTask.setVisible(false);
 		
-		comboBoxSelectedTask.setModel(new DefaultComboBoxModel());
+		comboBoxSelectedTask.setModel(new DefaultComboBoxModel<String>());
 		comboBoxSelectedTask.addItem("Select a Task");;
 		
 		//Creates a loop to go through all tasks, in order to add their IDs to the dropdown box.
@@ -584,7 +584,7 @@ public class CapytecGui extends JFrame {
 		for (int i = 0 ; i < allTasks.size(); i++)
 		{
 			CaretakerTask currentTask = allTasks.get(i);
-			comboBoxSelectedTask.addItem(currentTask.getID());
+			comboBoxSelectedTask.addItem("" + currentTask.getID());
 		}
 		
 		//Define each report-type button.
@@ -617,14 +617,14 @@ public class CapytecGui extends JFrame {
 		JButton btnGenerateReport = new JButton("Generate Report");
 		btnGenerateReport.setVisible(false);
 		panelGenerateButton.add(btnGenerateReport);
-	
+		
 		//Event listeners for the 3 report type buttons, historic task, current task, and caretaker reports.
 		//Each button will set certain comboboxes and their labels to visible or invisible, as well as changing the title and resetting the report text.
 		//Also changed the "mode" which is used by the generate report button.
 		btnHistoricTasks.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println("Historic tasks report button");
-				int mode = 2;
+				//int mode = 2;
 				//System.out.println("Mode: " + mode);
 				comboBoxSelectedCaretaker.setVisible(false);
 				comboBoxSelectedTask.setVisible(true);
@@ -640,7 +640,7 @@ public class CapytecGui extends JFrame {
 		btnCurrentTasksReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println("Current tasks report button");
-				int mode = 1;
+				//int mode = 1;
 				//System.out.println("Mode: " + mode);
 				comboBoxSelectedCaretaker.setVisible(false);
 				comboBoxSelectedTask.setVisible(false);
@@ -655,7 +655,7 @@ public class CapytecGui extends JFrame {
 		btnCaretakerReports.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				//System.out.println("Caretaker report button");
-				int mode = 0;
+				//int mode = 0;
 				//System.out.println("Mode: " + mode);
 				comboBoxSelectedCaretaker.setVisible(true);
 				comboBoxSelectedTask.setVisible(false);
@@ -700,7 +700,7 @@ public class CapytecGui extends JFrame {
 					
 					for (int i = 0 ; i < dbClass.getAllCaretakers().size() ; i++)
 					{
-						if (dbClass.getAllCaretakers().get(i).getID() == (int) comboBoxSelectedCaretaker.getSelectedItem())
+						if (("" + dbClass.getAllCaretakers().get(i).getID()).equals(comboBoxSelectedCaretaker.getSelectedItem()))
 						{
 							caretakerName = dbClass.getAllCaretakers().get(i).getFullName();
 						}
@@ -715,7 +715,7 @@ public class CapytecGui extends JFrame {
 						currentTaskEntry = "";
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 						//This first loop only reports on current one-off tasks
-						if (currentTask.getDaysUntilRepeat() == 0 && (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals(""))))
+						if (currentTask.getDaysUntilRepeat() == 0 && (currentTask.getTeamMembers().toString().equals("[" + comboBoxSelectedCaretaker.getSelectedItem() + "]") && (currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals(""))))
 						{
 							currentTaskEntry = "Task: " + currentTask.getID() + "\n";
 						}
@@ -727,7 +727,7 @@ public class CapytecGui extends JFrame {
 					{
 						currentTaskEntry = "";
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-						if (currentTask.getTeamMembers().contains(comboBoxSelectedCaretaker.getSelectedItem()) && (currentTask.getDaysUntilRepeat() != 0))
+						if (currentTask.getTeamMembers().toString().equals("[" + comboBoxSelectedCaretaker.getSelectedItem() + "]") && (currentTask.getDaysUntilRepeat() != 0))
 						{
 							currentTaskEntry = "Task: " + currentTask.getID() + "\n";
 						}
@@ -742,7 +742,7 @@ public class CapytecGui extends JFrame {
 					{
 						currentTaskEntry ="";
 						CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-						if (currentTask.getTeamMembers().contains((int) comboBoxSelectedCaretaker.getSelectedItem()) && currentTask.getDaysUntilRepeat() == 0 && !(currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals("")))
+						if (currentTask.getTeamMembers().toString().equals("[" + comboBoxSelectedCaretaker.getSelectedItem() + "]") && currentTask.getDaysUntilRepeat() == 0 && !(currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals("")))
 						{
 							currentTaskEntry = "Task " + currentTask.getID() + ", Completed on: " + currentTask.getDateCompleted() + "\n";
 						}
@@ -904,7 +904,7 @@ public class CapytecGui extends JFrame {
 					for (int i = 0 ; i < dbClass.getAllTasks().size(); i++)
 					{
 						CaretakerTask currentLoopTask = dbClass.getAllTasks().get(i);
-						if (dbClass.getAllTasks().get(i).getID() == (int) comboBoxSelectedTask.getSelectedItem())
+						if (("" + dbClass.getAllTasks().get(i).getID()).equals(comboBoxSelectedTask.getSelectedItem()))
 						{
 							currentTask = currentLoopTask;
 						}
@@ -939,7 +939,7 @@ public class CapytecGui extends JFrame {
 					{
 						CompletedTask currentRepeatedTask = dbClass.getAllCompletedTasks().get(i);
 						currentReportEntry = "";
-						if (currentRepeatedTask.getTaskID() == (int) comboBoxSelectedTask.getSelectedItem())
+						if (("" + currentRepeatedTask.getTaskID()).equals(comboBoxSelectedTask.getSelectedItem()))
 						{
 							currentReportEntry = "Task: " + currentRepeatedTask.getTaskID() + " was completed on: " + currentRepeatedTask.getDateCompleted() + "\n";
 							currentReportEntry += "                It was completed by user ID: " + currentRepeatedTask.getUserID() + "\n";

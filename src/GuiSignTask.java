@@ -1,6 +1,6 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -9,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -57,16 +58,25 @@ public class GuiSignTask extends JFrame {
 		
 		int userLoggedIn = 3;
 		
-		JComboBox dropdownTaskID = new JComboBox();
+		JTextArea textAreaUpdated = new JTextArea();
+		textAreaUpdated.setEditable(false);
+		textAreaUpdated.setBackground(SystemColor.menu);
+		textAreaUpdated.setFont(new Font("Tahoma", Font.BOLD, 11));
+		textAreaUpdated.setText("Task details have been updated.\r\n\r\nPlease restart GUI to view changes.");
+		textAreaUpdated.setBounds(114, 107, 224, 52);
+		contentPane.add(textAreaUpdated);
+		textAreaUpdated.setVisible(false);
 		
-		dropdownTaskID.setModel(new DefaultComboBoxModel());
+		JComboBox<String> dropdownTaskID = new JComboBox<String>();
+		
+		dropdownTaskID.setModel(new DefaultComboBoxModel<String>());
 		dropdownTaskID.addItem("Select a Task ID");
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			//if (currentTask.isNeedsSigning() && !currentTask.getTeamMembers().contains(userLoggedIn))
 			if (currentTask.isNeedsSigning() && (currentTask.getSignee() == null))
 			{
-				dropdownTaskID.addItem(currentTask.getID());
+				dropdownTaskID.addItem("" + currentTask.getID());
 			}
 		}
 		dropdownTaskID.setBounds(208, 60, 138, 22);
@@ -81,7 +91,7 @@ public class GuiSignTask extends JFrame {
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					if (("" + currentTask.getID()).equals("" + dropdownTaskID.getSelectedItem()))
 					{
 						CaretakerTask taskToUpdate = currentTask;
 						taskToUpdate.setSigneeID(userLoggedIn);
@@ -108,6 +118,7 @@ public class GuiSignTask extends JFrame {
 							//System.out.println("New signee is " + signeeName);
 							taskToUpdate.setDateCompleted("");
 							dbClass.updateCaretakerTask(taskToUpdate);
+							textAreaUpdated.setVisible(true);
 						}
 					}
 				}
