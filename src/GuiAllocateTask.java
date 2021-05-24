@@ -11,7 +11,6 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 
-import org.jdatepicker.impl.UtilDateModel;
 
 import javax.swing.JComboBox;
 import java.awt.Color;
@@ -81,7 +80,6 @@ public class GuiAllocateTask extends JFrame {
 		contentPane.add(lblFrequency);
 		
 		//Create models to store the format for the start and due dates to be displayed
-		UtilDateModel modelStartDate = new UtilDateModel();
 		
 		Properties pStart = new Properties();
 		pStart.put("text.today", "Today");
@@ -92,7 +90,6 @@ public class GuiAllocateTask extends JFrame {
 		lblStartDate.setBounds(22, 340, 144, 14);
 		contentPane.add(lblStartDate);
 		
-		UtilDateModel modelDueDate = new UtilDateModel();
 		Properties pDue = new Properties();
 		pDue.put("text.today", "Today");
 		pDue.put("text.month", "Month");
@@ -235,6 +232,9 @@ public class GuiAllocateTask extends JFrame {
 		for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			String currentTaskDesc = currentTask.getDesc();	
+			String userSkillOne = "";
+			String userSkillTwo = "";
+			String userSkillThree = "";
 			String recSkillOne = "";
 			String recSkillTwo = "";
 			String recSkillThree = "";
@@ -265,8 +265,15 @@ public class GuiAllocateTask extends JFrame {
 					
 				}
 				
-				/* Template code for when login system implemented
-				ArrayList<String> userSkills = loggedInUser.getSkills();
+				// Template code for when login system implemented
+				Caretaker loggedInCaretaker = new Caretaker();
+				for(int j=0; j<dbClass.getAllCaretakers().size(); j++) {
+					if(dbClass.getAllCaretakers().get(j).getID() == loggedInUser) {
+						loggedInCaretaker = dbClass.getAllCaretakers().get(j);
+						System.out.println(loggedInCaretaker.getSkills());
+					}
+				}
+				ArrayList<String> userSkills = loggedInCaretaker.getSkills();
 				int noOfUserSkills = userSkills.size();
 				switch(noOfUserSkills) {
 				case 1:
@@ -282,7 +289,7 @@ public class GuiAllocateTask extends JFrame {
 					userSkillThree = userSkills.get(2);
 					break;
 				}
-				*/
+				//
 				
 				
 			
@@ -291,9 +298,9 @@ public class GuiAllocateTask extends JFrame {
 				lblTaskTypeTwo.setText(recSkillTwo);
 				lblTaskTypeThree.setText(recSkillThree);
 				// Template code for when login system implemented
-				//lblUserSkillOne.setText(userSkillOne);
-				//lblUserSkillTwo.setText(userSkillTwo);
-				//lblUserSkillThree.setText(userSkillThree);
+				lblUserSkillOne.setText(userSkillOne);
+				lblUserSkillTwo.setText(userSkillTwo);
+				lblUserSkillThree.setText(userSkillThree);
 				lblFrequencyValue.setText(daysUntilRepeat.toString());
 				lblStartDateValue.setText(startDate);
 				lblDueDateValue.setText(dueDate);
@@ -319,6 +326,9 @@ public class GuiAllocateTask extends JFrame {
 					String recSkillOne = "";
 					String recSkillTwo = "";
 					String recSkillThree = "";
+					String userSkillOne = "";
+					String userSkillTwo = "";
+					String userSkillThree = "";
 					Integer daysUntilRepeat = currentTask.getDaysUntilRepeat();
 					String startDate = currentTask.getDateCreated();
 					String dueDate = currentTask.getDateDue();
@@ -348,8 +358,14 @@ public class GuiAllocateTask extends JFrame {
 							
 						}
 						
-						/* Template code for when login system implemented
-						ArrayList<String> userSkills = loggedInUser.getSkills();
+						// Template code for when login system implemented
+						Caretaker loggedInCaretaker = new Caretaker();
+						for(int j=0; j<dbClass.getAllCaretakers().size(); j++) {
+							if(dbClass.getAllCaretakers().get(j).getID() == loggedInUser) {
+								loggedInCaretaker = dbClass.getAllCaretakers().get(j);
+							}
+						}
+						ArrayList<String> userSkills = loggedInCaretaker.getSkills();
 						int noOfUserSkills = userSkills.size();
 						switch(noOfUserSkills) {
 						case 1:
@@ -365,7 +381,7 @@ public class GuiAllocateTask extends JFrame {
 							userSkillThree = userSkills.get(2);
 							break;
 						}
-						*/
+						//
 						
 						
 						//Update GUI with task details
@@ -374,9 +390,9 @@ public class GuiAllocateTask extends JFrame {
 						lblTaskTypeTwo.setText(recSkillTwo);
 						lblTaskTypeThree.setText(recSkillThree);
 						// Template code for when login system implemented
-						//lblUserSkillOne.setText(userSkillOne);
-						//lblUserSkillTwo.setText(userSkillTwo);
-						//lblUserSkillThree.setText(userSkillThree);
+						lblUserSkillOne.setText(userSkillOne);
+						lblUserSkillTwo.setText(userSkillTwo);
+						lblUserSkillThree.setText(userSkillThree);
 						lblFrequencyValue.setText(daysUntilRepeat.toString());
 						lblStartDateValue.setText(startDate);
 						lblDueDateValue.setText(dueDate);
