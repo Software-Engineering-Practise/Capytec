@@ -13,7 +13,7 @@ public class GuiDailyBriefing extends JFrame {
 	private JPanel contentPane;
 	CapyTecDB dbClass = new CapyTecDB();
 	//PLACEHOLDER FOR LOGIN PAGE
-	int loggedInUser = 8;
+	int loggedInUser = 5;
 
 	/**
 	 * Launch the application.

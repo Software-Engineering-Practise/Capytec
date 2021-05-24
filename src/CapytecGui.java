@@ -127,7 +127,7 @@ public class CapytecGui extends JFrame {
 			//System.out.println(dbClass.getAllCaretakers().get(1).getFullName());
 			tableUserManagement.setModel(new DefaultTableModel(
 				new Object[][] {
-					{null, null, null, null},
+					
 				},
 				new String[] {
 					"ID", "User", "Position", "Skills"

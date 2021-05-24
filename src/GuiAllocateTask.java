@@ -51,7 +51,7 @@ public class GuiAllocateTask extends JFrame {
 		contentPane.setLayout(null);
 		
 		//Placeholder value until login system is implemented
-		int loggedInUser = 8;
+		int loggedInUser = 5;
 		
 		//Label to tell user they are selecting between task names in the adjacent dropdown
 		JLabel lblTaskName = new JLabel("Task Name:");
@@ -270,7 +270,7 @@ public class GuiAllocateTask extends JFrame {
 				for(int j=0; j<dbClass.getAllCaretakers().size(); j++) {
 					if(dbClass.getAllCaretakers().get(j).getID() == loggedInUser) {
 						loggedInCaretaker = dbClass.getAllCaretakers().get(j);
-						System.out.println(loggedInCaretaker.getSkills());
+						//System.out.println(loggedInCaretaker.getSkills());
 					}
 				}
 				ArrayList<String> userSkills = loggedInCaretaker.getSkills();
