@@ -248,7 +248,6 @@ public class CapytecGui extends JFrame {
 			for(int i=0; i<dbClass.getAllTasks().size(); i++) {
 				CaretakerTask currentItem = dbClass.getAllTasks().get(i);
 				int repeat = currentItem.getDaysUntilRepeat();
-				String isRepeated;
 				String daysUntilRepeat;
 				String skillsList = " ";
 				String assignedCaretakers = " ";
@@ -265,10 +264,8 @@ public class CapytecGui extends JFrame {
 				
 				//Set whether a task is a one-off task, or how many days until it needs to be repeated
 				if(repeat == 0) {
-					isRepeated = "One-off";
 					tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),"One-off"});
 				} else {
-					isRepeated = "Repeats";
 					daysUntilRepeat = "" + repeat;
 					tableModelTaskManagement.addRow(new Object[] {currentItem.getID(),currentItem.getTitle(),assignedCaretakers,currentItem.getDesc(),skillsList,currentItem.getDateCreated(),currentItem.getDateDue(),currentItem.getDateCompleted(),currentItem.getCompletionist(),currentItem.getPriority(),daysUntilRepeat});
 				}
@@ -493,7 +490,6 @@ public class CapytecGui extends JFrame {
 				checkedBy = "N/A"; }
 			if (currentItem.getDateCompleted() != null && !currentItem.getDateCompleted().equals("") && isRepeated != "Yes")
 			{
-				String currentDate = currentItem.getDateCompleted();
 				//System.out.println("Current item " + currentItem.getID() + ". Completed date: " + currentItem.getDateCompleted() + currentItem.getDateCompleted().compareTo(""));
 				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentDate, isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
 			}
