@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
@@ -11,11 +10,6 @@ import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
-import java.io.Console;
-import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
-import java.util.Calendar;
-import java.util.Date;
 import java.awt.event.ActionEvent;
 
 public class GuiCheckTask extends JFrame {
@@ -63,15 +57,15 @@ public class GuiCheckTask extends JFrame {
 		
 		int userLoggedIn = 7;
 		
-		JComboBox dropdownTaskID = new JComboBox();
+		JComboBox<String> dropdownTaskID = new JComboBox<String>();
 		
-		dropdownTaskID.setModel(new DefaultComboBoxModel());
+		dropdownTaskID.setModel(new DefaultComboBoxModel<String>());
 		dropdownTaskID.addItem("Select a Task ID");
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			if (currentTask.isNeedsPeerChecking() && !currentTask.getTeamMembers().contains(userLoggedIn) && (currentTask.getPeerChecker() == null))
 			{
-				dropdownTaskID.addItem(currentTask.getID());
+				dropdownTaskID.addItem("" + currentTask.getID());
 			}
 		}
 		dropdownTaskID.setBounds(208, 60, 138, 22);
@@ -84,7 +78,7 @@ public class GuiCheckTask extends JFrame {
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					if (("" + currentTask.getID()).equals(dropdownTaskID.getSelectedItem()))
 					{
 						CaretakerTask taskToUpdate = currentTask;
 						taskToUpdate.setPeerCheckerID(userLoggedIn);

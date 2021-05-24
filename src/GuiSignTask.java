@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -57,16 +56,16 @@ public class GuiSignTask extends JFrame {
 		
 		int userLoggedIn = 3;
 		
-		JComboBox dropdownTaskID = new JComboBox();
+		JComboBox<String> dropdownTaskID = new JComboBox<String>();
 		
-		dropdownTaskID.setModel(new DefaultComboBoxModel());
+		dropdownTaskID.setModel(new DefaultComboBoxModel<String>());
 		dropdownTaskID.addItem("Select a Task ID");
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			//if (currentTask.isNeedsSigning() && !currentTask.getTeamMembers().contains(userLoggedIn))
 			if (currentTask.isNeedsSigning() && (currentTask.getSignee() == null))
 			{
-				dropdownTaskID.addItem(currentTask.getID());
+				dropdownTaskID.addItem("" + currentTask.getID());
 			}
 		}
 		dropdownTaskID.setBounds(208, 60, 138, 22);
@@ -81,7 +80,7 @@ public class GuiSignTask extends JFrame {
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					if (("" + currentTask.getID()).equals("" + dropdownTaskID.getSelectedItem()))
 					{
 						CaretakerTask taskToUpdate = currentTask;
 						taskToUpdate.setSigneeID(userLoggedIn);

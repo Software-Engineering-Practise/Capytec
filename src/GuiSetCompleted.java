@@ -1,4 +1,3 @@
-import java.awt.BorderLayout;
 import java.awt.EventQueue;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
@@ -59,14 +58,14 @@ public class GuiSetCompleted extends JFrame {
 		
 		int userLoggedIn = 8;
 		
-		JComboBox dropdownTaskID = new JComboBox();
-		dropdownTaskID.setModel(new DefaultComboBoxModel());
+		JComboBox<String> dropdownTaskID = new JComboBox<String>();
+		dropdownTaskID.setModel(new DefaultComboBoxModel<String>());
 		dropdownTaskID.addItem("Select a Task ID");
 		for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++) {
 			CaretakerTask currentTask = dbClass.getAllTasks().get(i);
 			if (currentTask.getTeamMembers().contains(userLoggedIn) && (currentTask.getDaysUntilRepeat() != 0 || currentTask.getDateCompleted() == null || currentTask.getDateCompleted().equals("")))
 			{
-				dropdownTaskID.addItem(currentTask.getID());
+				dropdownTaskID.addItem("" + currentTask.getID());
 			}
 		}
 		dropdownTaskID.setBounds(208, 60, 138, 22);
@@ -80,7 +79,7 @@ public class GuiSetCompleted extends JFrame {
 				for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
 				{
 					CaretakerTask currentTask = dbClass.getAllTasks().get(i);
-					if (currentTask.getID() == (int) dropdownTaskID.getSelectedItem())
+					if (("" + currentTask.getID()).equals(dropdownTaskID.getSelectedItem()))
 					{
 						CaretakerTask completedTask = currentTask;
 						CompletedTask newCompletion = new CompletedTask();
@@ -174,7 +173,17 @@ public class GuiSetCompleted extends JFrame {
 				//The first item (index 0) in the dropdown is not a valid task
 				if (dropdownTaskID.getSelectedIndex() != 0)
 				{
-					CaretakerTask currentTask = dbClass.getAllTasks().get((int)dropdownTaskID.getSelectedItem()-1);
+					CaretakerTask currentTask = dbClass.getAllTasks().get(0);
+					for (int i = 0 ; i < dbClass.getAllTasks().size() ; i++)
+					{
+						
+						CaretakerTask loopTask = dbClass.getAllTasks().get(i);
+						if (("" + loopTask.getID()).equals("" + dropdownTaskID.getSelectedItem()))
+						{
+							currentTask = loopTask;
+						}
+					}
+					//CaretakerTask currentTask = dbClass.getAllTasks().get((int)dropdownTaskID.getSelectedItem()-1);
 					//If the task needs to be peer checked, and hasn't been, or needs to be signed, and hasn't been, the button is disabled.
 					//Otherwise, if the user logged in is part of the task selected, the button can be selected
 					//However if this is not the case, the button is disabled.
