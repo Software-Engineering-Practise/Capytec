@@ -77,7 +77,7 @@ public class GuiDeleteTask extends JFrame {
 					Task currentTask = dbClass.getAllTasks().get(i);
 					String retrievedID = Integer.toString(currentTask.getID());
 					if(inputID.equals(retrievedID)) {
-						System.out.println("ID found for task: " + currentTask.getTitle());
+						//System.out.println("ID found for task: " + currentTask.getTitle());
 						isFound = true;
 						lblErrorMessage.setVisible(false);
 						int confirmationResult = JOptionPane.showConfirmDialog(contentPane, "Are you sure you would like to delete '" + currentTask.getTitle() + "'","Confirm Deletion",JOptionPane.YES_NO_OPTION);
@@ -85,7 +85,7 @@ public class GuiDeleteTask extends JFrame {
 							//Delete Task
 							dbClass.deleteCaretakerTask(currentTask.getID());
 						} else {
-							System.out.println("Do not delete");
+							//System.out.println("Do not delete");
 						}				
 					}
 				}
