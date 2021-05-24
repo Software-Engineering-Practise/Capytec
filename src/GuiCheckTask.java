@@ -2,9 +2,12 @@ import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import java.awt.Font;
+import java.awt.SystemColor;
+
 import javax.swing.SwingConstants;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
@@ -56,6 +59,15 @@ public class GuiCheckTask extends JFrame {
 		contentPane.add(lblSelectedTask);
 		
 		int userLoggedIn = 7;
+		
+		JTextArea textAreaUpdated = new JTextArea();
+		textAreaUpdated.setEditable(false);
+		textAreaUpdated.setBackground(SystemColor.menu);
+		textAreaUpdated.setFont(new Font("Tahoma", Font.BOLD, 11));
+		textAreaUpdated.setText("Task details have been updated.\r\n\r\nPlease restart GUI to view changes.");
+		textAreaUpdated.setBounds(114, 107, 224, 52);
+		contentPane.add(textAreaUpdated);
+		textAreaUpdated.setVisible(false);
 		
 		JComboBox<String> dropdownTaskID = new JComboBox<String>();
 		
@@ -112,6 +124,7 @@ public class GuiCheckTask extends JFrame {
 							taskToUpdate.setPeerCheckerID(checkerID);
 							taskToUpdate.setDateCompleted(null);
 							dbClass.updateCaretakerTask(taskToUpdate);
+							textAreaUpdated.setVisible(true);
 						}
 					}
 				}

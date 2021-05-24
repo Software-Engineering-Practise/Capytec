@@ -1,5 +1,6 @@
 import java.awt.EventQueue;
 import java.awt.Font;
+import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
@@ -8,6 +9,7 @@ import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JTextArea;
 import javax.swing.border.EmptyBorder;
 import javax.swing.JLabel;
 import javax.swing.SwingConstants;
@@ -55,6 +57,15 @@ public class GuiSignTask extends JFrame {
 		contentPane.add(lblSelectedTaskLabel);
 		
 		int userLoggedIn = 3;
+		
+		JTextArea textAreaUpdated = new JTextArea();
+		textAreaUpdated.setEditable(false);
+		textAreaUpdated.setBackground(SystemColor.menu);
+		textAreaUpdated.setFont(new Font("Tahoma", Font.BOLD, 11));
+		textAreaUpdated.setText("Task details have been updated.\r\n\r\nPlease restart GUI to view changes.");
+		textAreaUpdated.setBounds(114, 107, 224, 52);
+		contentPane.add(textAreaUpdated);
+		textAreaUpdated.setVisible(false);
 		
 		JComboBox<String> dropdownTaskID = new JComboBox<String>();
 		
@@ -107,6 +118,7 @@ public class GuiSignTask extends JFrame {
 							//System.out.println("New signee is " + signeeName);
 							taskToUpdate.setDateCompleted("");
 							dbClass.updateCaretakerTask(taskToUpdate);
+							textAreaUpdated.setVisible(true);
 						}
 					}
 				}

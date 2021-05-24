@@ -13,6 +13,8 @@ import javax.swing.JLabel;
 import javax.swing.JComboBox;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JButton;
+import javax.swing.JTextArea;
+import java.awt.SystemColor;
 
 public class GuiSetCompleted extends JFrame {
 
@@ -57,6 +59,16 @@ public class GuiSetCompleted extends JFrame {
 		contentPane.add(lblSelectedTask);
 		
 		int userLoggedIn = 8;
+		
+		JTextArea textAreaUpdated = new JTextArea();
+		textAreaUpdated.setEditable(false);
+		textAreaUpdated.setBackground(SystemColor.menu);
+		textAreaUpdated.setFont(new Font("Tahoma", Font.BOLD, 11));
+		textAreaUpdated.setText("Task details have been updated.\r\n\r\nPlease restart GUI to view changes.");
+		textAreaUpdated.setBounds(114, 107, 224, 52);
+		contentPane.add(textAreaUpdated);
+		textAreaUpdated.setVisible(false);
+		
 		
 		JComboBox<String> dropdownTaskID = new JComboBox<String>();
 		dropdownTaskID.setModel(new DefaultComboBoxModel<String>());
@@ -157,6 +169,9 @@ public class GuiSetCompleted extends JFrame {
 						//Updates task with new details
 						dbClass.updateCaretakerTask(completedTask);
 						
+						btnCompleteTask.setEnabled(false);
+						textAreaUpdated.setVisible(true);
+						
 						//System.out.println("Task " + completedTask.getID() + ". Set as completed on date: " + completedTask.getDateCompleted());
 					}
 				}				
@@ -165,7 +180,6 @@ public class GuiSetCompleted extends JFrame {
 		btnCompleteTask.setEnabled(false);
 		btnCompleteTask.setBounds(96, 170, 250, 42);
 		contentPane.add(btnCompleteTask);
-		
 		
 		dropdownTaskID.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
@@ -219,5 +233,4 @@ public class GuiSetCompleted extends JFrame {
 		
 		
 	}
-
 }
