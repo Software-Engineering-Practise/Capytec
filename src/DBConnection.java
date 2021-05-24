@@ -23,11 +23,11 @@ public class DBConnection {
 		try {
 			String url = "jdbc:sqlite:" + filename;
 			conn = DriverManager.getConnection(url);
-			System.out.println("Connection to " + filename + " has been established.");
+			//System.out.println("Connection to " + filename + " has been established.");
 		}
 		catch (SQLException e) {
-			System.out.println("Failed to connect to " + filename);
-			System.out.println(e.getMessage());
+			//System.out.println("Failed to connect to " + filename);
+			//System.out.println(e.getMessage());
 			return false;
 		}
 		return true;
@@ -43,8 +43,8 @@ public class DBConnection {
 			sqlStatement.execute(sql);
 		}
 		catch(SQLException e) {
-			System.out.println("Failed to execute: " + sql);
-			System.out.println(e.getMessage());
+			//System.out.println("Failed to execute: " + sql);
+			//System.out.println(e.getMessage());
 			return false;
 		}
 		return true;
@@ -53,7 +53,7 @@ public class DBConnection {
 	public ResultSet RunSQLQuery(String sql){
 		ResultSet result;
 		if(conn == null) {
-			System.out.println("There is no database loaded. Cannot run SQL.");
+			//System.out.println("There is no database loaded. Cannot run SQL.");
 			return null;
 		}
 		try {
@@ -61,8 +61,8 @@ public class DBConnection {
 			result = sqlStatement.executeQuery(sql);
 		}
 		catch (SQLException e) {
-			System.out.println("Failed to execute: " + sql);
-			System.out.println(e.getMessage());
+			//System.out.println("Failed to execute: " + sql);
+			//System.out.println(e.getMessage());
 			return null;
 		}
 		return result;
@@ -72,7 +72,7 @@ public class DBConnection {
 		try {
 			conn.close();
 		} catch (SQLException e) {
-			e.printStackTrace();
+			//e.printStackTrace();
 		}
 	}
 }

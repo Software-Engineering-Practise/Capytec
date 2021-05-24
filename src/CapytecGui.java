@@ -144,11 +144,16 @@ public class CapytecGui extends JFrame {
 			//Add rows for all caretakers and managers
 			for(int i=0; i<dbClass.getAllCaretakers().size(); i++) {
 				Caretaker currentCaretaker = dbClass.getAllCaretakers().get(i);
-				tableModelUserManagement.addRow(new Object[] {currentCaretaker.getID(),currentCaretaker.getFullName(),currentCaretaker.getJobTitle(),"Skill"});
+				String skills = "";
+				for(int j = 0; j < currentCaretaker.getSkills().size() ; j++) {
+					skills = skills + currentCaretaker.getSkills().get(j);
+					skills = skills + "  ";
+				}
+				tableModelUserManagement.addRow(new Object[] {currentCaretaker.getID(),currentCaretaker.getFullName(),currentCaretaker.getJobTitle(),skills});
 			}
 			for(int i=0; i<dbClass.getAllManagers().size(); i++) {
 				Manager currentManager = dbClass.getAllManagers().get(i);
-				tableModelUserManagement.addRow(new Object[] {currentManager.getID(),currentManager.getFullName(),currentManager.getJobTitle(),"Skill"});
+				tableModelUserManagement.addRow(new Object[] {currentManager.getID(),currentManager.getFullName(),currentManager.getJobTitle(),"N/A"});
 			}
 			scrollPaneUserManagement.setViewportView(tableUserManagement);
 		//

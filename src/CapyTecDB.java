@@ -363,25 +363,25 @@ public class CapyTecDB{
 		int needsSigning = caretakerTask.isNeedsSigning() ? 1 : 0;
 		int needsPeerChecking = caretakerTask.isNeedsPeerChecking() ? 1 : 0;
 		
-		
 		String sql = "INSERT INTO task (task_title, task_desc, extra_considerations, need_signing, need_peer_check, date_created, date_due, priority, created_by, days_till_repeat) "
 				+ "VALUES ('"+title+"', '"+desc+"', '"+exConsider+"', "+needsSigning+", "+needsPeerChecking+", '"+dateCreated+"', '"+dateDue+"', "+priority+", "+authorID+", "+daysUntilRepeat+");";
 		
-		boolean success = database.RunSQL(sql);
+		database.RunSQL(sql);
 		
 		sql = "SELECT skill_id, skill_name FROM skill;";
 		
+		ResultSet sqlResult = database.RunSQLQuery(sql);
 		if(caretakerTask.getRecSkills().size() != 0) {
 			try {
-				ResultSet sqlResult = database.RunSQLQuery(sql);
 				
 				ArrayList<Integer> skills = new ArrayList<Integer>();
 				
 				while(sqlResult.next()) {
 					int id = 1;
 					for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
-						if(caretakerTask.getRecSkills().get(i).contentEquals(sqlResult.getString(2))) {
-							skills.add(id);
+						if(caretakerTask.getRecSkills().get(i).equals(sqlResult.getString(2))) {
+							skills.add(i);
+							System.out.println("Skill: "+ i);
 						}
 					}
 					id++;
@@ -389,7 +389,7 @@ public class CapyTecDB{
 				
 				for(int i = 0 ; i < skills.size() ; i++) {
 					sql = "INSERT INTO task_skill (task, skill) VALUES ("+getLastInsertId()+", "+skills.get(i)+");";
-					success = database.RunSQL(sql);
+					database.RunSQL(sql);
 				}
 				
 			} catch (SQLException e) {
@@ -464,7 +464,7 @@ public class CapyTecDB{
 					int skillID = sqlResult.getInt(1);
 					for(int i = 0 ; i < caretaker.getSkills().size() ; i++) {
 						if(caretaker.getSkills().get(i).equals(sqlResult.getString(2))) {
-							System.out.println("got skill : " + skillID);
+							//System.out.println("got skill : " + skillID);
 							newerSkills.add(skillID);
 						}
 					}
