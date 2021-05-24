@@ -491,7 +491,7 @@ public class CapytecGui extends JFrame {
 			if (currentItem.getDateCompleted() != null && !currentItem.getDateCompleted().equals("") && isRepeated != "Yes")
 			{
 				//System.out.println("Current item " + currentItem.getID() + ". Completed date: " + currentItem.getDateCompleted() + currentItem.getDateCompleted().compareTo(""));
-				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentDate, isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
+				tableModelTaskLogging.addRow(new Object[] {members, currentItem.getID(), currentItem.getTitle(), currentItem.getDateCreated(), isRepeated, daysRepeat, currentItem.getDateDue(), currentItem.getDateCompleted(), extraReqs, checkedBy, signedBy, currentItem.getPriority()});
 			}
 		}
 		scrollPaneTaskLogging.setViewportView(tableTaskLogging);
