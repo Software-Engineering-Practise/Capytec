@@ -455,7 +455,7 @@ public class TestingDBMethods {
 		System.out.println("Task to be repeated every " + newTask.getDaysUntilRepeat() + " days.");
 		System.out.println("=====RECOMMENDED SKILLS=====");
 		for(int i = 0 ; i < newTask.getRecSkills().size() ; i++) {
-			System.out.println("Reccomended Skill: " + newTask.getRecSkills().get(j));
+			System.out.println("Reccomended Skill: " + newTask.getRecSkills().get(i));
 		}
 		System.out.println("");
 		System.out.println("=====TEAM MEMBERS=====");
