@@ -380,7 +380,7 @@ public class CapyTecDB{
 					for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
 						if(caretakerTask.getRecSkills().get(i).equals(sqlResult.getString(2))) {
 							skills.add(sqlResult.getInt(1));
-							System.out.println("Skill: "+ i + " Name: "+sqlResult.getString(2));
+							//System.out.println("Skill: "+ i + " Name: "+sqlResult.getString(2));
 						}
 					}
 				}
@@ -797,7 +797,7 @@ public class CapyTecDB{
 		
 		try {
 			id = result.getInt(1);
-			System.out.println("last inserted id: "+ id);
+			//System.out.println("last inserted id: "+ id);
 		} catch (SQLException e) {
 			
 		}
