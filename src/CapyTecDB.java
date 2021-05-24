@@ -377,18 +377,18 @@ public class CapyTecDB{
 				ArrayList<Integer> skills = new ArrayList<Integer>();
 				
 				while(sqlResult.next()) {
-					int id = 1;
 					for(int i = 0 ; i < caretakerTask.getRecSkills().size() ; i++) {
 						if(caretakerTask.getRecSkills().get(i).equals(sqlResult.getString(2))) {
-							skills.add(i);
-							System.out.println("Skill: "+ i);
+							skills.add(sqlResult.getInt(1));
+							System.out.println("Skill: "+ i + " Name: "+sqlResult.getString(2));
 						}
 					}
-					id++;
 				}
 				
+				int id = getLastInsertId();
+				
 				for(int i = 0 ; i < skills.size() ; i++) {
-					sql = "INSERT INTO task_skill (task, skill) VALUES ("+getLastInsertId()+", "+skills.get(i)+");";
+					sql = "INSERT INTO task_skill (task, skill) VALUES ("+id+", "+skills.get(i)+");";
 					database.RunSQL(sql);
 				}
 				
@@ -791,10 +791,13 @@ public class CapyTecDB{
 		int id = 0;
 		String sql = "select last_insert_rowid();";
 		
+		
+		
 		ResultSet result = database.RunSQLQuery(sql);
 		
 		try {
 			id = result.getInt(1);
+			System.out.println("last inserted id: "+ id);
 		} catch (SQLException e) {
 			
 		}
